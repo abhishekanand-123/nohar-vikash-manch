@@ -1,0 +1,50 @@
+import { MapPin, Mail, Phone } from "lucide-react";
+
+export default function Footer() {
+  return (
+    <footer className="bg-foreground text-background py-16">
+      <div className="container mx-auto px-6">
+        <div className="grid md:grid-cols-3 gap-12">
+          <div>
+            <h3 className="font-display text-xl font-bold mb-4">
+              Nohar<span className="text-accent">Vikash</span>Manch
+            </h3>
+            <p className="text-background/70 text-sm leading-relaxed">
+              Managed by Nohar Vikash Yuvak Sangh. A community dedicated to agriculture, peace, and the vibrant spirit of Madhepura.
+            </p>
+          </div>
+          <div>
+            <h4 className="font-display font-semibold mb-4">Quick Links</h4>
+            <ul className="space-y-2 text-sm text-background/70">
+              <li><a href="/about" className="hover:text-accent transition-colors">About Us</a></li>
+              <li><a href="/festivals" className="hover:text-accent transition-colors">Festivals</a></li>
+              <li><a href="/sports" className="hover:text-accent transition-colors">Sports Club</a></li>
+              <li><a href="/gallery" className="hover:text-accent transition-colors">Gallery</a></li>
+              <li><a href="/donation" className="hover:text-accent transition-colors">Donation</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-display font-semibold mb-4">Contact</h4>
+            <ul className="space-y-3 text-sm text-background/70">
+              <li className="flex items-start gap-2">
+                <MapPin className="w-4 h-4 mt-0.5 shrink-0" />
+                <span>Village Nohar, Post Gwalpara, Madhepura, Bihar, India</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Mail className="w-4 h-4 shrink-0" />
+                <span>contact@noharvikas.org</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Phone className="w-4 h-4 shrink-0" />
+                <span>+91 XXXXX XXXXX</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="mt-12 pt-8 border-t border-background/10 text-center text-sm text-background/50">
+          © {new Date().getFullYear()} NoharVikashManch — Nohar Vikash Yuvak Sangh. All rights reserved.
+        </div>
+      </div>
+    </footer>
+  );
+}
