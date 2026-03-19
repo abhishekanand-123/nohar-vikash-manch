@@ -1,24 +1,33 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
-import diwaliImg from "@/assets/diwali.jpg";
-import holiImg from "@/assets/holi.jpg";
-import chhathImg from "@/assets/chhath.jpg";
-import kalipujaImg from "@/assets/kalipuja.jpg";
-import ramnavamiImg from "@/assets/ramnavami.jpg";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
-const categories = ["All", "Diwali", "Holi", "Ramnavami", "Kali Puja", "Chhath Puja"];
+const categories = ["All", "Diwali", "Holi", "Ramnavami", "Kali Puja", "Chhath Puja", "General"];
 
-const blogPosts = [
-  { id: 1, title: "Ramnavami Mahotsav 2026", category: "Ramnavami", image: ramnavamiImg, desc: "Grand celebration at Lakshmi Narayan Aasthan with devotees from nearby villages.", date: "March 27, 2026", author: "Nohar Vikash Yuvak Sangh" },
-  { id: 2, title: "Diwali Celebration in Nohar", category: "Diwali", image: diwaliImg, desc: "The entire village lit up with thousands of diyas. Community feast was organized for all.", date: "November 1, 2025", author: "Nohar Vikash Yuvak Sangh" },
-  { id: 3, title: "Holi: Colors of Unity", category: "Holi", image: holiImg, desc: "Colors, music, and dance — Nohar's Holi is a spectacle of joy and togetherness.", date: "March 14, 2025", author: "Nohar Vikash Yuvak Sangh" },
-  { id: 4, title: "Chhath Puja at Village Ghat", category: "Chhath Puja", image: chhathImg, desc: "Devotees offered prayers to the Sun God at the village ghat during the sacred Chhath Puja.", date: "November 7, 2025", author: "Nohar Vikash Yuvak Sangh" },
-  { id: 5, title: "Kali Puja Night Celebration", category: "Kali Puja", image: kalipujaImg, desc: "A night filled with devotion, prayers, and community togetherness at Nohar's Kali temple.", date: "October 20, 2025", author: "Nohar Vikash Yuvak Sangh" },
-];
+interface Blog {
+  id: string;
+  title: string;
+  content: string | null;
+  image: string | null;
+  category: string | null;
+  created_at: string;
+}
 
 export default function Festivals() {
   const [active, setActive] = useState("All");
-  const filtered = active === "All" ? blogPosts : blogPosts.filter((p) => p.category === active);
+  const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      const { data } = await supabase.from("blogs").select("*").order("created_at", { ascending: false });
+      setBlogs((data as Blog[]) ?? []);
+      setLoading(false);
+    }
+    load();
+  }, []);
+
+  const filtered = active === "All" ? blogs : blogs.filter((p) => p.category === active);
 
   return (
     <div className="py-20">
@@ -46,31 +55,40 @@ export default function Festivals() {
           ))}
         </div>
 
-        {/* Blog Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((post, i) => (
-            <motion.article
-              key={post.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className="bg-card rounded-2xl overflow-hidden shadow-card ring-1 ring-border"
-            >
-              <div className="aspect-video overflow-hidden">
-                <img src={post.image} alt={post.title} className="w-full h-full object-cover" loading="lazy" />
-              </div>
-              <div className="p-6">
-                <span className="text-xs font-semibold text-accent uppercase tracking-wider">{post.category}</span>
-                <h3 className="font-display font-bold text-lg mt-2 mb-2 text-foreground">{post.title}</h3>
-                <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{post.desc}</p>
-                <div className="flex items-center justify-between text-xs text-muted-foreground">
-                  <span>{post.date}</span>
-                  <span>{post.author}</span>
+        {loading ? (
+          <div className="flex justify-center py-12">
+            <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
+          </div>
+        ) : filtered.length === 0 ? (
+          <p className="text-muted-foreground text-center py-8">No blog posts yet. Add posts from the admin dashboard.</p>
+        ) : (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filtered.map((post, i) => (
+              <motion.article
+                key={post.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="bg-card rounded-2xl overflow-hidden shadow-card ring-1 ring-border"
+              >
+                {post.image && (
+                  <div className="aspect-video overflow-hidden">
+                    <img src={post.image} alt={post.title} className="w-full h-full object-cover" loading="lazy" />
+                  </div>
+                )}
+                <div className="p-6">
+                  <span className="text-xs font-semibold text-accent uppercase tracking-wider">{post.category}</span>
+                  <h3 className="font-display font-bold text-lg mt-2 mb-2 text-foreground">{post.title}</h3>
+                  <p className="text-sm text-muted-foreground mb-4 line-clamp-3">{post.content}</p>
+                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <span>{new Date(post.created_at).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}</span>
+                    <span>Nohar Vikash Yuvak Sangh</span>
+                  </div>
                 </div>
-              </div>
-            </motion.article>
-          ))}
-        </div>
+              </motion.article>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
