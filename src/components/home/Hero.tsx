@@ -1,81 +1,97 @@
 import { motion } from "framer-motion";
-import { Calendar } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import EventCountdown from "./EventCountdown";
+import heroImg from "@/assets/hero-village.jpg";
 
 export default function Hero() {
   return (
-    <section className="relative min-h-[85vh] flex items-center pt-8 pb-16 overflow-hidden">
-      <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center">
+    <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0">
+        <img
+          src={heroImg}
+          alt="Nohar Village"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/30" />
+      </div>
+
+      <div className="container mx-auto px-6 relative z-10 grid lg:grid-cols-[1fr_auto] gap-8 items-center">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.6 }}
         >
-          <span className="text-accent font-semibold tracking-wide uppercase text-sm">
-            Welcome to Nohar
+          <span className="text-primary font-semibold tracking-widest uppercase text-sm">
+            Welcome to Nohar Village
           </span>
-          <h1 className="text-hero mt-4 mb-6 font-display font-bold text-foreground">
-            Empowering our{" "}
-            <span className="text-primary">Village</span>, Preserving our{" "}
-            <span className="text-accent">Culture</span>.
+          <h1 className="text-4xl md:text-5xl lg:text-6xl mt-4 mb-6 font-display font-bold text-white leading-tight">
+            Empowering Nohar,
+            <br />
+            Preserving Heritage
           </h1>
-          <p className="text-lg text-muted-foreground max-w-[50ch] mb-8 leading-relaxed">
-            Managed by Nohar Vikash Yuvak Sangh. A community dedicated to agriculture,
-            peace, and the vibrant spirit of Madhepura.
+          <p className="text-lg text-white/80 max-w-[50ch] mb-8 leading-relaxed">
+            A thriving agriculture-based community in Madhepura,
+            Bihar. Managed with care by Nohar Vikash Yuvak Sangh.
           </p>
           <div className="flex flex-wrap gap-4">
             <Link
-              to="/festivals"
-              className="bg-primary text-primary-foreground px-8 py-4 rounded-2xl font-semibold shadow-card hover:opacity-90 transition-opacity text-sm"
+              to="/about"
+              className="bg-primary text-primary-foreground px-8 py-4 rounded-full font-semibold hover:opacity-90 transition-opacity text-sm inline-flex items-center gap-2"
             >
-              Explore Festivals
+              Explore Our Story <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
-              to="/about"
-              className="bg-card text-foreground px-8 py-4 rounded-2xl font-semibold shadow-card hover:shadow-lg transition-shadow text-sm ring-1 ring-border"
+              to="/donation"
+              className="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-full font-semibold hover:bg-white/20 transition-colors text-sm ring-1 ring-white/30"
             >
-              Join the Sangh
+              Support Us
             </Link>
           </div>
+        </motion.div>
 
-          <div className="mt-10 flex gap-8">
+        {/* Countdown Card */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="hidden lg:block"
+        >
+          <div className="bg-white rounded-2xl p-6 shadow-xl min-w-[280px]">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-2xl">🪔</span>
+              <span className="text-primary font-bold uppercase text-xs tracking-widest">
+                Ramnavami Countdown
+              </span>
+            </div>
+            <EventCountdown />
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Stats Bar */}
+      <div className="absolute bottom-0 left-0 right-0">
+        <div className="container mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.5 }}
+            className="grid grid-cols-3 max-w-3xl mx-auto bg-white/95 backdrop-blur rounded-t-2xl shadow-xl"
+          >
             {[
-              { num: "1,000+", label: "Residents" },
-              { num: "5+", label: "Annual Festivals" },
-              { num: "100%", label: "Community Funded" },
+              { num: "1,000+", label: "Residents", icon: "👥" },
+              { num: "5+", label: "Annual Festivals", icon: "✨" },
+              { num: "1", label: "United Village", icon: "📍" },
             ].map((s) => (
-              <div key={s.label}>
-                <div className="font-display text-2xl font-bold text-primary">{s.num}</div>
+              <div key={s.label} className="text-center py-5 px-4">
+                <div className="text-2xl mb-1">{s.icon}</div>
+                <div className="font-display text-xl font-bold text-primary">{s.num}</div>
                 <div className="text-xs text-muted-foreground uppercase tracking-wider">{s.label}</div>
               </div>
             ))}
-          </div>
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="relative"
-        >
-          <div className="bg-card rounded-[2.5rem] p-8 shadow-card overflow-hidden ring-1 ring-border">
-            <div className="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent rounded-[2.5rem]" />
-            <div className="relative flex flex-col gap-6">
-              <div className="flex justify-between items-start">
-                <span className="bg-accent/10 text-accent px-4 py-1 rounded-full text-xs font-bold uppercase tracking-widest">
-                  Upcoming Event
-                </span>
-                <Calendar className="w-6 h-6 text-accent" />
-              </div>
-              <div>
-                <h3 className="text-3xl font-display font-bold mb-2 text-foreground">Ramnavami Puja</h3>
-                <p className="text-muted-foreground mb-6">Lakshmi Narayan Aasthan, Nohar</p>
-                <EventCountdown />
-              </div>
-            </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
