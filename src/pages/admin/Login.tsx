@@ -17,22 +17,11 @@ export default function AdminLogin() {
     setError("");
     setLoading(true);
 
-    if (isSignUp) {
-      const { error } = await signUp(email, password, name);
-      if (error) {
-        setError(error.message);
-      } else {
-        setError("");
-        setIsSignUp(false);
-        alert("Account created! The first registered user gets admin access. Please sign in.");
-      }
+    const { error } = await signIn(email, password);
+    if (error) {
+      setError(error.message);
     } else {
-      const { error } = await signIn(email, password);
-      if (error) {
-        setError(error.message);
-      } else {
-        navigate("/admin/dashboard");
-      }
+      navigate("/admin/dashboard");
     }
     setLoading(false);
   };
