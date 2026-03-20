@@ -19,10 +19,10 @@ export default function AdminLayout() {
   const { user, isAdmin, loading, signOut } = useAuth();
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!loading && (!user || !isAdmin)) {
       navigate("/admin/login");
     }
-  }, [loading, user, navigate]);
+  }, [loading, user, isAdmin, navigate]);
 
   const handleLogout = async () => {
     await signOut();

@@ -81,12 +81,6 @@ export default function AdminLogin() {
             </button>
           </form>
 
-          <button
-            onClick={() => { setIsSignUp(!isSignUp); setError(""); }}
-            className="w-full text-center text-sm text-primary mt-4 hover:underline"
-          >
-            {isSignUp ? "Already have an account? Sign In" : "First time? Create Admin Account"}
-          </button>
         </div>
       </motion.div>
     </div>
