@@ -49,18 +49,6 @@ export default function AdminLogin() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {isSignUp && (
-              <div>
-                <label className="text-sm font-medium text-foreground block mb-1">Name</label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl bg-background border border-input text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                  placeholder="Your name"
-                />
-              </div>
-            )}
             <div>
               <label className="text-sm font-medium text-foreground block mb-1">Email</label>
               <input
