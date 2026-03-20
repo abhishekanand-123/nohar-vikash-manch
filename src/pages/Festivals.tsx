@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import PageBanner from "@/components/layout/PageBanner";
+import { Sparkles } from "lucide-react";
 
 const categories = ["All", "Diwali", "Holi", "Ramnavami", "Kali Puja", "Chhath Puja", "General"];
 
@@ -30,14 +32,14 @@ export default function Festivals() {
   const filtered = active === "All" ? blogs : blogs.filter((p) => p.category === active);
 
   return (
-    <div className="py-20">
-      <div className="container mx-auto px-6">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-          <span className="text-accent font-semibold uppercase text-sm tracking-wide">Celebrations</span>
-          <h1 className="text-section font-display font-bold mt-2 text-foreground">Festival Blog</h1>
-          <p className="text-muted-foreground mt-2 max-w-lg mx-auto">Stories and moments from our village celebrations.</p>
-        </motion.div>
+    <div>
+      <PageBanner
+        icon={Sparkles}
+        title="Festival Blog"
+        subtitle="Stories and moments from our village celebrations."
+      />
 
+      <div className="container mx-auto px-6 py-20">
         {/* Category Filter */}
         <div className="flex flex-wrap justify-center gap-2 mb-12">
           {categories.map((cat) => (

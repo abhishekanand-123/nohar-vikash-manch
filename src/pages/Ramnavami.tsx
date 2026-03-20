@@ -2,21 +2,17 @@ import { motion } from "framer-motion";
 import EventCountdown from "@/components/home/EventCountdown";
 import ramnavamiImg from "@/assets/ramnavami.jpg";
 import templeImg from "@/assets/temple.jpg";
+import PageBanner from "@/components/layout/PageBanner";
 
 export default function Ramnavami() {
   return (
-    <div className="py-20">
-      <div className="container mx-auto px-6">
-        {/* Hero */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-16">
-          <span className="text-accent font-semibold uppercase text-sm tracking-wide">श्री राम जन्मोत्सव</span>
-          <h1 className="text-section font-display font-bold mt-2 text-foreground">Ramnavami Puja & Ashtajam</h1>
-          <p className="text-muted-foreground mt-4 max-w-2xl mx-auto leading-relaxed">
-            Every year, Ramnavami Puja and Ashtajam are organized at Lakshmi Narayan Aasthan in Village Nohar.
-            This grand celebration brings the entire community together in devotion, music, and joy.
-          </p>
-        </motion.div>
+    <div>
+      <PageBanner
+        title="Ramnavami Puja & Ashtajam"
+        subtitle="श्री राम जन्मोत्सव — Grand celebration at Lakshmi Narayan Aasthan, Village Nohar."
+      />
 
+      <div className="container mx-auto px-6 py-20">
         {/* Countdown */}
         <div className="max-w-xl mx-auto bg-card rounded-2xl p-8 shadow-card ring-1 ring-border mb-16">
           <h3 className="font-display font-bold text-xl mb-6 text-center text-foreground">Countdown to Ramnavami</h3>

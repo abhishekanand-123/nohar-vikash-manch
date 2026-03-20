@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
-import { Trophy, Users } from "lucide-react";
+import { Trophy, Users, Dribbble } from "lucide-react";
 import sportsImg from "@/assets/sports.jpg";
+import PageBanner from "@/components/layout/PageBanner";
 
 const tournaments = [
   { name: "Nohar Premier League (Cricket)", status: "Upcoming", date: "April 2026" },
@@ -10,37 +11,38 @@ const tournaments = [
 
 export default function Sports() {
   return (
-    <div className="py-20">
-      <div className="container mx-auto px-6">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-16">
-          <span className="text-primary font-semibold uppercase text-sm tracking-wide">Sports</span>
-          <h1 className="text-section font-display font-bold mt-2 text-foreground">Nohar Sports Club</h1>
-          <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
-            Managed by Nohar Vikash Yuvak Sangh, our Sports Club promotes cricket, football, and other sports among the youth of Nohar.
-          </p>
-        </motion.div>
+    <div>
+      <PageBanner
+        icon={Dribbble}
+        title="Sports Club"
+        subtitle="Managed by Nohar Vikash Yuvak Sangh, promoting sports and fitness in Nohar."
+      />
 
-        <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
-          <img src={sportsImg} alt="Village cricket match" className="rounded-2xl shadow-card w-full" loading="lazy" />
-          <div>
-            <h2 className="font-display font-bold text-2xl mb-4 text-foreground">Our Activities</h2>
-            <div className="space-y-4">
+      <div className="container mx-auto px-6 py-20">
+        {/* About + Image */}
+        <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
+          <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+            <h2 className="font-display font-bold text-2xl mb-4 text-foreground">Nohar Sports Club</h2>
+            <p className="text-muted-foreground leading-relaxed mb-8">
+              The Nohar Sports Club, managed by Nohar Vikash Yuvak Sangh, encourages youth participation in cricket,
+              football, and other sports activities. Regular tournaments and practice sessions are organized to keep the sporting spirit alive.
+            </p>
+            <div className="flex flex-wrap gap-4">
               {[
-                { icon: Trophy, title: "Cricket", desc: "Regular practice sessions and inter-village tournaments organized throughout the year." },
-                { icon: Users, title: "Football", desc: "Football matches are played on the village ground with teams from neighboring areas." },
+                { icon: Trophy, title: "Cricket" },
+                { icon: Users, title: "Football" },
               ].map((a) => (
-                <div key={a.title} className="flex items-start gap-4 bg-card rounded-xl p-5 shadow-card ring-1 ring-border">
-                  <div className="p-3 bg-primary/10 rounded-xl shrink-0">
-                    <a.icon className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h4 className="font-display font-semibold text-foreground">{a.title}</h4>
-                    <p className="text-sm text-muted-foreground mt-1">{a.desc}</p>
-                  </div>
+                <div key={a.title} className="flex flex-col items-center gap-2 bg-card rounded-xl px-8 py-5 shadow-card ring-1 ring-border">
+                  <a.icon className="w-6 h-6 text-primary" />
+                  <span className="font-display font-semibold text-foreground text-sm">{a.title}</span>
                 </div>
               ))}
             </div>
-          </div>
+          </motion.div>
+
+          <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
+            <img src={sportsImg} alt="Village cricket match" className="rounded-2xl shadow-card w-full" loading="lazy" />
+          </motion.div>
         </div>
 
         {/* Tournaments */}

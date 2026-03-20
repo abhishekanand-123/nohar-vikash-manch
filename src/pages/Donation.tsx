@@ -1,19 +1,17 @@
 import { motion } from "framer-motion";
 import { Heart, QrCode } from "lucide-react";
+import PageBanner from "@/components/layout/PageBanner";
 
 export default function Donation() {
   return (
-    <div className="py-20">
-      <div className="container mx-auto px-6">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-16">
-          <span className="text-accent font-semibold uppercase text-sm tracking-wide">Support Us</span>
-          <h1 className="text-section font-display font-bold mt-2 text-foreground">Donate for Village Events</h1>
-          <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">
-            Your generous donations help us organize festivals, maintain the temple, and support community activities.
-            Every contribution makes a difference.
-          </p>
-        </motion.div>
+    <div>
+      <PageBanner
+        icon={Heart}
+        title="Donate for Village Events"
+        subtitle="Your generous donations help us organize festivals, maintain the temple, and support community activities."
+      />
 
+      <div className="container mx-auto px-6 py-20">
         <div className="max-w-xl mx-auto">
           {/* QR Code Card */}
           <div className="bg-card rounded-2xl p-8 shadow-card ring-1 ring-border text-center mb-8">
