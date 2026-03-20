@@ -32,6 +32,7 @@ export default function Gallery() {
     <div>
       <PageBanner title="Village Gallery" subtitle="Explore the beauty of Nohar village through our photo collection" icon={Camera} />
 
+      <div className="container mx-auto px-6 py-16">
         <div className="flex flex-wrap justify-center gap-2 mb-12">
           {categories.map((cat) => (
             <button
@@ -66,6 +67,5 @@ export default function Gallery() {
           ))}
         </div>
       </div>
-    </div>
   );
 }
