@@ -1,5 +1,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { Camera } from "lucide-react";
+import PageBanner from "@/components/layout/PageBanner";
 import heroImg from "@/assets/hero-village.jpg";
 import templeImg from "@/assets/temple.jpg";
 import sportsImg from "@/assets/sports.jpg";
@@ -27,13 +29,10 @@ export default function Gallery() {
   const filtered = active === "All" ? images : images.filter((img) => img.category === active);
 
   return (
-    <div className="py-20">
-      <div className="container mx-auto px-6">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-          <span className="text-primary font-semibold uppercase text-sm tracking-wide">Photos</span>
-          <h1 className="text-section font-display font-bold mt-2 text-foreground">Village Gallery</h1>
-        </motion.div>
+    <div>
+      <PageBanner title="Village Gallery" subtitle="Explore the beauty of Nohar village through our photo collection" icon={Camera} />
 
+      <div className="container mx-auto px-6 py-16">
         <div className="flex flex-wrap justify-center gap-2 mb-12">
           {categories.map((cat) => (
             <button
