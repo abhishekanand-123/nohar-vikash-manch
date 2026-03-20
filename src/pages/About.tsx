@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import PageBanner from "@/components/layout/PageBanner";
+import { Info } from "lucide-react";
 
 interface Member {
   id: string;
@@ -26,7 +28,6 @@ export default function About() {
 
   const maxIndex = Math.max(0, members.length - visibleCount);
 
-  // Auto-slide
   const next = useCallback(() => {
     setCurrent((prev) => (prev >= maxIndex ? 0 : prev + 1));
   }, [maxIndex]);
@@ -38,14 +39,20 @@ export default function About() {
   }, [next, members.length, visibleCount]);
 
   return (
-    <div className="py-20">
+    <div>
+      <PageBanner
+        icon={Info}
+        title="About Us"
+        subtitle="Learn about Nohar Vikash Yuvak Sangh and our mission to develop Nohar village."
+      />
+
       {/* Mission Section */}
-      <section className="container mx-auto px-6 mb-20">
+      <section className="container mx-auto px-6 py-20">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl mx-auto text-center">
-          <span className="text-accent font-semibold uppercase text-sm tracking-wide">About Us</span>
-          <h1 className="text-section font-display font-bold mt-2 mb-6 text-foreground">
+          <span className="text-accent font-semibold uppercase text-sm tracking-wide">Who We Are</span>
+          <h2 className="text-section font-display font-bold mt-2 mb-6 text-foreground">
             Nohar Vikash Yuvak Sangh
-          </h1>
+          </h2>
           <p className="text-muted-foreground leading-relaxed mb-8">
             Nohar Vikash Yuvak Sangh is a community organization dedicated to the holistic development of Village Nohar.
             We organize festivals, manage community infrastructure, promote sports, and work towards improving the quality of life for all residents.
@@ -85,10 +92,7 @@ export default function About() {
           ) : members.length === 0 ? (
             <p className="text-muted-foreground text-center py-8">No members added yet.</p>
           ) : (
-            <div
-              className="relative max-w-4xl mx-auto"
-              onMouseEnter={() => {}} 
-            >
+            <div className="relative max-w-4xl mx-auto">
               <div className="overflow-hidden rounded-2xl">
                 <motion.div
                   className="flex gap-6"
@@ -117,7 +121,6 @@ export default function About() {
                 </motion.div>
               </div>
 
-              {/* Dots indicator */}
               {members.length > visibleCount && (
                 <div className="flex justify-center gap-2 mt-6">
                   {Array.from({ length: maxIndex + 1 }).map((_, i) => (
