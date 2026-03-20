@@ -77,7 +77,7 @@ export default function AdminLogin() {
               disabled={loading}
               className="w-full bg-primary text-primary-foreground py-3 rounded-xl font-semibold text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
             >
-              {loading ? "Please wait..." : isSignUp ? "Create Account" : "Sign In"}
+              {loading ? "Please wait..." : "Sign In"}
             </button>
           </form>
 
