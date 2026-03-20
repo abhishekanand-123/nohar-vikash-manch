@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface Member {
@@ -26,6 +25,17 @@ export default function About() {
   }, []);
 
   const maxIndex = Math.max(0, members.length - visibleCount);
+
+  // Auto-slide
+  const next = useCallback(() => {
+    setCurrent((prev) => (prev >= maxIndex ? 0 : prev + 1));
+  }, [maxIndex]);
+
+  useEffect(() => {
+    if (members.length <= visibleCount) return;
+    const id = setInterval(next, 3000);
+    return () => clearInterval(id);
+  }, [next, members.length, visibleCount]);
 
   return (
     <div className="py-20">
@@ -60,7 +70,7 @@ export default function About() {
         </div>
       </section>
 
-      {/* Members Carousel */}
+      {/* Members Auto Carousel */}
       <section className="bg-secondary/50 py-20">
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
@@ -75,12 +85,15 @@ export default function About() {
           ) : members.length === 0 ? (
             <p className="text-muted-foreground text-center py-8">No members added yet.</p>
           ) : (
-            <div className="relative max-w-4xl mx-auto">
-              <div className="overflow-hidden">
+            <div
+              className="relative max-w-4xl mx-auto"
+              onMouseEnter={() => {}} 
+            >
+              <div className="overflow-hidden rounded-2xl">
                 <motion.div
                   className="flex gap-6"
                   animate={{ x: `-${current * (100 / visibleCount + 2)}%` }}
-                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  transition={{ type: "spring", stiffness: 200, damping: 30 }}
                 >
                   {members.map((m) => (
                     <div
@@ -89,9 +102,9 @@ export default function About() {
                       style={{ width: `calc(${100 / visibleCount}% - 1rem)` }}
                     >
                       {m.image ? (
-                        <img src={m.image} alt={m.name} className="w-24 h-24 rounded-full mx-auto mb-4 object-cover" />
+                        <img src={m.image} alt={m.name} className="w-24 h-24 rounded-full mx-auto mb-4 object-cover ring-4 ring-primary/20" />
                       ) : (
-                        <div className="w-24 h-24 rounded-full bg-primary/10 mx-auto mb-4 flex items-center justify-center">
+                        <div className="w-24 h-24 rounded-full bg-primary/10 mx-auto mb-4 flex items-center justify-center ring-4 ring-primary/20">
                           <span className="font-display text-2xl font-bold text-primary">
                             {m.name.split(" ").map(n => n[0]).join("")}
                           </span>
@@ -104,20 +117,20 @@ export default function About() {
                 </motion.div>
               </div>
 
-              <button
-                onClick={() => setCurrent(Math.max(0, current - 1))}
-                disabled={current === 0}
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 p-2 bg-card rounded-full shadow-card ring-1 ring-border disabled:opacity-30"
-              >
-                <ChevronLeft className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => setCurrent(Math.min(maxIndex, current + 1))}
-                disabled={current >= maxIndex}
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 p-2 bg-card rounded-full shadow-card ring-1 ring-border disabled:opacity-30"
-              >
-                <ChevronRight className="w-5 h-5" />
-              </button>
+              {/* Dots indicator */}
+              {members.length > visibleCount && (
+                <div className="flex justify-center gap-2 mt-6">
+                  {Array.from({ length: maxIndex + 1 }).map((_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setCurrent(i)}
+                      className={`w-2.5 h-2.5 rounded-full transition-colors ${
+                        i === current ? "bg-primary" : "bg-border"
+                      }`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>
