@@ -40,7 +40,7 @@ export default function AdminLogin() {
             </div>
           </div>
           <h1 className="font-display font-bold text-2xl text-center mb-2 text-foreground">
-            {isSignUp ? "Admin Register" : "Admin Login"}
+            Admin Login
           </h1>
           <p className="text-sm text-muted-foreground text-center mb-6">NoharVikashManch Dashboard</p>
 
