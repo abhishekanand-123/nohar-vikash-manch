@@ -20,8 +20,13 @@ export type Database = {
           content: string | null
           created_at: string
           created_by: string | null
+          festival_date: string | null
+          gallery_images: string[] | null
+          highlights: string[] | null
           id: string
           image: string | null
+          location: string | null
+          tags: string[] | null
           title: string
         }
         Insert: {
@@ -29,8 +34,13 @@ export type Database = {
           content?: string | null
           created_at?: string
           created_by?: string | null
+          festival_date?: string | null
+          gallery_images?: string[] | null
+          highlights?: string[] | null
           id?: string
           image?: string | null
+          location?: string | null
+          tags?: string[] | null
           title: string
         }
         Update: {
@@ -38,8 +48,13 @@ export type Database = {
           content?: string | null
           created_at?: string
           created_by?: string | null
+          festival_date?: string | null
+          gallery_images?: string[] | null
+          highlights?: string[] | null
           id?: string
           image?: string | null
+          location?: string | null
+          tags?: string[] | null
           title?: string
         }
         Relationships: []

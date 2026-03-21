@@ -42,7 +42,7 @@ export default function FestivalHighlights() {
               transition={{ delay: i * 0.1 }}
             >
               <Link
-                to="/festivals"
+                to={`/festivals/${f.id}`}
                 className="block bg-card rounded-xl overflow-hidden shadow-card ring-1 ring-border hover:shadow-xl transition-shadow group"
               >
                 {f.image && (

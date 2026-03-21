@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import PageBanner from "@/components/layout/PageBanner";
 import { Sparkles } from "lucide-react";
@@ -11,7 +12,12 @@ interface Blog {
   title: string;
   content: string | null;
   image: string | null;
+  gallery_images: string[] | null;
   category: string | null;
+  tags: string[] | null;
+  highlights: string[] | null;
+  location: string | null;
+  festival_date: string | null;
   created_at: string;
 }
 
@@ -100,9 +106,18 @@ export default function Festivals() {
                         <span className="text-xs font-semibold text-accent uppercase tracking-wider">{post.category}</span>
                         <h3 className="font-display font-bold text-lg mt-2 mb-2 text-foreground">{post.title}</h3>
                         <p className="text-sm text-muted-foreground mb-4 line-clamp-3">{post.content}</p>
+                        {post.tags && post.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-2 mb-4">
+                            {post.tags.slice(0, 3).map((tag) => (
+                              <span key={tag} className="text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-secondary text-secondary-foreground">
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                         <div className="flex items-center justify-between text-xs text-muted-foreground">
                           <span>{new Date(post.created_at).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}</span>
-                          <span>Nohar Vikash Yuvak Sangh</span>
+                          <Link to={`/festivals/${post.id}`} className="text-primary font-medium hover:underline">Read Details</Link>
                         </div>
                       </div>
                     </motion.article>

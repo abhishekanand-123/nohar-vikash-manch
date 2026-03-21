@@ -9,6 +9,7 @@ import AdminLayout from "@/components/admin/AdminLayout";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Festivals from "./pages/Festivals";
+import FestivalDetails from "./pages/FestivalDetails";
 import Ramnavami from "./pages/Ramnavami";
 import Sports from "./pages/Sports";
 import Gallery from "./pages/Gallery";
@@ -38,6 +39,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/about" element={<About />} />
               <Route path="/festivals" element={<Festivals />} />
+              <Route path="/festivals/:id" element={<FestivalDetails />} />
               <Route path="/ramnavami" element={<Ramnavami />} />
               <Route path="/sports" element={<Sports />} />
               <Route path="/gallery" element={<Gallery />} />

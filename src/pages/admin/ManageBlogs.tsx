@@ -10,11 +10,17 @@ interface Blog {
   title: string;
   content: string | null;
   image: string | null;
+  gallery_images: string[] | null;
   category: string | null;
+  tags: string[] | null;
+  highlights: string[] | null;
+  location: string | null;
+  festival_date: string | null;
   created_at: string;
 }
 
 const categories = ["Diwali", "Holi", "Ramnavami", "Kali Puja", "Chhath Puja", "General"];
+const tagOptions = ["Tradition", "Community", "Music", "Food", "Temple", "Culture", "Parade", "Youth"];
 
 export default function ManageBlogs() {
   const { isAdmin, user } = useAuth();
@@ -22,7 +28,18 @@ export default function ManageBlogs() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<Blog | null>(null);
-  const [form, setForm] = useState({ title: "", content: "", category: "General", imageFile: null as File | null });
+  const [form, setForm] = useState({
+    title: "",
+    content: "",
+    category: "General",
+    imageFile: null as File | null,
+    galleryImageFiles: [] as File[],
+    tags: [] as string[],
+    customTags: "",
+    highlightsText: "",
+    location: "",
+    festivalDate: "",
+  });
   const [saving, setSaving] = useState(false);
 
   const load = async () => {
@@ -33,24 +50,82 @@ export default function ManageBlogs() {
 
   useEffect(() => { load(); }, []);
 
-  const resetForm = () => { setForm({ title: "", content: "", category: "General", imageFile: null }); setEditing(null); setShowForm(false); };
+  const resetForm = () => {
+    setForm({
+      title: "",
+      content: "",
+      category: "General",
+      imageFile: null,
+      galleryImageFiles: [],
+      tags: [],
+      customTags: "",
+      highlightsText: "",
+      location: "",
+      festivalDate: "",
+    });
+    setEditing(null);
+    setShowForm(false);
+  };
+
+  const normalizeTags = (selected: string[], customTagInput: string) => {
+    const custom = customTagInput
+      .split(",")
+      .map((tag) => tag.trim())
+      .filter(Boolean);
+    return Array.from(new Set([...selected, ...custom]));
+  };
 
   const handleSave = async () => {
     if (!form.title.trim()) { toast({ title: "Title is required", variant: "destructive" }); return; }
     setSaving(true);
 
     let imageUrl = editing?.image ?? null;
+    let galleryImages = editing?.gallery_images ?? [];
     if (form.imageFile) {
       const url = await uploadFile(form.imageFile, "blogs");
       if (url) imageUrl = url;
     }
+    if (form.galleryImageFiles.length > 0) {
+      const uploaded = await Promise.all(form.galleryImageFiles.map((file) => uploadFile(file, "blogs")));
+      galleryImages = uploaded.filter((url): url is string => Boolean(url));
+    }
+
+    const tags = normalizeTags(form.tags, form.customTags);
+    const highlights = form.highlightsText
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean);
 
     if (editing) {
-      const { error } = await supabase.from("blogs").update({ title: form.title, content: form.content, category: form.category, image: imageUrl }).eq("id", editing.id);
+      const { error } = await supabase
+        .from("blogs")
+        .update({
+          title: form.title,
+          content: form.content,
+          category: form.category,
+          image: imageUrl,
+          gallery_images: galleryImages,
+          tags,
+          highlights,
+          location: form.location || null,
+          festival_date: form.festivalDate || null,
+        })
+        .eq("id", editing.id);
       if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
       else toast({ title: "Blog updated!" });
     } else {
-      const { error } = await supabase.from("blogs").insert({ title: form.title, content: form.content, category: form.category, image: imageUrl, created_by: user?.id });
+      const { error } = await supabase.from("blogs").insert({
+        title: form.title,
+        content: form.content,
+        category: form.category,
+        image: imageUrl,
+        gallery_images: galleryImages,
+        tags,
+        highlights,
+        location: form.location || null,
+        festival_date: form.festivalDate || null,
+        created_by: user?.id,
+      });
       if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
       else toast({ title: "Blog added!" });
     }
@@ -68,7 +143,18 @@ export default function ManageBlogs() {
 
   const startEdit = (b: Blog) => {
     setEditing(b);
-    setForm({ title: b.title, content: b.content ?? "", category: b.category ?? "General", imageFile: null });
+    setForm({
+      title: b.title,
+      content: b.content ?? "",
+      category: b.category ?? "General",
+      imageFile: null,
+      galleryImageFiles: [],
+      tags: b.tags ?? [],
+      customTags: "",
+      highlightsText: (b.highlights ?? []).join("\n"),
+      location: b.location ?? "",
+      festivalDate: b.festival_date ?? "",
+    });
     setShowForm(true);
   };
 
@@ -92,7 +178,64 @@ export default function ManageBlogs() {
           <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="w-full px-4 py-3 rounded-xl bg-background border border-input text-foreground text-sm">
             {categories.map((c) => <option key={c} value={c}>{c}</option>)}
           </select>
-          <input type="file" accept="image/*" onChange={(e) => setForm({ ...form, imageFile: e.target.files?.[0] ?? null })} className="text-sm" />
+          <input value={form.location} onChange={(e) => setForm({ ...form, location: e.target.value })} placeholder="Festival location (optional)" className="w-full px-4 py-3 rounded-xl bg-background border border-input text-foreground text-sm" />
+          <input value={form.festivalDate} onChange={(e) => setForm({ ...form, festivalDate: e.target.value })} placeholder="Festival date / range (optional)" className="w-full px-4 py-3 rounded-xl bg-background border border-input text-foreground text-sm" />
+
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-foreground">Tags (multi-select)</p>
+            <div className="flex flex-wrap gap-2">
+              {tagOptions.map((tag) => {
+                const checked = form.tags.includes(tag);
+                return (
+                  <button
+                    key={tag}
+                    type="button"
+                    onClick={() => setForm({
+                      ...form,
+                      tags: checked ? form.tags.filter((t) => t !== tag) : [...form.tags, tag],
+                    })}
+                    className={`px-3 py-1 rounded-full text-xs ring-1 transition-colors ${
+                      checked ? "bg-primary text-primary-foreground ring-primary" : "bg-background text-muted-foreground ring-border hover:bg-secondary"
+                    }`}
+                  >
+                    {tag}
+                  </button>
+                );
+              })}
+            </div>
+            <input
+              value={form.customTags}
+              onChange={(e) => setForm({ ...form, customTags: e.target.value })}
+              placeholder="Add custom tags (comma separated)"
+              className="w-full px-4 py-3 rounded-xl bg-background border border-input text-foreground text-sm"
+            />
+          </div>
+
+          <textarea
+            value={form.highlightsText}
+            onChange={(e) => setForm({ ...form, highlightsText: e.target.value })}
+            placeholder="Highlights (one point per line)"
+            rows={4}
+            className="w-full px-4 py-3 rounded-xl bg-background border border-input text-foreground text-sm"
+          />
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">Cover image</label>
+            <input type="file" accept="image/*" onChange={(e) => setForm({ ...form, imageFile: e.target.files?.[0] ?? null })} className="text-sm" />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">Gallery images (multi-select)</label>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={(e) => setForm({ ...form, galleryImageFiles: Array.from(e.target.files ?? []) })}
+              className="text-sm"
+            />
+            {editing && (editing.gallery_images?.length ?? 0) > 0 && form.galleryImageFiles.length === 0 && (
+              <p className="text-xs text-muted-foreground">Using {editing.gallery_images?.length} existing gallery image(s). Select files to replace them.</p>
+            )}
+          </div>
           <div className="flex gap-3">
             <button onClick={handleSave} disabled={saving} className="bg-primary text-primary-foreground px-6 py-2 rounded-xl text-sm font-medium hover:opacity-90 disabled:opacity-50">
               {saving ? "Saving..." : editing ? "Update" : "Add"}
@@ -110,6 +253,9 @@ export default function ManageBlogs() {
               <h3 className="font-semibold text-foreground truncate">{b.title}</h3>
               <p className="text-xs text-muted-foreground">{b.category} • {new Date(b.created_at).toLocaleDateString()}</p>
               <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{b.content}</p>
+              {b.tags && b.tags.length > 0 && (
+                <p className="text-xs text-muted-foreground mt-1">Tags: {b.tags.join(", ")}</p>
+              )}
             </div>
             {isAdmin && (
               <div className="flex gap-1 flex-shrink-0">
