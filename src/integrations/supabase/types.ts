@@ -143,6 +143,39 @@ export type Database = {
         }
         Relationships: []
       }
+      page_banners: {
+        Row: {
+          bg_image: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          page_key: string
+          subtitle: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          bg_image?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          page_key: string
+          subtitle?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          bg_image?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          page_key?: string
+          subtitle?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -164,6 +197,39 @@ export type Database = {
           email?: string | null
           id?: string
           name?: string | null
+        }
+        Relationships: []
+      }
+      sports: {
+        Row: {
+          created_at: string
+          description: string | null
+          event_date: string | null
+          id: string
+          image: string | null
+          sport_type: string | null
+          status: string | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          event_date?: string | null
+          id?: string
+          image?: string | null
+          sport_type?: string | null
+          status?: string | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          event_date?: string | null
+          id?: string
+          image?: string | null
+          sport_type?: string | null
+          status?: string | null
+          title?: string
         }
         Relationships: []
       }

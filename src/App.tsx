@@ -20,6 +20,8 @@ import ManageBlogs from "./pages/admin/ManageBlogs";
 import ManageGallery from "./pages/admin/ManageGallery";
 import ManageEvents from "./pages/admin/ManageEvents";
 import ManageDonations from "./pages/admin/ManageDonations";
+import ManageSports from "./pages/admin/ManageSports";
+import ManageBanners from "./pages/admin/ManageBanners";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -48,6 +50,8 @@ const App = () => (
               <Route path="/admin/members" element={<ManageMembers />} />
               <Route path="/admin/gallery" element={<ManageGallery />} />
               <Route path="/admin/events" element={<ManageEvents />} />
+              <Route path="/admin/sports" element={<ManageSports />} />
+              <Route path="/admin/banners" element={<ManageBanners />} />
               <Route path="/admin/donations" element={<ManageDonations />} />
             </Route>
             <Route path="*" element={<NotFound />} />

@@ -8,6 +8,7 @@ export default function Ramnavami() {
   return (
     <div>
       <PageBanner
+        pageKey="ramnavami"
         title="Ramnavami Puja & Ashtajam"
         subtitle="श्री राम जन्मोत्सव — Grand celebration at Lakshmi Narayan Aasthan, Village Nohar."
       />

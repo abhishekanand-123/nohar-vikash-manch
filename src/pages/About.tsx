@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import PageBanner from "@/components/layout/PageBanner";
 import { Info } from "lucide-react";
+import HoverImagePreview from "@/components/common/HoverImagePreview";
 
 interface Member {
   id: string;
@@ -15,7 +16,18 @@ export default function About() {
   const [current, setCurrent] = useState(0);
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
-  const visibleCount = typeof window !== "undefined" && window.innerWidth < 768 ? 1 : 3;
+  const [visibleCount, setVisibleCount] = useState(3);
+
+  useEffect(() => {
+    const updateVisibleCount = () => {
+      if (window.innerWidth < 768) setVisibleCount(1);
+      else if (window.innerWidth < 1024) setVisibleCount(2);
+      else setVisibleCount(3);
+    };
+    updateVisibleCount();
+    window.addEventListener("resize", updateVisibleCount);
+    return () => window.removeEventListener("resize", updateVisibleCount);
+  }, []);
 
   useEffect(() => {
     async function load() {
@@ -41,6 +53,7 @@ export default function About() {
   return (
     <div>
       <PageBanner
+        pageKey="about"
         icon={Info}
         title="About Us"
         subtitle="Learn about Nohar Vikash Yuvak Sangh and our mission to develop Nohar village."
@@ -92,21 +105,26 @@ export default function About() {
           ) : members.length === 0 ? (
             <p className="text-muted-foreground text-center py-8">No members added yet.</p>
           ) : (
-            <div className="relative max-w-4xl mx-auto">
+            <div className="relative max-w-5xl mx-auto">
               <div className="overflow-hidden rounded-2xl">
                 <motion.div
-                  className="flex gap-6"
+                  className="flex gap-5"
                   animate={{ x: `-${current * (100 / visibleCount + 2)}%` }}
                   transition={{ type: "spring", stiffness: 200, damping: 30 }}
                 >
                   {members.map((m) => (
                     <div
                       key={m.id}
-                      className="shrink-0 bg-card rounded-2xl p-6 shadow-card ring-1 ring-border text-center"
+                      className="shrink-0 bg-card rounded-2xl p-6 shadow-card ring-1 ring-border text-center hover:shadow-xl transition-shadow"
                       style={{ width: `calc(${100 / visibleCount}% - 1rem)` }}
                     >
                       {m.image ? (
-                        <img src={m.image} alt={m.name} className="w-24 h-24 rounded-full mx-auto mb-4 object-cover ring-4 ring-primary/20" />
+                        <HoverImagePreview
+                          src={m.image}
+                          alt={m.name}
+                          containerClassName="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden ring-4 ring-primary/20"
+                          imageClassName="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                        />
                       ) : (
                         <div className="w-24 h-24 rounded-full bg-primary/10 mx-auto mb-4 flex items-center justify-center ring-4 ring-primary/20">
                           <span className="font-display text-2xl font-bold text-primary">

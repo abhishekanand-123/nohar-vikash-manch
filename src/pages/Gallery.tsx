@@ -1,38 +1,50 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Camera } from "lucide-react";
 import PageBanner from "@/components/layout/PageBanner";
-import heroImg from "@/assets/hero-village.jpg";
-import templeImg from "@/assets/temple.jpg";
-import sportsImg from "@/assets/sports.jpg";
-import diwaliImg from "@/assets/diwali.jpg";
-import holiImg from "@/assets/holi.jpg";
-import chhathImg from "@/assets/chhath.jpg";
-import kalipujaImg from "@/assets/kalipuja.jpg";
-import ramnavamiImg from "@/assets/ramnavami.jpg";
+import { supabase } from "@/integrations/supabase/client";
+import HoverImagePreview from "@/components/common/HoverImagePreview";
 
-const categories = ["All", "Festival", "Sports", "Village"];
-
-const images = [
-  { src: heroImg, title: "Nohar Village", category: "Village" },
-  { src: templeImg, title: "Lakshmi Narayan Aasthan", category: "Village" },
-  { src: ramnavamiImg, title: "Ramnavami Celebration", category: "Festival" },
-  { src: diwaliImg, title: "Diwali Festival", category: "Festival" },
-  { src: holiImg, title: "Holi Celebration", category: "Festival" },
-  { src: chhathImg, title: "Chhath Puja", category: "Festival" },
-  { src: kalipujaImg, title: "Kali Puja", category: "Festival" },
-  { src: sportsImg, title: "Cricket Match", category: "Sports" },
-];
+interface GalleryItem {
+  id: string;
+  image: string;
+  title: string | null;
+  category: string | null;
+}
 
 export default function Gallery() {
   const [active, setActive] = useState("All");
+  const [images, setImages] = useState<GalleryItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function load() {
+      const { data } = await supabase.from("gallery").select("*").order("created_at", { ascending: false });
+      setImages((data as GalleryItem[]) ?? []);
+      setLoading(false);
+    }
+    load();
+  }, []);
+
+  const categories = useMemo(() => {
+    const uniqueCategories = Array.from(
+      new Set(images.map((img) => img.category?.trim()).filter((category): category is string => Boolean(category)))
+    );
+    return ["All", ...uniqueCategories];
+  }, [images]);
+
   const filtered = active === "All" ? images : images.filter((img) => img.category === active);
 
   return (
     <div>
-      <PageBanner title="Village Gallery" subtitle="Explore the beauty of Nohar village through our photo collection" icon={Camera} />
+      <PageBanner pageKey="gallery" title="Village Gallery" subtitle="Explore the beauty of Nohar village through our photo collection" icon={Camera} />
 
       <div className="container mx-auto px-6 py-16">
+        <div className="max-w-6xl mx-auto mb-10 text-center">
+          <p className="text-sm text-muted-foreground">
+            Hover any photo to preview full image. New uploads from admin appear automatically.
+          </p>
+        </div>
         <div className="flex flex-wrap justify-center gap-2 mb-12">
           {categories.map((cat) => (
             <button
@@ -49,23 +61,37 @@ export default function Gallery() {
           ))}
         </div>
 
-        <div className="columns-1 sm:columns-2 lg:columns-3 gap-4 space-y-4">
+        {loading ? (
+          <div className="flex justify-center py-12">
+            <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
+          </div>
+        ) : (
+          <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 space-y-5 max-w-6xl mx-auto">
           {filtered.map((img, i) => (
             <motion.div
-              key={img.title}
+              key={img.id}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.05 }}
-              className="break-inside-avoid rounded-xl overflow-hidden shadow-card ring-1 ring-border group"
+              className="break-inside-avoid rounded-2xl overflow-hidden shadow-card ring-1 ring-border/60 bg-card group hover:shadow-xl transition-all duration-300"
             >
-              <img src={img.src} alt={img.title} className="w-full group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+              <HoverImagePreview
+                src={img.image}
+                alt={img.title ?? "Gallery image"}
+                containerClassName="relative overflow-hidden"
+                imageClassName="w-full group-hover:scale-105 transition-transform duration-500"
+              />
               <div className="p-3 bg-card">
-                <p className="text-sm font-medium text-foreground">{img.title}</p>
-                <p className="text-xs text-muted-foreground">{img.category}</p>
+                <p className="text-sm font-medium text-foreground">{img.title || "Nohar Gallery"}</p>
+                <p className="text-xs text-muted-foreground">{img.category || "General"}</p>
               </div>
             </motion.div>
           ))}
-        </div>
+          </div>
+        )}
+        {!loading && filtered.length === 0 && (
+          <p className="text-muted-foreground text-center py-8">No gallery images available yet.</p>
+        )}
       </div>
     </div>
   );

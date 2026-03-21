@@ -3,21 +3,8 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import PageBanner from "@/components/layout/PageBanner";
 import { Sparkles } from "lucide-react";
-import ramnavamiImg from "@/assets/ramnavami-festival.jpg";
-import diwaliImg from "@/assets/diwali-festival.jpg";
-import holiImg from "@/assets/holi-festival.jpg";
-import chhathImg from "@/assets/chhath-festival.jpg";
-import kalipujaImg from "@/assets/kalipuja-festival.jpg";
-
-const categories = ["All", "Diwali", "Holi", "Ramnavami", "Kali Puja", "Chhath Puja", "General"];
-
-const defaultFestivals = [
-  { id: "d-ramnavami", title: "Ramnavami", description: "Grand celebration at Lakshmi Narayan Aasthan", image: ramnavamiImg, category: "Ramnavami" },
-  { id: "d-diwali", title: "Diwali", description: "Festival of lights celebrated with community feasts", image: diwaliImg, category: "Diwali" },
-  { id: "d-holi", title: "Holi", description: "Colors of joy across every lane of Nohar", image: holiImg, category: "Holi" },
-  { id: "d-chhath", title: "Chhath Puja", description: "Sacred offerings to the Sun God", image: chhathImg, category: "Chhath Puja" },
-  { id: "d-kalipuja", title: "Kali Puja", description: "Night of devotion and spiritual energy", image: kalipujaImg, category: "Kali Puja" },
-];
+import { Tables } from "@/integrations/supabase/types";
+import HoverImagePreview from "@/components/common/HoverImagePreview";
 
 interface Blog {
   id: string;
@@ -28,26 +15,37 @@ interface Blog {
   created_at: string;
 }
 
+type Event = Tables<"events">;
+
 export default function Festivals() {
   const [active, setActive] = useState("All");
   const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function load() {
-      const { data } = await supabase.from("blogs").select("*").order("created_at", { ascending: false });
-      setBlogs((data as Blog[]) ?? []);
+      const [{ data: blogsData }, { data: eventsData }] = await Promise.all([
+        supabase.from("blogs").select("*").order("created_at", { ascending: false }),
+        supabase.from("events").select("*").order("date", { ascending: true }),
+      ]);
+      setBlogs((blogsData as Blog[]) ?? []);
+      setEvents((eventsData as Event[]) ?? []);
       setLoading(false);
     }
     load();
   }, []);
 
-  const filteredDefaults = active === "All" ? defaultFestivals : defaultFestivals.filter((f) => f.category === active);
+  const categories = [
+    "All",
+    ...Array.from(new Set(blogs.map((p) => p.category?.trim()).filter((category): category is string => Boolean(category)))),
+  ];
   const filteredBlogs = active === "All" ? blogs : blogs.filter((p) => p.category === active);
 
   return (
     <div>
       <PageBanner
+        pageKey="festivals"
         icon={Sparkles}
         title="Festival Blog"
         subtitle="Stories and moments from our village celebrations."
@@ -71,62 +69,83 @@ export default function Festivals() {
           ))}
         </div>
 
-        {/* Default Festival Cards */}
-        {filteredDefaults.length > 0 && (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {filteredDefaults.map((fest, i) => (
-              <motion.div
-                key={fest.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.08 }}
-                className="bg-card rounded-2xl overflow-hidden shadow-card ring-1 ring-border hover:shadow-lg transition-shadow"
-              >
-                <div className="aspect-video overflow-hidden">
-                  <img src={fest.image} alt={fest.title} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" loading="lazy" />
-                </div>
-                <div className="p-5">
-                  <h3 className="font-display font-bold text-lg text-foreground">{fest.title}</h3>
-                  <p className="text-sm text-muted-foreground mt-1">{fest.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        )}
-
-        {/* Blog Posts from Supabase */}
+        {/* Blog posts from admin panel */}
         {loading ? (
           <div className="flex justify-center py-12">
             <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
           </div>
-        ) : filteredBlogs.length > 0 && (
+        ) : (
           <>
-            <h3 className="font-display text-xl font-bold text-foreground mb-6">Blog Posts</h3>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredBlogs.map((post, i) => (
-                <motion.article
-                  key={post.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  className="bg-card rounded-2xl overflow-hidden shadow-card ring-1 ring-border"
-                >
-                  {post.image && (
-                    <div className="aspect-video overflow-hidden">
-                      <img src={post.image} alt={post.title} className="w-full h-full object-cover" loading="lazy" />
-                    </div>
-                  )}
-                  <div className="p-6">
-                    <span className="text-xs font-semibold text-accent uppercase tracking-wider">{post.category}</span>
-                    <h3 className="font-display font-bold text-lg mt-2 mb-2 text-foreground">{post.title}</h3>
-                    <p className="text-sm text-muted-foreground mb-4 line-clamp-3">{post.content}</p>
-                    <div className="flex items-center justify-between text-xs text-muted-foreground">
-                      <span>{new Date(post.created_at).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}</span>
-                      <span>Nohar Vikash Yuvak Sangh</span>
-                    </div>
-                  </div>
-                </motion.article>
-              ))}
+            {filteredBlogs.length > 0 && (
+              <>
+                <h3 className="font-display text-xl font-bold text-foreground mb-6">Blog Posts</h3>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
+                  {filteredBlogs.map((post, i) => (
+                    <motion.article
+                      key={post.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      className="bg-card rounded-2xl overflow-hidden shadow-card ring-1 ring-border hover:shadow-xl transition-shadow"
+                    >
+                      {post.image && (
+                        <HoverImagePreview
+                          src={post.image}
+                          alt={post.title}
+                          containerClassName="aspect-video overflow-hidden"
+                          imageClassName="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                        />
+                      )}
+                      <div className="p-6">
+                        <span className="text-xs font-semibold text-accent uppercase tracking-wider">{post.category}</span>
+                        <h3 className="font-display font-bold text-lg mt-2 mb-2 text-foreground">{post.title}</h3>
+                        <p className="text-sm text-muted-foreground mb-4 line-clamp-3">{post.content}</p>
+                        <div className="flex items-center justify-between text-xs text-muted-foreground">
+                          <span>{new Date(post.created_at).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}</span>
+                          <span>Nohar Vikash Yuvak Sangh</span>
+                        </div>
+                      </div>
+                    </motion.article>
+                  ))}
+                </div>
+              </>
+            )}
+            {filteredBlogs.length === 0 && (
+              <p className="text-muted-foreground text-center py-8">No blog posts available yet.</p>
+            )}
+            <div className="mt-14">
+              <h3 className="font-display text-xl font-bold text-foreground mb-6">Village Events</h3>
+              {events.length === 0 ? (
+                <p className="text-muted-foreground">No events added yet.</p>
+              ) : (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
+                  {events.map((event, i) => (
+                    <motion.article
+                      key={event.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.08 }}
+                      className="bg-card rounded-2xl overflow-hidden shadow-card ring-1 ring-border hover:shadow-xl transition-shadow"
+                    >
+                      {event.image && (
+                        <HoverImagePreview
+                          src={event.image}
+                          alt={event.title}
+                          containerClassName="aspect-video overflow-hidden"
+                          imageClassName="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                        />
+                      )}
+                      <div className="p-6">
+                        <h3 className="font-display font-bold text-lg text-foreground">{event.title}</h3>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {event.date ? new Date(event.date).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" }) : "Date to be announced"}
+                        </p>
+                        <p className="text-sm text-muted-foreground mt-3 line-clamp-3">{event.description || "More details will be shared soon."}</p>
+                      </div>
+                    </motion.article>
+                  ))}
+                </div>
+              )}
             </div>
           </>
         )}

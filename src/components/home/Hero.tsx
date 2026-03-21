@@ -1,16 +1,42 @@
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import EventCountdown from "./EventCountdown";
 import heroImg from "@/assets/hero-village.jpg";
+import { supabase } from "@/integrations/supabase/client";
+import { Tables } from "@/integrations/supabase/types";
+
+type PageBanner = Tables<"page_banners">;
 
 export default function Hero() {
+  const [homeBanner, setHomeBanner] = useState<PageBanner | null>(null);
+
+  useEffect(() => {
+    async function loadHomeBanner() {
+      const { data } = await supabase
+        .from("page_banners")
+        .select("*")
+        .eq("page_key", "home")
+        .eq("is_active", true)
+        .maybeSingle();
+      setHomeBanner((data as PageBanner | null) ?? null);
+    }
+    loadHomeBanner();
+  }, []);
+
+  const heroTitle = homeBanner?.title || "Empowering Nohar, Preserving Heritage";
+  const heroSubtitle =
+    homeBanner?.subtitle ||
+    "A thriving agriculture-based community in Madhepura, Bihar. Managed with care by Nohar Vikash Yuvak Sangh.";
+  const heroBackground = homeBanner?.bg_image || heroImg;
+
   return (
     <section className="relative min-h-[90vh] flex items-center overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
-          src={heroImg}
+          src={heroBackground}
           alt="Nohar Village"
           className="w-full h-full object-cover"
         />
@@ -27,13 +53,10 @@ export default function Hero() {
             Welcome to Nohar Village
           </span>
           <h1 className="text-4xl md:text-5xl lg:text-6xl mt-4 mb-6 font-display font-bold text-white leading-tight">
-            Empowering Nohar,
-            <br />
-            Preserving Heritage
+            {heroTitle}
           </h1>
           <p className="text-lg text-white/80 max-w-[50ch] mb-8 leading-relaxed">
-            A thriving agriculture-based community in Madhepura,
-            Bihar. Managed with care by Nohar Vikash Yuvak Sangh.
+            {heroSubtitle}
           </p>
           <div className="flex flex-wrap gap-4">
             <Link
@@ -59,12 +82,6 @@ export default function Hero() {
           className="hidden lg:block"
         >
           <div className="bg-white rounded-2xl p-6 shadow-xl min-w-[280px]">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="text-2xl">🪔</span>
-              <span className="text-primary font-bold uppercase text-xs tracking-widest">
-                Ramnavami Countdown
-              </span>
-            </div>
             <EventCountdown />
           </div>
         </motion.div>
