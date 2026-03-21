@@ -87,29 +87,6 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Stats Bar */}
-      <div className="absolute bottom-0 left-0 right-0">
-        <div className="container mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="grid grid-cols-3 max-w-3xl mx-auto bg-white/95 backdrop-blur rounded-t-2xl shadow-xl"
-          >
-            {[
-              { num: "1,000+", label: "Residents", icon: "👥" },
-              { num: "5+", label: "Annual Festivals", icon: "✨" },
-              { num: "1", label: "United Village", icon: "📍" },
-            ].map((s) => (
-              <div key={s.label} className="text-center py-5 px-4">
-                <div className="text-2xl mb-1">{s.icon}</div>
-                <div className="font-display text-xl font-bold text-primary">{s.num}</div>
-                <div className="text-xs text-muted-foreground uppercase tracking-wider">{s.label}</div>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </div>
     </section>
   );
 }
