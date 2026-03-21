@@ -32,17 +32,17 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 shrink-0" />
-                <span>contact@noharvikas.org</span>
+                <span>abhi96anand@gmail.com</span>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 shrink-0" />
-                <span>+91 XXXXX XXXXX</span>
+                <span>+91 8770824752</span>
               </li>
             </ul>
           </div>
         </div>
         <div className="mt-12 pt-8 border-t border-background/10 text-center text-sm text-background/50">
-          © {new Date().getFullYear()} NoharVikashManch — Nohar Vikash Yuvak Sangh. All rights reserved.
+          © {new Date().getFullYear()} Abhishek Anand — Nohar Vikash Yuvak Sangh. All rights reserved.
         </div>
       </div>
     </footer>
