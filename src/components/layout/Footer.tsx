@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { MapPin, Mail, Phone } from "lucide-react";
 
 export default function Footer() {
@@ -6,9 +7,9 @@ export default function Footer() {
       <div className="container mx-auto px-6">
         <div className="grid md:grid-cols-3 gap-12">
           <div>
-            <h3 className="font-display text-xl font-bold mb-4">
+            <Link to="/" className="inline-block font-display text-xl font-bold mb-4 hover:text-accent transition-colors">
               Nohar<span className="text-accent">Vikash</span>Manch
-            </h3>
+            </Link>
             <p className="text-background/70 text-sm leading-relaxed">
               Managed by Nohar Vikash Yuvak Sangh. A community dedicated to agriculture, peace, and the vibrant spirit of Madhepura.
             </p>
@@ -16,6 +17,7 @@ export default function Footer() {
           <div>
             <h4 className="font-display font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2 text-sm text-background/70">
+              <li><Link to="/" className="hover:text-accent transition-colors">Home</Link></li>
               <li><a href="/about" className="hover:text-accent transition-colors">About Us</a></li>
               <li><a href="/festivals" className="hover:text-accent transition-colors">Festivals</a></li>
               <li><a href="/sports" className="hover:text-accent transition-colors">Sports Club</a></li>

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import heroImg from "@/assets/hero-village.jpg";
+import heroImg from "@/assets/nohar-banyan-tree.png";
 import { Sprout, Users, Heart } from "lucide-react";
 
 const highlights = [
@@ -19,7 +19,7 @@ export default function VillageIntro() {
         >
           <img
             src={heroImg}
-            alt="Nohar Village landscape"
+            alt="Sacred banyan tree and village site at Nohar"
             className="rounded-2xl shadow-card w-full"
             loading="lazy"
           />
