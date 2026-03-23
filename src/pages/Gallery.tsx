@@ -42,7 +42,7 @@ export default function Gallery() {
       <div className="container mx-auto px-6 py-16">
         <div className="max-w-6xl mx-auto mb-10 text-center">
           <p className="text-sm text-muted-foreground">
-            Hover any photo to preview full image. New uploads from admin appear automatically.
+          🌄 हमारे गाँव की झलकियाँ (best village feel 🔥)
           </p>
         </div>
         <div className="flex flex-wrap justify-center gap-2 mb-12">

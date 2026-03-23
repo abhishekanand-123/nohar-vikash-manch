@@ -50,7 +50,7 @@ export default function Hero() {
           transition={{ duration: 0.6 }}
         >
           <span className="text-primary font-semibold tracking-widest uppercase text-sm">
-            Welcome to Nohar Village
+          नौहर गाँव में आपका स्वागत है
           </span>
           <h1 className="text-4xl md:text-5xl lg:text-6xl mt-4 mb-6 font-display font-bold text-white leading-tight">
             {heroTitle}

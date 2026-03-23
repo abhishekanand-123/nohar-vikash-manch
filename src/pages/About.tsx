@@ -62,29 +62,26 @@ export default function About() {
       {/* Mission Section */}
       <section className="container mx-auto px-6 py-20">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="max-w-3xl mx-auto text-center">
-          <span className="text-accent font-semibold uppercase text-sm tracking-wide">Who We Are</span>
+          <span className="text-accent font-semibold uppercase text-sm tracking-wide">हमारा परिचय</span>
           <h2 className="text-section font-display font-bold mt-2 mb-6 text-foreground">
-            Nohar Vikash Yuvak Sangh
+          नौहर विकास युवक संघ
           </h2>
           <p className="text-muted-foreground leading-relaxed mb-8">
-            Nohar Vikash Yuvak Sangh is a community organization dedicated to the holistic development of Village Nohar.
-            We organize festivals, manage community infrastructure, promote sports, and work towards improving the quality of life for all residents.
+          नौहर विकास युवक संघ एक सामुदायिक संगठन है, जो नौहर गाँव के समग्र विकास के लिए समर्पित है। हम विभिन्न त्योहारों का आयोजन करते हैं, सामुदायिक संसाधनों का प्रबंधन करते हैं, खेल गतिविधियों को बढ़ावा देते हैं और सभी निवासियों के जीवन स्तर को बेहतर बनाने के लिए निरंतर कार्य करते हैं।
           </p>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mt-12">
           <div className="bg-card rounded-2xl p-8 shadow-card ring-1 ring-border">
-            <h3 className="font-display font-bold text-xl mb-4 text-primary">Our Mission</h3>
+            <h3 className="font-display font-bold text-xl mb-4 text-primary">हमारा उद्देश्य</h3>
             <p className="text-muted-foreground leading-relaxed">
-              To foster community development through collective efforts in agriculture, education, sports, and cultural preservation.
-              We believe in the power of unity and aim to make Nohar a model village in Madhepura.
+            हमारा उद्देश्य कृषि, शिक्षा, खेल और सांस्कृतिक संरक्षण के क्षेत्र में सामूहिक प्रयासों के माध्यम से समुदाय के विकास को बढ़ावा देना है। हम एकता की शक्ति में विश्वास रखते हैं और नौहर को मधेपुरा का एक आदर्श गाँव बनाने का लक्ष्य रखते हैं।
             </p>
           </div>
           <div className="bg-card rounded-2xl p-8 shadow-card ring-1 ring-border">
-            <h3 className="font-display font-bold text-xl mb-4 text-accent">Our Vision</h3>
+            <h3 className="font-display font-bold text-xl mb-4 text-accent">हमारी दृष्टि </h3>
             <p className="text-muted-foreground leading-relaxed">
-              A self-reliant, progressive village where every resident has access to opportunities for growth,
-              where our traditions are celebrated, and where the youth lead positive change.
+            एक आत्मनिर्भर और प्रगतिशील गाँव का निर्माण करना, जहाँ हर निवासी को विकास के अवसर प्राप्त हों, जहाँ हमारी परंपराओं का सम्मान और संरक्षण किया जाए, और जहाँ युवा सकारात्मक बदलाव का नेतृत्व करें।
             </p>
           </div>
         </div>
@@ -95,7 +92,7 @@ export default function About() {
         <div className="container mx-auto px-6">
           <div className="text-center mb-12">
             <span className="text-primary font-semibold uppercase text-sm tracking-wide">Team</span>
-            <h2 className="text-section font-display font-bold mt-2 text-foreground">Our Members</h2>
+            <h2 className="text-section font-display font-bold mt-2 text-foreground">हमारे सदस्य</h2>
           </div>
 
           {loading ? (

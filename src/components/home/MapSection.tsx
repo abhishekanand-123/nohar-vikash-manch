@@ -4,8 +4,8 @@ export default function MapSection() {
       <div className="container mx-auto px-6">
         <div className="text-center mb-12">
           <span className="text-primary font-semibold uppercase text-sm tracking-wide">Location</span>
-          <h2 className="text-section font-display font-bold mt-2 text-foreground">Find Us on the Map</h2>
-          <p className="text-muted-foreground mt-2">Village Nohar, Post Gwalpara, District Madhepura, Bihar</p>
+          <h2 className="text-section font-display font-bold mt-2 text-foreground">मानचित्र पर हमारा स्थान देखें</h2>
+          <p className="text-muted-foreground mt-2">ग्राम – नौहर, पोस्ट – ग्वालपारा, जिला – मधेपुरा, बिहार, (भारत)</p>
         </div>
         <div className="rounded-2xl overflow-hidden shadow-card ring-1 ring-border aspect-video">
           <iframe

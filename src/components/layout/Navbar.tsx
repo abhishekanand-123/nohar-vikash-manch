@@ -4,13 +4,13 @@ import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
-  { to: "/", label: "Home" },
-  { to: "/about", label: "About Us" },
-  { to: "/festivals", label: "Festivals" },
-  { to: "/ramnavami", label: "Ramnavami" },
-  { to: "/sports", label: "Sports Club" },
-  { to: "/gallery", label: "Gallery" },
-  { to: "/donation", label: "Donation" },
+  { to: "/", label: "मुख्य पृष्ठ" },
+  { to: "/about", label: "हमारे बारे में" },
+  { to: "/festivals", label: "त्योहार" },
+  { to: "/ramnavami", label: "रामनवमी" },
+  { to: "/sports", label: "खेल क्लब" },
+  { to: "/gallery", label: "गैलरी" },
+  { to: "/donation", label: "दान" },
 ];
 
 export default function Navbar() {

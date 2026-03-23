@@ -3,9 +3,9 @@ import heroImg from "@/assets/nohar-banyan-tree.png";
 import { Sprout, Users, Heart } from "lucide-react";
 
 const highlights = [
-  { icon: Sprout, title: "Agriculture", desc: "Rice, wheat, and seasonal crops form the backbone of our economy." },
-  { icon: Users, title: "Community", desc: "1,000+ residents living in harmony, celebrating life together." },
-  { icon: Heart, title: "Peace", desc: "A village known for its peaceful coexistence and mutual respect." },
+  { icon: Sprout, title: "कृषि", desc: "धान, गेहूँ और मौसमी फसलें हमारी अर्थव्यवस्था की रीढ़ हैं।" },
+  { icon: Users, title: "समुदाय", desc: "1000 से अधिक निवासी एकता और सद्भाव के साथ मिलकर जीवन का आनंद लेते हैं" },
+  { icon: Heart, title: "शांति", desc: "एक ऐसा गाँव जो शांतिपूर्ण सहअस्तित्व और आपसी सम्मान के लिए जाना जाता है।" },
 ];
 
 export default function VillageIntro() {
@@ -29,14 +29,16 @@ export default function VillageIntro() {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
         >
-          <span className="text-primary font-semibold uppercase text-sm tracking-wide">About Nohar</span>
+          <span className="text-primary font-semibold uppercase text-sm tracking-wide">नौहर के बारे में</span>
           <h2 className="text-section font-display font-bold mt-2 mb-4 text-foreground">
-            Our Village, Our Pride
+            हमारा गाँव, हमारा गौरव
           </h2>
           <p className="text-muted-foreground leading-relaxed mb-8">
-            Nohar is an agriculture-based village located in Post Gwalpara, District Madhepura, Bihar.
-            With a population of over 1,000 people, we live peacefully and celebrate every festival together.
-            Our village development and social activities are managed by the organization "Nohar Vikash Yuvak Sangh."
+            नौहर एक कृषि प्रधान गाँव है, जो पोस्ट ग्वालपारा, जिला मधेपुरा (बिहार) में स्थित है। लगभग 1000 से अधिक लोगों की आबादी वाला यह गाँव शांति, एकता और भाईचारे का प्रतीक है। यहाँ के लोग आपसी प्रेम और सहयोग के साथ जीवन व्यतीत करते हैं तथा सभी त्योहारों को सामूहिक उत्साह और उमंग के साथ मनाते हैं। गाँव के विकास, सामाजिक कार्यों और सांस्कृतिक गतिविधियों का संचालन ‘नौहर विकास युवक संघ’ द्वारा किया जाता है, जो गाँव की प्रगति और एकता को निरंतर मजबूत बनाता है।
+
+            पूर्वजों के अनुसार ‘नौहर’ नाम का अर्थ ‘नौ देवताओं का अवतार’ माना जाता है। यह गाँव अपनी गहरी धार्मिक आस्था और देवी-देवताओं की कृपा के लिए प्रसिद्ध है। यहाँ अनेक पवित्र देवस्थल स्थित हैं, जैसे — काली माता, भोले शंकरदानी, ब्रह्म स्थान, त्रिलोकी बाबा, लक्ष्मी नारायण बाबा, पंचमुखी हनुमान जी महाराज, बूढ़ी स्थान, दुर्गा जी तथा कार्तिक महाराज।
+
+            इन सभी देवस्थलों की उपस्थिति नौहर गाँव को एक विशेष आध्यात्मिक पहचान प्रदान करती है। यहाँ श्रद्धालु दूर-दूर से आकर पूजा-अर्चना करते हैं और आशीर्वाद प्राप्त करते हैं, जिससे यह स्थान आस्था, श्रद्धा और संस्कृति का प्रमुख केंद्र बना हुआ है।"
           </p>
           <div className="space-y-4">
             {highlights.map((h) => (

@@ -41,7 +41,7 @@ export default function Donation() {
             </div>
             <p className="text-sm text-muted-foreground mb-2">Scan the QR code above to donate via UPI</p>
             <p className="font-display font-semibold text-foreground">UPI ID: noharvikas@upi</p>
-            <p className="text-xs text-muted-foreground mt-3">Support puja, sports events, and village development activities.</p>
+            <p className="text-xs text-muted-foreground mt-3">पूजा, खेल आयोजनों और गाँव के विकास कार्यों को सहयोग करें।</p>
           </div>
 
           <div>
@@ -49,8 +49,7 @@ export default function Donation() {
               <Heart className="w-10 h-10 text-accent mx-auto mb-4" />
               <h3 className="font-display font-bold text-xl mb-2 text-foreground">Thank You!</h3>
               <p className="text-muted-foreground leading-relaxed">
-                We are grateful to every donor who supports our village events. Your contributions fund Ramnavami Puja,
-                Chhath celebrations, sports tournaments, and village development. Together, we make Nohar a better place.
+                हम अपने गाँव के सभी दानदाताओं के प्रति आभारी हैं, जो हमारे कार्यक्रमों का समर्थन करते हैं। आपके सहयोग से रामनवमी पूजा, छठ पर्व, खेल प्रतियोगिताएँ और गाँव के विकास कार्य संभव हो पाते हैं। मिलकर हम नोहर को एक बेहतर स्थान बना रहे हैं।
               </p>
             </div>
             <div className="mt-6 bg-card rounded-2xl p-6 shadow-card ring-1 ring-border">

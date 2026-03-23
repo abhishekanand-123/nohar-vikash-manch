@@ -68,10 +68,10 @@ export default function Sports() {
         {/* About + Image */}
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-20">
           <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-            <h2 className="font-display font-bold text-2xl mb-4 text-foreground">Nohar Sports Club</h2>
+            <h2 className="font-display font-bold text-2xl mb-4 text-foreground">नोहर स्पोर्ट्स क्लब (LNCC)</h2>
             <p className="text-muted-foreground leading-relaxed mb-8">
-              The Nohar Sports Club, managed by Nohar Vikash Yuvak Sangh, encourages youth participation in cricket,
-              football, and other sports activities. Sports announcements below are managed from the admin panel.
+              नोहर विकास युवक संघ द्वारा संचालित नोहर स्पोर्ट्स क्लब युवाओं को क्रिकेट, फुटबॉल और अन्य खेल गतिविधियों में भाग लेने के लिए प्रोत्साहित करता है। नीचे दिए गए खेल संबंधी घोषणाएँ एडमिन पैनल से प्रबंधित की जाती हैं।
+              इस क्लब का संचालन सिद्धार्थ झा, उज्ज्वल अभिषेक, सुमित कुमार और मारुति मिश्रा द्वारा किया जाता है।
             </p>
             <div className="flex flex-wrap gap-4">
               {(sportCategories.length > 0 ? sportCategories : ["Cricket", "Football"]).slice(0, 4).map((sport) => (
@@ -101,7 +101,7 @@ export default function Sports() {
 
         {/* Tournaments */}
         <div className="max-w-3xl mx-auto">
-          <h2 className="font-display font-bold text-2xl mb-6 text-center text-foreground">Tournament Announcements</h2>
+          <h2 className="font-display font-bold text-2xl mb-6 text-center text-foreground">खेल प्रतियोगिता सूचनाएँ</h2>
           {nextSport && (
             <div className="bg-card rounded-2xl p-5 shadow-card ring-1 ring-border mb-6">
               <p className="text-xs uppercase tracking-widest text-primary text-center font-semibold mb-3">
@@ -140,9 +140,8 @@ export default function Sports() {
                     </p>
                     {item.description && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{item.description}</p>}
                   </div>
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                    item.status === "Upcoming" ? "bg-primary/10 text-primary" : item.status === "Ongoing" ? "bg-accent/20 text-accent-foreground" : "bg-muted text-muted-foreground"
-                  }`}>
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${item.status === "Upcoming" ? "bg-primary/10 text-primary" : item.status === "Ongoing" ? "bg-accent/20 text-accent-foreground" : "bg-muted text-muted-foreground"
+                    }`}>
                     {item.status || "Status"}
                   </span>
                 </div>

@@ -27,9 +27,9 @@ export default function FestivalHighlights() {
     <section className="py-20">
       <div className="container mx-auto px-6">
         <div className="text-center mb-12">
-          <span className="text-accent font-semibold uppercase text-sm tracking-wide">Our Celebrations</span>
+          <span className="text-accent font-semibold uppercase text-sm tracking-wide">हमारी परंपराएँ और उत्सव</span>
           <h2 className="text-section font-display font-bold mt-2 text-foreground">
-            Festivals We Celebrate Together
+          एकता के साथ मनाए जाने वाले हमारे त्योहार
           </h2>
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
