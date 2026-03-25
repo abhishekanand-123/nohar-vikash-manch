@@ -72,6 +72,13 @@ export default function Hero() {
               Support Us
             </Link>
           </div>
+
+          {/* Countdown Card (mobile/tablet) */}
+          <div className="mt-8 lg:hidden">
+            <div className="bg-white/95 backdrop-blur rounded-2xl p-5 shadow-xl max-w-[360px]">
+              <EventCountdown />
+            </div>
+          </div>
         </motion.div>
 
         {/* Countdown Card */}
