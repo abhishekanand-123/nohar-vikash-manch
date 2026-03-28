@@ -248,6 +248,53 @@ export type Database = {
         }
         Relationships: []
       }
+      videos: {
+        Row: {
+          id: string
+          title: string
+          description: string | null
+          embed_url: string | null
+          file_url: string | null
+          placement: Database["public"]["Enums"]["video_placement"]
+          page_key: string | null
+          blog_id: string | null
+          sort_order: number
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          title?: string
+          description?: string | null
+          embed_url?: string | null
+          file_url?: string | null
+          placement?: Database["public"]["Enums"]["video_placement"]
+          page_key?: string | null
+          blog_id?: string | null
+          sort_order?: number
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          description?: string | null
+          embed_url?: string | null
+          file_url?: string | null
+          placement?: Database["public"]["Enums"]["video_placement"]
+          page_key?: string | null
+          blog_id?: string | null
+          sort_order?: number
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "videos_blog_id_fkey"
+            columns: ["blog_id"]
+            isOneToOne: false
+            referencedRelation: "blogs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
@@ -281,6 +328,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "user"
+      video_placement: "site" | "ramnavami" | "blog"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -409,6 +457,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "user"],
+      video_placement: ["blog", "global", "home", "page", "ramnavami", "site"],
     },
   },
 } as const

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link, useLocation, Outlet } from "react-router-dom";
-import { LayoutDashboard, FileText, Users, Image, Calendar, Trophy, PanelsTopLeft, Heart, LogOut, Menu } from "lucide-react";
+import { LayoutDashboard, FileText, Users, Image, Calendar, Trophy, PanelsTopLeft, Heart, LogOut, Menu, Video } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
 const sidebarLinks = [
@@ -8,6 +8,7 @@ const sidebarLinks = [
   { to: "/admin/blogs", label: "Blog Posts", icon: FileText },
   { to: "/admin/members", label: "Members", icon: Users },
   { to: "/admin/gallery", label: "Gallery", icon: Image },
+  { to: "/admin/videos", label: "Videos", icon: Video },
   { to: "/admin/events", label: "Events", icon: Calendar },
   { to: "/admin/sports", label: "Sports", icon: Trophy },
   { to: "/admin/banners", label: "Banners", icon: PanelsTopLeft },

@@ -66,20 +66,22 @@ export default function EventCountdown({ showHeading = true }: EventCountdownPro
   return (
     <>
       {showHeading && (
-        <div className="flex items-center justify-center gap-2 mb-4">
-          <span className="text-base">🪔</span>
-          <p className="text-center text-xs font-semibold uppercase tracking-widest text-primary">
+        <div className="flex items-center justify-center gap-2 mb-4 sm:mb-5">
+          <span className="text-lg sm:text-base" aria-hidden>
+            🪔
+          </span>
+          <p className="text-center text-[11px] sm:text-xs font-semibold uppercase tracking-widest text-primary leading-tight px-1">
             {hasEvent ? `${eventTitle} Countdown` : "Festival Countdown"}
           </p>
         </div>
       )}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-4 gap-2 sm:gap-4">
         {units.map((u) => (
           <div key={u.label} className="text-center">
-            <div className="text-2xl font-bold text-accent tabular-nums font-display">
+            <div className="text-[1.65rem] sm:text-2xl font-bold text-accent tabular-nums font-display leading-none">
               {String(u.value).padStart(2, "0")}
             </div>
-            <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+            <div className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground mt-1">
               {u.label}
             </div>
           </div>

@@ -24,15 +24,15 @@ export default function FestivalHighlights() {
   }, []);
 
   return (
-    <section className="py-20">
-      <div className="container mx-auto px-6">
-        <div className="text-center mb-12">
+    <section className="py-14 sm:py-20">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="text-center mb-10 sm:mb-12 max-w-2xl mx-auto px-1">
           <span className="text-accent font-semibold uppercase text-sm tracking-wide">हमारी परंपराएँ और उत्सव</span>
           <h2 className="text-section font-display font-bold mt-2 text-foreground">
           एकता के साथ मनाए जाने वाले हमारे त्योहार
           </h2>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-7">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-7">
           {festivals.map((f, i) => (
             <motion.div
               key={f.id}
@@ -43,7 +43,7 @@ export default function FestivalHighlights() {
             >
               <Link
                 to={`/festivals/${f.id}`}
-                className="block bg-card rounded-xl overflow-hidden shadow-card ring-1 ring-border hover:shadow-xl transition-shadow group"
+                className="block bg-card rounded-2xl overflow-hidden shadow-card ring-1 ring-border hover:shadow-xl transition-shadow group active:scale-[0.99] sm:active:scale-100"
               >
                 {f.image && (
                   <HoverImagePreview

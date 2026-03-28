@@ -23,10 +23,10 @@ export default function GalleryPreview() {
   }, []);
 
   return (
-    <section className="py-20 bg-secondary/50">
-      <div className="container mx-auto px-6">
-        <div className="flex items-end justify-between mb-12">
-          <div>
+    <section className="py-14 sm:py-20 bg-secondary/50">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10 sm:mb-12 text-center sm:text-left">
+          <div className="max-w-xl mx-auto sm:mx-0">
             <span className="text-accent font-semibold uppercase text-sm tracking-wide">Gallery</span>
             <h2 className="text-section font-display font-bold mt-2 text-foreground">Glimpses of Nohar</h2>
           </div>
@@ -37,7 +37,7 @@ export default function GalleryPreview() {
             View All <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-5">
           {images.map((item, i) => (
             <motion.div
               key={item.id}
@@ -59,7 +59,7 @@ export default function GalleryPreview() {
         {images.length === 0 && <p className="text-muted-foreground text-center py-6">Gallery images will appear here soon.</p>}
         <Link
           to="/gallery"
-          className="sm:hidden flex items-center justify-center gap-2 mt-8 text-sm font-semibold text-primary"
+          className="sm:hidden flex items-center justify-center gap-2 mt-8 min-h-[48px] text-sm font-semibold text-primary rounded-full px-5 py-3 bg-primary/10"
         >
           View All Photos <ArrowRight className="w-4 h-4" />
         </Link>

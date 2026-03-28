@@ -80,11 +80,37 @@ export default {
           from: { opacity: "0", transform: "translateY(10px)" },
           to: { opacity: "1", transform: "translateY(0)" },
         },
+        "hero-tagline-shine": {
+          "0%, 100%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+        },
+        "welcome-pop": {
+          "0%, 100%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.03)" },
+        },
+        "cta-boom-pulse": {
+          "0%, 100%": {
+            boxShadow:
+              "0 10px 36px -6px rgba(22, 163, 74, 0.55), 0 4px 16px -4px rgba(0, 0, 0, 0.45)",
+          },
+          "50%": {
+            boxShadow:
+              "0 14px 48px -4px rgba(34, 197, 94, 0.75), 0 0 36px rgba(251, 146, 60, 0.22)",
+          },
+        },
+        "border-glow": {
+          "0%, 100%": { borderColor: "rgba(255,255,255,0.45)" },
+          "50%": { borderColor: "rgba(251, 146, 60, 0.65)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards",
+        "hero-tagline-shine": "hero-tagline-shine 4s ease-in-out infinite",
+        "welcome-pop": "welcome-pop 2s ease-in-out infinite",
+        "cta-boom-pulse": "cta-boom-pulse 2.4s ease-in-out infinite",
+        "border-glow": "border-glow 2.5s ease-in-out infinite",
       },
     },
   },

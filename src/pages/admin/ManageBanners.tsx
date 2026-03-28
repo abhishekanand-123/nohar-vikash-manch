@@ -13,6 +13,7 @@ const pages = [
   { key: "about", label: "About Page" },
   { key: "festivals", label: "Festivals Page" },
   { key: "gallery", label: "Gallery Page" },
+  { key: "videos", label: "Videos Page" },
   { key: "donation", label: "Donation Page" },
   { key: "ramnavami", label: "Ramnavami Page" },
   { key: "sports", label: "Sports Page" },

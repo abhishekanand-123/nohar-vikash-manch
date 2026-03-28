@@ -3,6 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import { CalendarDays, MapPin, Tag } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import HoverImagePreview from "@/components/common/HoverImagePreview";
+import VideoEmbed from "@/components/common/VideoEmbed";
+import { Tables } from "@/integrations/supabase/types";
 
 interface BlogDetails {
   id: string;
@@ -18,9 +20,12 @@ interface BlogDetails {
   created_at: string;
 }
 
+type VideoRow = Tables<"videos">;
+
 export default function FestivalDetails() {
   const { id } = useParams();
   const [post, setPost] = useState<BlogDetails | null>(null);
+  const [videos, setVideos] = useState<VideoRow[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -28,6 +33,13 @@ export default function FestivalDetails() {
       if (!id) return;
       const { data } = await supabase.from("blogs").select("*").eq("id", id).maybeSingle();
       setPost((data as BlogDetails | null) ?? null);
+      const { data: vids } = await supabase
+        .from("videos")
+        .select("*")
+        .eq("blog_id", id)
+        .eq("placement", "blog")
+        .order("sort_order", { ascending: true });
+      setVideos((vids as VideoRow[]) ?? []);
       setLoading(false);
     }
     load();
@@ -83,6 +95,21 @@ export default function FestivalDetails() {
         )}
 
         {post.content && <p className="text-base md:text-lg text-muted-foreground leading-relaxed mt-8">{post.content}</p>}
+
+        {videos.length > 0 && (
+          <div className="mt-10">
+            <h2 className="font-display text-2xl font-bold text-foreground mb-4">Videos</h2>
+            <div className="space-y-8">
+              {videos.map((v) => (
+                <div key={v.id}>
+                  <h3 className="font-display font-semibold text-lg text-foreground mb-2">{v.title}</h3>
+                  {v.description && <p className="text-sm text-muted-foreground mb-3">{v.description}</p>}
+                  <VideoEmbed embedUrl={v.embed_url} fileUrl={v.file_url} title={v.title} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {post.highlights && post.highlights.length > 0 && (
           <div className="mt-10">

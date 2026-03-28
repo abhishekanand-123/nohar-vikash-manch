@@ -4,6 +4,7 @@ import { uploadFile } from "@/lib/supabase-helpers";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { Pencil, Trash2, Plus } from "lucide-react";
+import { parseVideoUrlLines } from "@/lib/video-embed";
 
 interface Blog {
   id: string;
@@ -22,6 +23,24 @@ interface Blog {
 const categories = ["Diwali", "Holi", "Ramnavami", "Kali Puja", "Chhath Puja", "General"];
 const tagOptions = ["Tradition", "Community", "Music", "Food", "Temple", "Culture", "Parade", "Youth"];
 
+async function replaceBlogVideosFromForm(blogId: string, urlsText: string) {
+  const urls = parseVideoUrlLines(urlsText);
+  await supabase.from("videos").delete().eq("blog_id", blogId);
+  if (urls.length === 0) return;
+  const { error } = await supabase.from("videos").insert(
+    urls.map((embed_url, i) => ({
+      title: `Video ${i + 1}`,
+      embed_url,
+      file_url: null,
+      page_key: null,
+      placement: "blog" as const,
+      blog_id: blogId,
+      sort_order: i,
+    }))
+  );
+  if (error) throw error;
+}
+
 export default function ManageBlogs() {
   const { isAdmin, user } = useAuth();
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -39,6 +58,7 @@ export default function ManageBlogs() {
     highlightsText: "",
     location: "",
     festivalDate: "",
+    videoUrlsText: "",
   });
   const [saving, setSaving] = useState(false);
 
@@ -62,6 +82,7 @@ export default function ManageBlogs() {
       highlightsText: "",
       location: "",
       festivalDate: "",
+      videoUrlsText: "",
     });
     setEditing(null);
     setShowForm(false);
@@ -96,6 +117,21 @@ export default function ManageBlogs() {
       .map((line) => line.trim())
       .filter(Boolean);
 
+    const rawVideoLines = form.videoUrlsText
+      .split(/\r?\n/)
+      .map((s) => s.trim())
+      .filter(Boolean);
+    const parsedVideos = parseVideoUrlLines(form.videoUrlsText);
+    if (rawVideoLines.length > 0 && parsedVideos.length === 0) {
+      toast({
+        title: "Invalid video URLs",
+        description: "Use one YouTube or Vimeo link per line, or leave blank.",
+        variant: "destructive",
+      });
+      setSaving(false);
+      return;
+    }
+
     if (editing) {
       const { error } = await supabase
         .from("blogs")
@@ -111,23 +147,51 @@ export default function ManageBlogs() {
           festival_date: form.festivalDate || null,
         })
         .eq("id", editing.id);
-      if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
-      else toast({ title: "Blog updated!" });
+      if (error) {
+        toast({ title: "Error", description: error.message, variant: "destructive" });
+      } else {
+        try {
+          await replaceBlogVideosFromForm(editing.id, form.videoUrlsText);
+          toast({ title: "Blog updated!" });
+        } catch (e) {
+          toast({
+            title: "Blog saved; video sync failed",
+            description: e instanceof Error ? e.message : "Try again or use Videos in admin.",
+            variant: "destructive",
+          });
+        }
+      }
     } else {
-      const { error } = await supabase.from("blogs").insert({
-        title: form.title,
-        content: form.content,
-        category: form.category,
-        image: imageUrl,
-        gallery_images: galleryImages,
-        tags,
-        highlights,
-        location: form.location || null,
-        festival_date: form.festivalDate || null,
-        created_by: user?.id,
-      });
-      if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
-      else toast({ title: "Blog added!" });
+      const { data: inserted, error } = await supabase
+        .from("blogs")
+        .insert({
+          title: form.title,
+          content: form.content,
+          category: form.category,
+          image: imageUrl,
+          gallery_images: galleryImages,
+          tags,
+          highlights,
+          location: form.location || null,
+          festival_date: form.festivalDate || null,
+          created_by: user?.id,
+        })
+        .select("id")
+        .single();
+      if (error) {
+        toast({ title: "Error", description: error.message, variant: "destructive" });
+      } else if (inserted?.id) {
+        try {
+          await replaceBlogVideosFromForm(inserted.id, form.videoUrlsText);
+          toast({ title: "Blog added!" });
+        } catch (e) {
+          toast({
+            title: "Blog added; video sync failed",
+            description: e instanceof Error ? e.message : undefined,
+            variant: "destructive",
+          });
+        }
+      }
     }
     setSaving(false);
     resetForm();
@@ -141,7 +205,13 @@ export default function ManageBlogs() {
     else { toast({ title: "Blog deleted" }); load(); }
   };
 
-  const startEdit = (b: Blog) => {
+  const startEdit = async (b: Blog) => {
+    const { data: vids } = await supabase
+      .from("videos")
+      .select("embed_url")
+      .eq("blog_id", b.id)
+      .eq("placement", "blog")
+      .order("sort_order", { ascending: true });
     setEditing(b);
     setForm({
       title: b.title,
@@ -154,6 +224,7 @@ export default function ManageBlogs() {
       highlightsText: (b.highlights ?? []).join("\n"),
       location: b.location ?? "",
       festivalDate: b.festival_date ?? "",
+      videoUrlsText: (vids ?? []).map((row: { embed_url: string }) => row.embed_url).join("\n"),
     });
     setShowForm(true);
   };
@@ -218,6 +289,20 @@ export default function ManageBlogs() {
             rows={4}
             className="w-full px-4 py-3 rounded-xl bg-background border border-input text-foreground text-sm"
           />
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-foreground">Video URLs (optional)</label>
+            <p className="text-xs text-muted-foreground">
+              One YouTube or Vimeo link per line. Saving replaces all videos attached to this post (titles reset to Video 1, 2…).
+            </p>
+            <textarea
+              value={form.videoUrlsText}
+              onChange={(e) => setForm({ ...form, videoUrlsText: e.target.value })}
+              placeholder="https://www.youtube.com/watch?v=…"
+              rows={4}
+              className="w-full px-4 py-3 rounded-xl bg-background border border-input text-foreground text-sm font-mono text-xs"
+            />
+          </div>
 
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground">Cover image</label>

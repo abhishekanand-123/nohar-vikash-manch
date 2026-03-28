@@ -3,9 +3,9 @@ import { MapPin, Mail, Phone } from "lucide-react";
 
 export default function Footer() {
   return (
-    <footer className="bg-foreground text-background py-16">
-      <div className="container mx-auto px-6">
-        <div className="grid md:grid-cols-3 gap-12">
+    <footer className="bg-foreground text-background py-12 sm:py-16 pb-[max(3rem,env(safe-area-inset-bottom))]">
+      <div className="container mx-auto px-4 sm:px-6">
+        <div className="grid md:grid-cols-3 gap-10 md:gap-12 text-left">
           <div>
             <Link to="/" className="inline-block font-display text-xl font-bold mb-4 hover:text-accent transition-colors">
               Nohar<span className="text-accent">Vikash</span>Manch
@@ -16,12 +16,13 @@ export default function Footer() {
           </div>
           <div>
             <h4 className="font-display font-semibold mb-4">महत्वपूर्ण लिंक</h4>
-            <ul className="space-y-2 text-sm text-background/70">
+            <ul className="space-y-2.5 text-sm text-background/70">
               <li><Link to="/" className="hover:text-accent transition-colors">मुख्य पृष्ठ</Link></li>
               <li><Link to="/about" className="hover:text-accent transition-colors">हमारे बारे में</Link></li>
               <li><Link to="/festivals" className="hover:text-accent transition-colors">त्योहार</Link></li>
               <li><Link to="/sports" className="hover:text-accent transition-colors">खेल क्लब</Link></li>
               <li><Link to="/gallery" className="hover:text-accent transition-colors">गैलरी</Link></li>
+              <li><Link to="/videos" className="hover:text-accent transition-colors">वीडियो</Link></li>
               <li><Link to="/donation" className="hover:text-accent transition-colors">दान</Link></li>
             </ul>
           </div>

@@ -10,6 +10,7 @@ const navLinks = [
   { to: "/ramnavami", label: "रामनवमी" },
   { to: "/sports", label: "खेल क्लब" },
   { to: "/gallery", label: "गैलरी" },
+  { to: "/videos", label: "वीडियो" },
   { to: "/donation", label: "दान" },
 ];
 
@@ -18,8 +19,8 @@ export default function Navbar() {
   const location = useLocation();
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-card/80 backdrop-blur-lg shadow-card">
-      <div className="container mx-auto px-6 flex items-center justify-between h-16">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-card/85 backdrop-blur-xl shadow-card border-b border-border/40 [padding-top:env(safe-area-inset-top,0px)]">
+      <div className="container mx-auto px-4 sm:px-6 flex items-center justify-between min-h-16">
         <Link to="/" className="font-display text-xl font-bold text-primary" title="Home">
           Nohar<span className="text-accent">Vikash</span>Manch
         </Link>
@@ -49,8 +50,11 @@ export default function Navbar() {
 
         {/* Mobile toggle */}
         <button
+          type="button"
+          aria-expanded={open}
+          aria-label={open ? "Close menu" : "Open menu"}
           onClick={() => setOpen(!open)}
-          className="lg:hidden p-2 rounded-lg hover:bg-secondary"
+          className="lg:hidden p-2.5 min-h-[44px] min-w-[44px] rounded-xl hover:bg-secondary flex items-center justify-center"
         >
           {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
@@ -65,13 +69,13 @@ export default function Navbar() {
             exit={{ opacity: 0, height: 0 }}
             className="lg:hidden bg-card border-t border-border overflow-hidden"
           >
-            <div className="container mx-auto px-6 py-4 flex flex-col gap-1">
+            <div className="container mx-auto px-4 sm:px-6 py-3 pb-5 flex flex-col gap-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.to}
                   to={link.to}
                   onClick={() => setOpen(false)}
-                  className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                  className={`px-4 py-3.5 min-h-[48px] rounded-xl text-sm font-medium transition-colors flex items-center ${
                     location.pathname === link.to
                       ? "bg-primary text-primary-foreground"
                       : "text-foreground hover:bg-secondary"
@@ -83,7 +87,7 @@ export default function Navbar() {
               <Link
                 to="/admin/login"
                 onClick={() => setOpen(false)}
-                className="px-4 py-3 rounded-lg text-sm font-medium bg-accent text-accent-foreground"
+                className="px-4 py-3.5 min-h-[48px] rounded-xl text-sm font-medium bg-accent text-accent-foreground flex items-center justify-center mt-1"
               >
                 Admin
               </Link>

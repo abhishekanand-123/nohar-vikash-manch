@@ -83,6 +83,10 @@
   * {
     @apply border-border;
   }
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground;
     font-family: 'Plus Jakarta Sans', sans-serif;
@@ -110,5 +114,44 @@
   }
   .text-section {
     font-size: clamp(1.5rem, 4vw, 2.25rem);
+  }
+
+  .hero-gradient-scrim {
+    background: linear-gradient(
+      165deg,
+      rgba(0, 0, 0, 0.78) 0%,
+      rgba(0, 0, 0, 0.45) 45%,
+      rgba(0, 0, 0, 0.28) 100%
+    );
+  }
+}
+
+@layer components {
+  /* Explore Our Story: static gradient, no motion */
+  .hero-cta-primary {
+    @apply relative inline-flex w-auto max-w-none items-center justify-center gap-2 overflow-hidden rounded-full font-semibold text-white touch-manipulation;
+    @apply min-h-[46px] px-6 py-2.5 text-sm sm:min-h-[52px] sm:px-7 sm:py-3.5;
+    background-image: linear-gradient(
+      105deg,
+      hsl(var(--primary)) 0%,
+      rgb(16 185 129) 30%,
+      rgb(251 146 60) 70%,
+      hsl(var(--primary)) 100%
+    );
+    @apply shadow-[0_10px_36px_-6px_rgba(22,163,74,0.55),0_4px_16px_-4px_rgba(0,0,0,0.45)];
+    @apply transition-colors duration-200 ease-out;
+    @apply hover:opacity-[0.93] active:opacity-[0.88];
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-black/40;
+  }
+
+  .hero-cta-ghost {
+    @apply relative inline-flex w-auto shrink-0 items-center justify-center rounded-full border-2 border-white/50 bg-white/[0.08] font-semibold text-white backdrop-blur-md touch-manipulation;
+    @apply min-h-[38px] px-3.5 py-1.5 text-[11px] leading-tight sm:min-h-[52px] sm:px-8 sm:py-3.5 sm:text-sm;
+    @apply shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_6px_24px_-6px_rgba(0,0,0,0.35)];
+    @apply transition-all duration-300 ease-out;
+    @apply hover:scale-[1.03] hover:-translate-y-0.5 hover:border-accent hover:bg-accent/15 sm:hover:scale-[1.045];
+    @apply hover:text-white hover:shadow-[0_0_36px_rgba(251,146,60,0.4),0_10px_32px_-8px_rgba(0,0,0,0.4)];
+    @apply active:scale-[0.98] active:translate-y-0;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black/30;
   }
 }

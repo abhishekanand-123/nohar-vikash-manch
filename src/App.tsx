@@ -23,6 +23,8 @@ import ManageEvents from "./pages/admin/ManageEvents";
 import ManageDonations from "./pages/admin/ManageDonations";
 import ManageSports from "./pages/admin/ManageSports";
 import ManageBanners from "./pages/admin/ManageBanners";
+import ManageVideos from "./pages/admin/ManageVideos";
+import Videos from "./pages/Videos";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -43,6 +45,7 @@ const App = () => (
               <Route path="/ramnavami" element={<Ramnavami />} />
               <Route path="/sports" element={<Sports />} />
               <Route path="/gallery" element={<Gallery />} />
+              <Route path="/videos" element={<Videos />} />
               <Route path="/donation" element={<Donation />} />
             </Route>
             <Route path="/admin/login" element={<AdminLogin />} />
@@ -54,6 +57,7 @@ const App = () => (
               <Route path="/admin/events" element={<ManageEvents />} />
               <Route path="/admin/sports" element={<ManageSports />} />
               <Route path="/admin/banners" element={<ManageBanners />} />
+              <Route path="/admin/videos" element={<ManageVideos />} />
               <Route path="/admin/donations" element={<ManageDonations />} />
             </Route>
             <Route path="*" element={<NotFound />} />

@@ -5,7 +5,10 @@ import EventCountdown from "@/components/home/EventCountdown";
 import ramnavamiFallback from "@/assets/ramnavami.jpg";
 import templeImg from "@/assets/temple.jpg";
 import PageBanner from "@/components/layout/PageBanner";
+import HoverImagePreview from "@/components/common/HoverImagePreview";
+import VideoEmbed from "@/components/common/VideoEmbed";
 import { supabase } from "@/integrations/supabase/client";
+import { Tables } from "@/integrations/supabase/types";
 
 interface RamnavamiBlog {
   id: string;
@@ -15,6 +18,8 @@ interface RamnavamiBlog {
   gallery_images: string[] | null;
   category: string | null;
 }
+
+type VideoRow = Tables<"videos">;
 
 const FALLBACK_PARAGRAPHS = [
   "Ramnavami is celebrated as the birth anniversary of Lord Shri Ram. At Lakshmi Narayan Aasthan, a 3-day grand puja is organized with Ashtajam — continuous 8-hour kirtan and bhajan sessions.",
@@ -33,6 +38,7 @@ function paragraphsFromContent(content: string | null): string[] {
 
 export default function Ramnavami() {
   const [post, setPost] = useState<RamnavamiBlog | null>(null);
+  const [videos, setVideos] = useState<VideoRow[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -45,6 +51,12 @@ export default function Ramnavami() {
         .limit(1)
         .maybeSingle();
       setPost((data as RamnavamiBlog | null) ?? null);
+      const { data: vids } = await supabase
+        .from("videos")
+        .select("*")
+        .eq("placement", "ramnavami")
+        .order("sort_order", { ascending: true });
+      setVideos((vids as VideoRow[]) ?? []);
       setLoading(false);
     }
     load();
@@ -89,7 +101,12 @@ export default function Ramnavami() {
           <>
             <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
               <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
-                <img src={leadImage} alt={sectionTitle} className="rounded-2xl shadow-card w-full" loading="lazy" />
+                <HoverImagePreview
+                  src={leadImage}
+                  alt={sectionTitle}
+                  containerClassName="w-full"
+                  imageClassName="rounded-2xl shadow-card w-full"
+                />
               </motion.div>
               <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
                 <h2 className="font-display font-bold text-2xl mb-4 text-foreground">{sectionTitle}</h2>
@@ -108,15 +125,35 @@ export default function Ramnavami() {
               </motion.div>
             </div>
 
+            {videos.length > 0 && (
+              <div className="mb-16 max-w-4xl mx-auto">
+                <h2 className="font-display font-bold text-2xl text-center mb-8 text-foreground">Videos</h2>
+                <div className="space-y-10">
+                  {videos.map((v) => (
+                    <motion.div
+                      key={v.id}
+                      initial={{ opacity: 0, y: 12 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                    >
+                      <h3 className="font-display font-semibold text-lg text-foreground mb-2">{v.title}</h3>
+                      {v.description && <p className="text-muted-foreground text-sm mb-3 leading-relaxed">{v.description}</p>}
+                      <VideoEmbed embedUrl={v.embed_url} fileUrl={v.file_url} title={v.title} />
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {galleryImages.length > 0 && (
               <div className="grid md:grid-cols-2 gap-6">
                 {galleryImages.map((src, i) => (
-                  <img
+                  <HoverImagePreview
                     key={`${src}-${i}`}
                     src={src}
-                    alt=""
-                    className="rounded-2xl shadow-card w-full aspect-video object-cover"
-                    loading="lazy"
+                    alt={`${sectionTitle} — gallery ${i + 1}`}
+                    containerClassName="rounded-2xl shadow-card w-full aspect-video overflow-hidden ring-1 ring-border/60"
+                    imageClassName="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                   />
                 ))}
               </div>
