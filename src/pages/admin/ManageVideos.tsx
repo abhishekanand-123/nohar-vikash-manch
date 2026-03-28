@@ -3,7 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { uploadVideoFile, deleteFile } from "@/lib/supabase-helpers";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
-import { Pencil, Trash2, Plus } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Pencil, Trash2, Plus, BarChart3 } from "lucide-react";
 import { toEmbedUrl } from "@/lib/video-embed";
 import { PAGE_VIDEO_OPTIONS } from "@/lib/page-video-routes";
 import { Tables } from "@/integrations/supabase/types";
@@ -416,6 +417,13 @@ export default function ManageVideos() {
             </div>
             {isAdmin && (
               <div className="flex gap-1">
+                <Link
+                  to={`/admin/analytics?tab=videos&videoId=${v.id}`}
+                  className="rounded-lg p-2 text-primary hover:bg-secondary"
+                  title="Video analytics"
+                >
+                  <BarChart3 className="h-4 w-4" />
+                </Link>
                 <button type="button" onClick={() => startEdit(v)} className="rounded-lg p-2 hover:bg-secondary">
                   <Pencil className="h-4 w-4" />
                 </button>

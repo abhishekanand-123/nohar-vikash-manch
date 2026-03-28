@@ -3,6 +3,9 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import PageRouteAndGlobalVideos from "./PageRouteAndGlobalVideos";
 import { useEffect } from "react";
+import { AnalyticsConsentProvider } from "@/contexts/AnalyticsConsentContext";
+import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
+import CookieConsentBanner from "@/components/analytics/CookieConsentBanner";
 
 export default function PublicLayout() {
   const location = useLocation();
@@ -12,13 +15,18 @@ export default function PublicLayout() {
   }, [location.pathname]);
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main className="flex-1 pt-[calc(4rem+env(safe-area-inset-top,0px))]">
-        <Outlet />
-        <PageRouteAndGlobalVideos />
-      </main>
-      <Footer />
-    </div>
+    <AnalyticsConsentProvider>
+      <AnalyticsProvider>
+        <div className="min-h-screen flex flex-col">
+          <Navbar />
+          <main className="flex-1 pt-[calc(4rem+env(safe-area-inset-top,0px))]">
+            <Outlet />
+            <PageRouteAndGlobalVideos />
+          </main>
+          <Footer />
+        </div>
+      </AnalyticsProvider>
+      <CookieConsentBanner />
+    </AnalyticsConsentProvider>
   );
 }

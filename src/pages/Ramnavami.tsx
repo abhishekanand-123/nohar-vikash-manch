@@ -138,7 +138,7 @@ export default function Ramnavami() {
                     >
                       <h3 className="font-display font-semibold text-lg text-foreground mb-2">{v.title}</h3>
                       {v.description && <p className="text-muted-foreground text-sm mb-3 leading-relaxed">{v.description}</p>}
-                      <VideoEmbed embedUrl={v.embed_url} fileUrl={v.file_url} title={v.title} />
+                      <VideoEmbed embedUrl={v.embed_url} fileUrl={v.file_url} title={v.title} videoId={v.id} />
                     </motion.div>
                   ))}
                 </div>

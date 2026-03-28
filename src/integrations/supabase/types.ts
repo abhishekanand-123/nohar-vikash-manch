@@ -14,6 +14,77 @@ export type Database = {
   }
   public: {
     Tables: {
+      analytics_events: {
+        Row: {
+          id: string
+          event_type: string
+          page_path: string | null
+          section_id: string | null
+          video_id: string | null
+          session_id: string
+          visitor_id: string
+          visitor_key: string
+          ip_hash: string | null
+          country: string | null
+          region: string | null
+          city: string | null
+          device_type: string | null
+          browser: string | null
+          occurred_at: string
+          duration_ms: number | null
+          metadata: Json
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          event_type: string
+          page_path?: string | null
+          section_id?: string | null
+          video_id?: string | null
+          session_id: string
+          visitor_id: string
+          visitor_key: string
+          ip_hash?: string | null
+          country?: string | null
+          region?: string | null
+          city?: string | null
+          device_type?: string | null
+          browser?: string | null
+          occurred_at?: string
+          duration_ms?: number | null
+          metadata?: Json
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          event_type?: string
+          page_path?: string | null
+          section_id?: string | null
+          video_id?: string | null
+          session_id?: string
+          visitor_id?: string
+          visitor_key?: string
+          ip_hash?: string | null
+          country?: string | null
+          region?: string | null
+          city?: string | null
+          device_type?: string | null
+          browser?: string | null
+          occurred_at?: string
+          duration_ms?: number | null
+          metadata?: Json
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analytics_events_video_id_fkey"
+            columns: ["video_id"]
+            isOneToOne: false
+            referencedRelation: "videos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       blogs: {
         Row: {
           category: string | null
@@ -318,6 +389,28 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      analytics_submit_batch: {
+        Args: {
+          p_browser: string
+          p_device_type: string
+          p_events: Json
+          p_session_id: string
+          p_visitor_id: string
+        }
+        Returns: Json
+      }
+      analytics_active_sessions: {
+        Args: { _minutes?: number }
+        Returns: number
+      }
+      analytics_session_count: {
+        Args: { _from: string; _to: string }
+        Returns: number
+      }
+      analytics_unique_visitors: {
+        Args: { _from: string; _to: string }
+        Returns: number
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

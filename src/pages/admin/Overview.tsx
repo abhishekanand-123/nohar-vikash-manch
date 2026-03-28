@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { FileText, Users, Calendar, Trophy, Image, Heart } from "lucide-react";
+import { Link } from "react-router-dom";
+import { FileText, Users, Calendar, Trophy, Image, Heart, BarChart3 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export default function AdminOverview() {
@@ -52,6 +53,15 @@ export default function AdminOverview() {
           </div>
         ))}
       </div>
+      <p className="mt-8 text-sm">
+        <Link
+          to="/admin/analytics"
+          className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
+        >
+          <BarChart3 className="h-4 w-4" />
+          Open analytics dashboard
+        </Link>
+      </p>
     </div>
   );
 }

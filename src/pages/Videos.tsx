@@ -50,6 +50,7 @@ export default function Videos() {
                 description={v.description}
                 embedUrl={v.embed_url}
                 fileUrl={v.file_url}
+                videoId={v.id}
                 headingLevel="h2"
               />
             ))}

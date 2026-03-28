@@ -104,7 +104,7 @@ export default function FestivalDetails() {
                 <div key={v.id}>
                   <h3 className="font-display font-semibold text-lg text-foreground mb-2">{v.title}</h3>
                   {v.description && <p className="text-sm text-muted-foreground mb-3">{v.description}</p>}
-                  <VideoEmbed embedUrl={v.embed_url} fileUrl={v.file_url} title={v.title} />
+                  <VideoEmbed embedUrl={v.embed_url} fileUrl={v.file_url} title={v.title} videoId={v.id} />
                 </div>
               ))}
             </div>

@@ -6,6 +6,7 @@ interface VideoShowcaseItemProps {
   description?: string | null;
   embedUrl?: string | null;
   fileUrl?: string | null;
+  videoId?: string | null;
   index: number;
   headingLevel?: "h2" | "h3";
 }
@@ -15,6 +16,7 @@ export default function VideoShowcaseItem({
   description,
   embedUrl,
   fileUrl,
+  videoId,
   index,
   headingLevel = "h2",
 }: VideoShowcaseItemProps) {
@@ -42,6 +44,7 @@ export default function VideoShowcaseItem({
               embedUrl={embedUrl}
               fileUrl={fileUrl}
               title={title}
+              videoId={videoId}
               className="aspect-video w-full max-w-full rounded-lg shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] ring-2 ring-black/20 sm:rounded-2xl sm:ring-black/30"
             />
           </div>

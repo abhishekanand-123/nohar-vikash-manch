@@ -24,6 +24,7 @@ import ManageDonations from "./pages/admin/ManageDonations";
 import ManageSports from "./pages/admin/ManageSports";
 import ManageBanners from "./pages/admin/ManageBanners";
 import ManageVideos from "./pages/admin/ManageVideos";
+import AnalyticsDashboard from "./pages/admin/AnalyticsDashboard";
 import Videos from "./pages/Videos";
 import NotFound from "./pages/NotFound";
 
@@ -51,6 +52,7 @@ const App = () => (
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route element={<AdminLayout />}>
               <Route path="/admin/dashboard" element={<AdminOverview />} />
+              <Route path="/admin/analytics" element={<AnalyticsDashboard />} />
               <Route path="/admin/blogs" element={<ManageBlogs />} />
               <Route path="/admin/members" element={<ManageMembers />} />
               <Route path="/admin/gallery" element={<ManageGallery />} />
