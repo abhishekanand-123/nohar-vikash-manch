@@ -1,8 +1,9 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { Heart, QrCode } from "lucide-react";
+import { Heart, Copy, Check, ExternalLink, Download } from "lucide-react";
 import PageBanner from "@/components/layout/PageBanner";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface DonationItem {
   id: string;
@@ -12,8 +13,12 @@ interface DonationItem {
   created_at: string;
 }
 
+const UPI_ID = "abhi96anand@ybl";
+const UPI_PAY_URL = `upi://pay?pa=${UPI_ID}&pn=Nohar%20Vikash%20Manch&cu=INR`;
+
 export default function Donation() {
   const [donations, setDonations] = useState<DonationItem[]>([]);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -22,6 +27,13 @@ export default function Donation() {
     }
     load();
   }, []);
+
+  const handleCopyUPI = () => {
+    navigator.clipboard.writeText(UPI_ID);
+    setCopied(true);
+    toast.success("UPI ID copied to clipboard!");
+    setTimeout(() => setCopied(false), 2500);
+  };
 
   return (
     <div>
@@ -35,13 +47,52 @@ export default function Donation() {
       <div className="container mx-auto px-6 py-20">
         <div className="max-w-4xl mx-auto grid lg:grid-cols-2 gap-8">
           {/* QR Code Card */}
-          <div className="bg-card rounded-2xl p-8 shadow-card ring-1 ring-border text-center">
-            <div className="w-52 h-52 bg-muted rounded-2xl mx-auto mb-6 flex items-center justify-center ring-1 ring-border">
-              <QrCode className="w-24 h-24 text-muted-foreground/80" />
+          <div className="bg-card rounded-2xl p-8 shadow-card ring-1 ring-border text-center flex flex-col items-center">
+            <div className="bg-white p-3 rounded-2xl shadow-sm ring-1 ring-border/80 mb-5">
+              <img
+                src="/upi-qr-code.png"
+                alt="Donation UPI QR Code"
+                className="w-56 h-56 object-contain rounded-xl"
+              />
             </div>
-            <p className="text-sm text-muted-foreground mb-2">Scan the QR code above to donate via UPI</p>
-            <p className="font-display font-semibold text-foreground">UPI ID: noharvikas@upi</p>
-            <p className="text-xs text-muted-foreground mt-3">पूजा, खेल आयोजनों और गाँव के विकास कार्यों को सहयोग करें।</p>
+            
+            <p className="text-sm font-medium text-muted-foreground mb-3">
+              Scan the QR code above to donate via any UPI app
+            </p>
+
+            <div className="flex items-center gap-2 bg-secondary/70 hover:bg-secondary border border-border px-4 py-2 rounded-xl text-sm transition-colors mb-4">
+              <span className="text-muted-foreground">UPI ID:</span>
+              <span className="font-semibold font-mono text-foreground">{UPI_ID}</span>
+              <button
+                onClick={handleCopyUPI}
+                title="Copy UPI ID"
+                className="ml-1 p-1 rounded-md text-primary hover:bg-primary/10 transition-colors"
+              >
+                {copied ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
+              </button>
+            </div>
+
+            <div className="flex flex-wrap gap-2 justify-center w-full">
+              <a
+                href={UPI_PAY_URL}
+                className="inline-flex items-center gap-1.5 px-4 py-2 bg-primary text-primary-foreground text-xs font-semibold rounded-lg hover:opacity-90 transition-opacity"
+              >
+                <span>Open UPI App</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+              <a
+                href="/upi-qr-code.png"
+                download="nohar-vikas-manch-qr.png"
+                className="inline-flex items-center gap-1.5 px-3 py-2 bg-secondary text-secondary-foreground text-xs font-medium rounded-lg hover:bg-secondary/80 transition-colors border border-border"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>Save QR</span>
+              </a>
+            </div>
+
+            <p className="text-xs text-muted-foreground mt-4">
+              पूजा, खेल आयोजनों और गाँव के विकास कार्यों को सहयोग करें।
+            </p>
           </div>
 
           <div>

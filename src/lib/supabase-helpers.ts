@@ -51,6 +51,30 @@ export async function uploadVideoFile(file: File, folder: string = "videos"): Pr
   return `${SUPABASE_URL}/storage/v1/object/public/uploads/${fileName}`;
 }
 
+export async function uploadPdfFile(file: File, folder: string = "documents"): Promise<string | null> {
+  const isPdf = file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf");
+  if (!isPdf) {
+    throw new Error("Only PDF files are allowed.");
+  }
+  if (file.size > 25 * 1024 * 1024) {
+    throw new Error("PDF file must not exceed 25 MB.");
+  }
+
+  const fileName = `${folder}/${Date.now()}-${Math.random().toString(36).substring(7)}.pdf`;
+
+  const { error } = await supabase.storage.from("uploads").upload(fileName, file, {
+    contentType: "application/pdf",
+    cacheControl: "3600",
+    upsert: false,
+  });
+  if (error) {
+    console.error("PDF upload error:", error);
+    return null;
+  }
+
+  return `${SUPABASE_URL}/storage/v1/object/public/uploads/${fileName}`;
+}
+
 export async function deleteFile(url: string): Promise<boolean> {
   const prefix = `${SUPABASE_URL}/storage/v1/object/public/uploads/`;
   if (!url.startsWith(prefix)) return false;

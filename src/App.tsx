@@ -23,6 +23,7 @@ import ManageEvents from "./pages/admin/ManageEvents";
 import ManageDonations from "./pages/admin/ManageDonations";
 import ManageSports from "./pages/admin/ManageSports";
 import ManageBanners from "./pages/admin/ManageBanners";
+import ManageDocuments from "./pages/admin/ManageDocuments";
 import ManageVideos from "./pages/admin/ManageVideos";
 import AnalyticsDashboard from "./pages/admin/AnalyticsDashboard";
 import Videos from "./pages/Videos";
@@ -53,6 +54,7 @@ const App = () => (
             <Route element={<AdminLayout />}>
               <Route path="/admin/dashboard" element={<AdminOverview />} />
               <Route path="/admin/analytics" element={<AnalyticsDashboard />} />
+              <Route path="/admin/documents" element={<ManageDocuments />} />
               <Route path="/admin/blogs" element={<ManageBlogs />} />
               <Route path="/admin/members" element={<ManageMembers />} />
               <Route path="/admin/gallery" element={<ManageGallery />} />

@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
 import EventCountdown from "./EventCountdown";
 import heroImg from "@/assets/hero-village.jpg";
@@ -41,19 +41,29 @@ function AccentHeroTitle({ title }: { title: string }) {
 
 export default function Hero() {
   const [homeBanner, setHomeBanner] = useState<PageBanner | null>(null);
+  const [stotraDoc, setStotraDoc] = useState<PageBanner | null>(null);
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    async function loadHomeBanner() {
-      const { data } = await supabase
+    async function loadData() {
+      // Load Home Banner
+      const { data: bannerData } = await supabase
         .from("page_banners")
         .select("*")
         .eq("page_key", "home")
         .eq("is_active", true)
         .maybeSingle();
-      setHomeBanner((data as PageBanner | null) ?? null);
+      setHomeBanner((bannerData as PageBanner | null) ?? null);
+
+      // Load Stotra Ratnavali PDF info
+      const { data: docData } = await supabase
+        .from("page_banners")
+        .select("*")
+        .eq("page_key", "stotra_ratnavali")
+        .maybeSingle();
+      setStotraDoc((docData as PageBanner | null) ?? null);
     }
-    loadHomeBanner();
+    loadData();
   }, []);
 
   const heroTitle = homeBanner?.title || "Empowering Nohar, Preserving Heritage";
@@ -61,6 +71,15 @@ export default function Hero() {
     homeBanner?.subtitle ||
     "A thriving agriculture-based community in Madhepura, Bihar. Managed with care by Nohar Vikash Yuvak Sangh.";
   const heroBackground = homeBanner?.bg_image || heroImg;
+
+  const pdfUrl = (stotraDoc?.is_active && stotraDoc?.bg_image) ? stotraDoc.bg_image : null;
+  const docTitle = stotraDoc?.title || "स्तोत्र रत्नावली";
+
+  const handleDocClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!pdfUrl) {
+      e.preventDefault();
+    }
+  };
 
   const titleMotion = prefersReducedMotion
     ? {}
@@ -112,7 +131,7 @@ export default function Hero() {
             {heroSubtitle}
           </p>
 
-          <div className="flex flex-col sm:flex-row flex-wrap items-start gap-3 sm:items-center sm:gap-4 w-full sm:w-auto">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2.5 sm:gap-4 w-full sm:w-auto">
             <Link to="/about" className="hero-cta-primary">
               <span className="inline-flex items-center justify-center gap-2">
                 Explore Our Story <ArrowRight className="h-4 w-4 shrink-0" />
@@ -127,6 +146,23 @@ export default function Hero() {
                 Support Us
               </span>
             </Link>
+
+            {/* Stotra Ratnavali PDF CTA Button */}
+            <a
+              href={pdfUrl || "#"}
+              target={pdfUrl ? "_blank" : undefined}
+              rel={pdfUrl ? "noopener noreferrer" : undefined}
+              onClick={handleDocClick}
+              className="hero-cta-doc group"
+            >
+              <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300 shrink-0 group-hover:rotate-6 transition-transform" />
+              <span className="relative z-[1] transition-colors duration-300 group-hover:text-amber-100">
+                {docTitle}
+              </span>
+              <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-200 border border-amber-400/30">
+                PDF
+              </span>
+            </a>
           </div>
 
           {/* Countdown Card (mobile/tablet) */}

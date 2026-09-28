@@ -154,4 +154,15 @@
     @apply active:scale-[0.98] active:translate-y-0;
     @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 focus-visible:ring-offset-2 focus-visible:ring-offset-black/30;
   }
+
+  .hero-cta-doc {
+    @apply relative inline-flex w-auto shrink-0 items-center justify-center gap-2 rounded-full border-2 border-amber-400/60 bg-gradient-to-r from-amber-500/20 via-orange-500/15 to-emerald-500/20 font-semibold text-white backdrop-blur-md touch-manipulation;
+    @apply min-h-[38px] px-3.5 py-1.5 text-[11px] leading-tight sm:min-h-[52px] sm:px-6 sm:py-3.5 sm:text-sm;
+    @apply shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_6px_24px_-6px_rgba(245,158,11,0.35)];
+    @apply transition-all duration-300 ease-out;
+    @apply hover:scale-[1.03] hover:-translate-y-0.5 hover:border-amber-300 hover:bg-amber-500/30 sm:hover:scale-[1.045];
+    @apply hover:text-white hover:shadow-[0_0_36px_rgba(245,158,11,0.45),0_10px_32px_-8px_rgba(0,0,0,0.4)];
+    @apply active:scale-[0.98] active:translate-y-0;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black/30;
+  }
 }
