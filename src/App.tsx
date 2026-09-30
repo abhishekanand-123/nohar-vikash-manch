@@ -30,6 +30,8 @@ import ManageDocuments from "./pages/admin/ManageDocuments";
 import ManageVideos from "./pages/admin/ManageVideos";
 import ManageNotifications from "./pages/admin/ManageNotifications";
 import AnalyticsDashboard from "./pages/admin/AnalyticsDashboard";
+import GramUdyog from "./pages/GramUdyog";
+import ManageGramUdyog from "./pages/admin/ManageGramUdyog";
 import Videos from "./pages/Videos";
 import NotFound from "./pages/NotFound";
 
@@ -49,6 +51,7 @@ const App = () => (
             <Route element={<PublicLayout />}>
               <Route path="/" element={<Index />} />
               <Route path="/about" element={<About />} />
+              <Route path="/gram-udyog" element={<GramUdyog />} />
               <Route path="/festivals" element={<Festivals />} />
               <Route path="/festivals/:id" element={<FestivalDetails />} />
               <Route path="/ramnavami" element={<Ramnavami />} />
@@ -62,6 +65,7 @@ const App = () => (
               <Route path="/admin/dashboard" element={<AdminOverview />} />
               <Route path="/admin/analytics" element={<AnalyticsDashboard />} />
               <Route path="/admin/notifications" element={<ManageNotifications />} />
+              <Route path="/admin/gram-udyog" element={<ManageGramUdyog />} />
               <Route path="/admin/documents" element={<ManageDocuments />} />
               <Route path="/admin/blogs" element={<ManageBlogs />} />
               <Route path="/admin/members" element={<ManageMembers />} />

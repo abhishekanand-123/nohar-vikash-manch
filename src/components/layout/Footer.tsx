@@ -19,6 +19,7 @@ export default function Footer() {
             <ul className="space-y-2.5 text-sm text-background/70">
               <li><Link to="/" className="hover:text-accent transition-colors">मुख्य पृष्ठ</Link></li>
               <li><Link to="/about" className="hover:text-accent transition-colors">हमारे बारे में</Link></li>
+              <li><Link to="/gram-udyog" className="hover:text-accent transition-colors">ग्राम उद्योग एवं विकास</Link></li>
               <li><Link to="/festivals" className="hover:text-accent transition-colors">त्योहार</Link></li>
               <li><Link to="/sports" className="hover:text-accent transition-colors">खेल क्लब</Link></li>
               <li><Link to="/gallery" className="hover:text-accent transition-colors">गैलरी</Link></li>

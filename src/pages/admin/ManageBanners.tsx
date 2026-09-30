@@ -11,6 +11,7 @@ type PageBanner = Tables<"page_banners">;
 const pages = [
   { key: "home", label: "Home Page" },
   { key: "about", label: "About Page" },
+  { key: "gram-udyog", label: "ग्राम उद्योग एवं विकास (Gram Udyog)" },
   { key: "festivals", label: "Festivals Page" },
   { key: "gallery", label: "Gallery Page" },
   { key: "videos", label: "Videos Page" },
