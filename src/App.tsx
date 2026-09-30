@@ -8,6 +8,7 @@ import PublicLayout from "@/components/layout/PublicLayout";
 import AdminLayout from "@/components/admin/AdminLayout";
 import InstallPWA from "@/components/pwa/InstallPWA";
 import ReloadPrompt from "@/components/pwa/ReloadPrompt";
+import NotificationPrompt from "@/components/pwa/NotificationPrompt";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Festivals from "./pages/Festivals";
@@ -27,6 +28,7 @@ import ManageSports from "./pages/admin/ManageSports";
 import ManageBanners from "./pages/admin/ManageBanners";
 import ManageDocuments from "./pages/admin/ManageDocuments";
 import ManageVideos from "./pages/admin/ManageVideos";
+import ManageNotifications from "./pages/admin/ManageNotifications";
 import AnalyticsDashboard from "./pages/admin/AnalyticsDashboard";
 import Videos from "./pages/Videos";
 import NotFound from "./pages/NotFound";
@@ -41,6 +43,7 @@ const App = () => (
       <ReloadPrompt />
       <BrowserRouter>
         <InstallPWA />
+        <NotificationPrompt />
         <AuthProvider>
           <Routes>
             <Route element={<PublicLayout />}>
@@ -58,6 +61,7 @@ const App = () => (
             <Route element={<AdminLayout />}>
               <Route path="/admin/dashboard" element={<AdminOverview />} />
               <Route path="/admin/analytics" element={<AnalyticsDashboard />} />
+              <Route path="/admin/notifications" element={<ManageNotifications />} />
               <Route path="/admin/documents" element={<ManageDocuments />} />
               <Route path="/admin/blogs" element={<ManageBlogs />} />
               <Route path="/admin/members" element={<ManageMembers />} />

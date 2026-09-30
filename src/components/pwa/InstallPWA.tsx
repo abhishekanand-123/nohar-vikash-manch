@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Download, X, Smartphone, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -35,9 +36,39 @@ export default function InstallPWA() {
       setDeferredPrompt(e as BeforeInstallPromptEvent);
     };
 
-    const handleAppInstalled = () => {
+    const handleAppInstalled = async () => {
       setIsInstalled(true);
       setDeferredPrompt(null);
+
+      // 1. Send push notification to user's screen
+      if ("Notification" in window && Notification.permission === "granted") {
+        new Notification("🎉 Nohar Vikash Manch App Installed!", {
+          body: "नोहर विकास मंच ॲप इनस्टॉल करने के लिए धन्यवाद! अब आप बिना ब्राउज़र के सीधे ॲप चला सकते हैं।",
+          icon: "/pwa-192x192.png",
+          badge: "/pwa-64x64.png",
+        });
+      }
+
+      // 2. Track install event in Supabase Analytics
+      try {
+        await supabase.from("analytics_events").insert({
+          event_type: "app_installed",
+          session_id: crypto.randomUUID(),
+          visitor_id: localStorage.getItem("nvm_visitor_id") || crypto.randomUUID(),
+          visitor_key: "visitor_" + Date.now(),
+          page_path: window.location.pathname,
+          device_type: /mobile/i.test(navigator.userAgent) ? "mobile" : "desktop",
+          browser: navigator.userAgent,
+          occurred_at: new Date().toISOString(),
+          metadata: {
+            installed_at: new Date().toISOString(),
+            platform: navigator.platform,
+            userAgent: navigator.userAgent,
+          },
+        });
+      } catch (err) {
+        console.warn("Could not log app_installed event:", err);
+      }
     };
 
     const handleCustomTrigger = () => {
