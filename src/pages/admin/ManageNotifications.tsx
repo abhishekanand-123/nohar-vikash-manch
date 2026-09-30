@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Bell, Send, CheckCircle2, Smartphone, Monitor, Sparkles, RefreshCw, AlertCircle } from "lucide-react";
+import { Bell, Send, CheckCircle2, Smartphone, Monitor, Sparkles, RefreshCw, AlertCircle, Radio, Clock, Laptop } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -18,12 +18,21 @@ interface SentNotification {
   status: string;
 }
 
+interface InstallRecord {
+  id: string;
+  device_type: string | null;
+  browser: string | null;
+  occurred_at: string;
+  city?: string | null;
+}
+
 export default function ManageNotifications() {
   const [title, setTitle] = useState("🎉 रामनवमी महोत्सव 2026 की तैयारियाँ शुरू!");
   const [body, setBody] = useState("गाँव नोहर में इस वर्ष रामनवमी महोत्सव धूमधाम से मनाया जाएगा। कार्यक्रम की रूपरेखा और समय सारिणी देखें।");
   const [url, setUrl] = useState("/ramnavami");
   const [isSending, setIsSending] = useState(false);
   const [installCount, setInstallCount] = useState<number>(0);
+  const [recentInstalls, setRecentInstalls] = useState<InstallRecord[]>([]);
   const [loadingInstalls, setLoadingInstalls] = useState(true);
   const [sentHistory, setSentHistory] = useState<SentNotification[]>([
     {
@@ -45,12 +54,38 @@ export default function ManageNotifications() {
   ]);
 
   useEffect(() => {
-    fetchInstallCount();
+    fetchInstallData();
+
+    // Setup Supabase Realtime subscription for live updates
+    const channel = supabase
+      .channel("analytics_events_installs")
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "analytics_events",
+          filter: "event_type=eq.app_installed",
+        },
+        (payload) => {
+          setInstallCount((prev) => prev + 1);
+          if (payload.new) {
+            setRecentInstalls((prev) => [payload.new as InstallRecord, ...prev.slice(0, 9)]);
+            toast.info("🎉 नया ॲप इंस्टॉल हुआ (New App Installed)!");
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
-  const fetchInstallCount = async () => {
+  const fetchInstallData = async () => {
     setLoadingInstalls(true);
     try {
+      // 1. Total Count
       const { count, error } = await supabase
         .from("analytics_events")
         .select("*", { count: "exact", head: true })
@@ -59,8 +94,20 @@ export default function ManageNotifications() {
       if (!error && typeof count === "number") {
         setInstallCount(count);
       }
+
+      // 2. Recent List
+      const { data: list } = await supabase
+        .from("analytics_events")
+        .select("id, device_type, browser, occurred_at, city")
+        .eq("event_type", "app_installed")
+        .order("occurred_at", { ascending: false })
+        .limit(10);
+
+      if (list) {
+        setRecentInstalls(list as InstallRecord[]);
+      }
     } catch (err) {
-      console.warn("Could not fetch install count:", err);
+      console.warn("Could not fetch install data:", err);
     } finally {
       setLoadingInstalls(false);
     }
@@ -93,7 +140,6 @@ export default function ManageNotifications() {
       if (success) {
         toast.success("✅ टेस्ट पुश नोटिफिकेशन स्क्रीन पर भेज दिया गया!");
         
-        // Add to history
         const newNotif: SentNotification = {
           id: Date.now().toString(),
           title,
@@ -120,32 +166,56 @@ export default function ManageNotifications() {
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground flex items-center gap-2.5">
             <Bell className="w-7 h-7 text-primary" />
-            Push Notifications
+            Push Notifications & App Installs
           </h1>
           <p className="text-muted-foreground text-sm mt-1">
-            मोबाइल और डेस्कटॉप ॲप यूज़र्स को सीधे सूचनाएँ व घोषणाएँ भेजें।
+            मोबाइल और डेस्कटॉप ॲप यूज़र्स को सीधे सूचनाएँ भेजें और लाइव इंस्टॉल्स ट्रैक करें।
           </p>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 flex items-center gap-1.5 py-1 px-3 text-xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            Realtime Live Synced
+          </Badge>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={fetchInstallData}
+            disabled={loadingInstalls}
+            className="gap-1.5"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${loadingInstalls ? "animate-spin" : ""}`} />
+            Refresh
+          </Button>
         </div>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card className="border-primary/20 bg-card/60 backdrop-blur-sm shadow-sm">
+        <Card className="border-primary/20 bg-card/60 backdrop-blur-sm shadow-sm relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-primary/10 rounded-full blur-xl pointer-events-none" />
           <CardHeader className="p-4 pb-2">
-            <CardDescription className="text-xs font-medium">Total App Installs</CardDescription>
-            <CardTitle className="text-2xl font-bold text-primary flex items-center gap-2">
-              <Smartphone className="w-5 h-5" />
+            <div className="flex items-center justify-between">
+              <CardDescription className="text-xs font-semibold">Total App Installs</CardDescription>
+              <span className="flex h-2 w-2 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+              </span>
+            </div>
+            <CardTitle className="text-3xl font-bold text-primary flex items-center gap-2">
+              <Smartphone className="w-6 h-6" />
               {loadingInstalls ? "..." : `${installCount} Devices`}
             </CardTitle>
           </CardHeader>
           <CardContent className="p-4 pt-0">
-            <p className="text-[11px] text-muted-foreground">फोन व पीसी में इंस्टॉल्ड ॲप्स</p>
+            <p className="text-[11px] text-muted-foreground">फोन व पीसी में इंस्टॉल्ड ॲप्स (Live Count)</p>
           </CardContent>
         </Card>
 
         <Card className="border-primary/20 bg-card/60 backdrop-blur-sm shadow-sm">
           <CardHeader className="p-4 pb-2">
-            <CardDescription className="text-xs font-medium">Notification Status</CardDescription>
+            <CardDescription className="text-xs font-semibold">Notification Status</CardDescription>
             <CardTitle className="text-2xl font-bold text-emerald-600 flex items-center gap-2">
               <CheckCircle2 className="w-5 h-5" />
               Active
@@ -158,7 +228,7 @@ export default function ManageNotifications() {
 
         <Card className="border-primary/20 bg-card/60 backdrop-blur-sm shadow-sm">
           <CardHeader className="p-4 pb-2">
-            <CardDescription className="text-xs font-medium">Broadcasts Sent</CardDescription>
+            <CardDescription className="text-xs font-semibold">Broadcasts Sent</CardDescription>
             <CardTitle className="text-2xl font-bold text-foreground flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-amber-500" />
               {sentHistory.length}
@@ -180,7 +250,7 @@ export default function ManageNotifications() {
                 नया नोटिफिकेशन बनाएँ (Compose Announcement)
               </CardTitle>
               <CardDescription className="text-xs">
-                यह संदेश यूज़र के मोबाइल/कंप्यूटर की स्क्रीन पर पॉपअप के रूप में दिखाई देगा।
+                यह संदेश यूज़र के मोबाइल/कंप्यूटर की स्क्रीन पर सीधे पॉपअप होगा।
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -208,7 +278,7 @@ export default function ManageNotifications() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-foreground">Target URL (क्लिक करने पर खुलने वाला पेज)</label>
+                <label className="text-xs font-semibold text-foreground">Target URL (पेज लिंक)</label>
                 <Input
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
@@ -220,47 +290,78 @@ export default function ManageNotifications() {
                 <Button
                   onClick={handleSendTestNotification}
                   disabled={isSending}
-                  className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground gap-2"
+                  className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground gap-2 py-2.5 font-semibold"
                 >
                   {isSending ? (
                     <RefreshCw className="w-4 h-4 animate-spin" />
                   ) : (
                     <Send className="w-4 h-4" />
                   )}
-                  Send Push Notification
+                  Send Push Notification (सूचना भेजें)
                 </Button>
               </div>
             </CardContent>
           </Card>
 
-          {/* Sent History */}
+          {/* Recent App Installs Live Table */}
           <Card className="border-border">
             <CardHeader className="p-4 pb-2">
-              <CardTitle className="text-sm font-semibold">Sent Notifications History</CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-sm font-semibold flex items-center gap-2">
+                  <Smartphone className="w-4 h-4 text-primary" />
+                  Recent Installs (हाल के इंस्टॉल्स)
+                </CardTitle>
+                <Badge variant="secondary" className="text-[10px]">
+                  Total: {installCount}
+                </Badge>
+              </div>
             </CardHeader>
-            <CardContent className="p-4 pt-2 divide-y divide-border">
-              {sentHistory.map((item) => (
-                <div key={item.id} className="py-3 first:pt-0 last:pb-0 flex items-start justify-between gap-3">
-                  <div className="space-y-1 min-w-0 flex-1">
-                    <h5 className="text-xs font-semibold text-foreground truncate">{item.title}</h5>
-                    <p className="text-[11px] text-muted-foreground line-clamp-2">{item.body}</p>
-                    <div className="flex items-center gap-2 pt-1">
-                      <Badge variant="outline" className="text-[9px] py-0 px-1.5">
-                        Link: {item.url}
-                      </Badge>
-                      <span className="text-[10px] text-muted-foreground">{item.sentAt}</span>
-                    </div>
-                  </div>
-                  <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px]">
-                    {item.status}
-                  </Badge>
+            <CardContent className="p-4 pt-2">
+              {recentInstalls.length === 0 ? (
+                <div className="text-center py-6 text-xs text-muted-foreground">
+                  अभी तक कोई नया इंस्टॉल डेटा दर्ज नहीं हुआ है। जब भी कोई यूज़र ॲप इनस्टॉल करेगा, वह यहाँ लाइव दिखेगा।
                 </div>
-              ))}
+              ) : (
+                <div className="divide-y divide-border">
+                  {recentInstalls.map((inst) => (
+                    <div key={inst.id} className="py-2.5 first:pt-0 last:pb-0 flex items-center justify-between text-xs">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <div className="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                          {inst.device_type === "mobile" ? (
+                            <Smartphone className="w-3.5 h-3.5" />
+                          ) : (
+                            <Laptop className="w-3.5 h-3.5" />
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="font-semibold text-foreground truncate">
+                            {inst.device_type === "mobile" ? "Mobile Phone" : "Desktop / Laptop"}
+                          </p>
+                          <p className="text-[10px] text-muted-foreground truncate">
+                            {inst.browser ? inst.browser.slice(0, 45) + "..." : "Chrome Browser"}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <span className="text-[10px] text-muted-foreground flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          {new Date(inst.occurred_at).toLocaleDateString("hi-IN", {
+                            day: "numeric",
+                            month: "short",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
 
-        {/* Live Preview on Mobile / Desktop */}
+        {/* Live Preview & Tips */}
         <div className="lg:col-span-5 space-y-6">
           <Card className="border-border bg-card/80">
             <CardHeader>
