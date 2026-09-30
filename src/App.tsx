@@ -6,6 +6,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
 import PublicLayout from "@/components/layout/PublicLayout";
 import AdminLayout from "@/components/admin/AdminLayout";
+import InstallPWA from "@/components/pwa/InstallPWA";
+import ReloadPrompt from "@/components/pwa/ReloadPrompt";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Festivals from "./pages/Festivals";
@@ -36,7 +38,9 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <ReloadPrompt />
       <BrowserRouter>
+        <InstallPWA />
         <AuthProvider>
           <Routes>
             <Route element={<PublicLayout />}>

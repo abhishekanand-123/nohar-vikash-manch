@@ -24,6 +24,15 @@ export default function Footer() {
               <li><Link to="/gallery" className="hover:text-accent transition-colors">गैलरी</Link></li>
               <li><Link to="/videos" className="hover:text-accent transition-colors">वीडियो</Link></li>
               <li><Link to="/donation" className="hover:text-accent transition-colors">दान</Link></li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => window.dispatchEvent(new CustomEvent("trigger-pwa-install"))}
+                  className="text-accent hover:underline flex items-center gap-1 font-medium"
+                >
+                  📲 App Install करें (PWA)
+                </button>
+              </li>
             </ul>
           </div>
           <div>

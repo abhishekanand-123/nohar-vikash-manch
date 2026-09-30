@@ -84,6 +84,16 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
+              <button
+                type="button"
+                onClick={() => {
+                  setOpen(false);
+                  window.dispatchEvent(new CustomEvent("trigger-pwa-install"));
+                }}
+                className="px-4 py-3.5 min-h-[48px] rounded-xl text-sm font-medium border border-primary/30 text-primary bg-primary/5 hover:bg-primary/10 transition-colors flex items-center justify-center gap-2 mt-1"
+              >
+                📲 App Install करें
+              </button>
               <Link
                 to="/admin/login"
                 onClick={() => setOpen(false)}

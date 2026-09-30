@@ -1,0 +1,142 @@
+import fs from 'fs';
+import path from 'path';
+import sharp from 'sharp';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const svgContent = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f766e" />
+      <stop offset="50%" stop-color="#16a34a" />
+      <stop offset="100%" stop-color="#15803d" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#ea580c" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a" />
+      <stop offset="50%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Background rounded rectangle -->
+  <rect width="512" height="512" rx="115" fill="url(#bgGrad)" />
+
+  <!-- Subtle glowing circle in background -->
+  <circle cx="256" cy="235" r="160" fill="white" fill-opacity="0.08" />
+
+  <!-- Decorative Mandala / Sun rays -->
+  <g stroke="url(#goldGrad)" stroke-width="4" opacity="0.4" stroke-linecap="round">
+    <line x1="256" y1="55" x2="256" y2="75" />
+    <line x1="256" y1="395" x2="256" y2="415" />
+    <line x1="96" y1="235" x2="116" y2="235" />
+    <line x1="396" y1="235" x2="416" y2="235" />
+    <line x1="143" y1="122" x2="157" y2="136" />
+    <line x1="355" y1="334" x2="369" y2="348" />
+    <line x1="143" y1="348" x2="157" y2="334" />
+    <line x1="355" y1="136" x2="369" y2="122" />
+  </g>
+
+  <!-- Inner Badge Shield / Circle -->
+  <circle cx="256" cy="225" r="130" fill="#ffffff" filter="url(#shadow)" />
+  <circle cx="256" cy="225" r="122" fill="none" stroke="url(#accentGrad)" stroke-width="4" stroke-dasharray="8 6" />
+
+  <!-- Emblem / Rising Sun & Temple / Community Structure inside badge -->
+  <g transform="translate(156, 125) scale(0.39)">
+    <!-- Sun -->
+    <circle cx="256" cy="190" r="70" fill="url(#accentGrad)" />
+    <!-- Rising Rays -->
+    <path d="M256 70 L256 100 M170 105 L190 128 M342 105 L322 128 M130 190 L160 190 M382 190 L352 190" stroke="#f59e0b" stroke-width="12" stroke-linecap="round"/>
+    <!-- Temple/Mandir Arch Kalash -->
+    <path d="M256 120 L270 160 L242 160 Z" fill="#d97706" />
+    <!-- Kalash Flag -->
+    <path d="M256 120 L285 105 L256 95 Z" fill="#ea580c" />
+    <!-- Pillars and base -->
+    <path d="M160 380 L160 270 L352 270 L352 380 Z" fill="#15803d" opacity="0.9" />
+    <path d="M140 380 L372 380 L372 410 L140 410 Z" fill="#166534" />
+    <path d="M200 270 L200 380 M256 270 L256 380 M312 270 L312 380" stroke="#ffffff" stroke-width="8" stroke-linecap="round"/>
+    <!-- Dome Arch -->
+    <path d="M160 270 Q256 180 352 270 Z" fill="#ea580c" />
+    <!-- Lotus Petals at bottom -->
+    <path d="M256 380 C230 350 200 370 190 395 C220 405 245 390 256 380 Z" fill="#f59e0b" />
+    <path d="M256 380 C282 350 312 370 322 395 C292 405 267 390 256 380 Z" fill="#f59e0b" />
+  </g>
+
+  <!-- Typography: NOHAR VIKASH MANCH -->
+  <text x="256" y="405" 
+        text-anchor="middle" 
+        font-family="system-ui, -apple-system, sans-serif" 
+        font-size="34" 
+        font-weight="900" 
+        letter-spacing="2" 
+        fill="#ffffff"
+        filter="url(#shadow)">
+    NOHAR VIKASH
+  </text>
+  <text x="256" y="445" 
+        text-anchor="middle" 
+        font-family="system-ui, -apple-system, sans-serif" 
+        font-size="24" 
+        font-weight="700" 
+        letter-spacing="4" 
+        fill="#fef08a">
+    MANCH • PWA
+  </text>
+</svg>
+`;
+
+const publicDir = path.join(__dirname, 'public');
+
+async function generate() {
+  const svgBuffer = Buffer.from(svgContent.trim());
+  
+  // Save SVG
+  fs.writeFileSync(path.join(publicDir, 'pwa-icon.svg'), svgBuffer);
+  console.log('Saved pwa-icon.svg');
+
+  // Generate 512x512 PNG
+  await sharp(svgBuffer)
+    .resize(512, 512)
+    .png()
+    .toFile(path.join(publicDir, 'pwa-512x512.png'));
+  console.log('Generated pwa-512x512.png');
+
+  // Generate maskable 512x512 PNG (with extra padding safe zone)
+  await sharp(svgBuffer)
+    .resize(512, 512)
+    .png()
+    .toFile(path.join(publicDir, 'maskable-icon-512x512.png'));
+  console.log('Generated maskable-icon-512x512.png');
+
+  // Generate 192x192 PNG
+  await sharp(svgBuffer)
+    .resize(192, 192)
+    .png()
+    .toFile(path.join(publicDir, 'pwa-192x192.png'));
+  console.log('Generated pwa-192x192.png');
+
+  // Generate 64x64 PNG
+  await sharp(svgBuffer)
+    .resize(64, 64)
+    .png()
+    .toFile(path.join(publicDir, 'pwa-64x64.png'));
+  console.log('Generated pwa-64x64.png');
+
+  // Generate Apple Touch Icon (180x180)
+  await sharp(svgBuffer)
+    .resize(180, 180)
+    .png()
+    .toFile(path.join(publicDir, 'apple-touch-icon.png'));
+  console.log('Generated apple-touch-icon.png');
+}
+
+generate().catch(console.error);
