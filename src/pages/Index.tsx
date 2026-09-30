@@ -1,6 +1,7 @@
 import Hero from "@/components/home/Hero";
 import ManagedVideosSection from "@/components/common/ManagedVideosSection";
 import VillageIntro from "@/components/home/VillageIntro";
+import GramUdyogPreview from "@/components/home/GramUdyogPreview";
 import FestivalHighlights from "@/components/home/FestivalHighlights";
 import GalleryPreview from "@/components/home/GalleryPreview";
 import MapSection from "@/components/home/MapSection";
@@ -15,6 +16,9 @@ export default function Index() {
       <ManagedVideosSection placement="home" heading="Videos" />
       <SectionTracker sectionId="home-intro">
         <VillageIntro />
+      </SectionTracker>
+      <SectionTracker sectionId="home-gram-udyog">
+        <GramUdyogPreview />
       </SectionTracker>
       <SectionTracker sectionId="home-festivals">
         <FestivalHighlights />
