@@ -13,7 +13,8 @@ interface DonationItem {
   created_at: string;
 }
 
-const UPI_ID = "abhi96anand@ybl";
+const UPI_ID = "8770824752@ybl";
+const BANK_NAME = "State Bank of India - 4588";
 const UPI_PAY_URL = `upi://pay?pa=${UPI_ID}&pn=Nohar%20Vikash%20Manch&cu=INR`;
 
 export default function Donation() {
@@ -48,7 +49,12 @@ export default function Donation() {
         <div className="max-w-4xl mx-auto grid lg:grid-cols-2 gap-8">
           {/* QR Code Card */}
           <div className="bg-card rounded-2xl p-8 shadow-card ring-1 ring-border text-center flex flex-col items-center">
-            <div className="bg-white p-3 rounded-2xl shadow-sm ring-1 ring-border/80 mb-5">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium mb-4">
+              <span className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+              <span>{BANK_NAME}</span>
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl shadow-md ring-1 ring-border/80 mb-5 max-w-[260px]">
               <img
                 src="/upi-qr-code.png"
                 alt="Donation UPI QR Code"
@@ -57,7 +63,7 @@ export default function Donation() {
             </div>
             
             <p className="text-sm font-medium text-muted-foreground mb-3">
-              Scan the QR code above to donate via any UPI app
+              Scan the QR code above to donate via PhonePe, GPay, Paytm, or any UPI app
             </p>
 
             <div className="flex items-center gap-2 bg-secondary/70 hover:bg-secondary border border-border px-4 py-2 rounded-xl text-sm transition-colors mb-4">
