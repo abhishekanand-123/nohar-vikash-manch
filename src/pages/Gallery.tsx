@@ -39,9 +39,9 @@ export default function Gallery() {
   return (
     <div>
       <SEO
-        title="फोटो गैलरी (Village Photo Gallery)"
-        description="ग्राम नोहर के उत्सवों, त्योहारों, प्राकृतिक सौंदर्य, मंदिर, खेल प्रतियोगिताओं और ग्राम सभाओं की खूबसूरत तस्वीरों का संग्रह।"
-        keywords="नोहर गैलरी, फोटो गैलरी नोहर, Nohar Photo Gallery, Village Photos Bihar"
+        title="Village Photo Gallery"
+        description="Explore photo collections of village celebrations, cultural festivals, sports events, temple rituals, and the scenic beauty of Village Nohar."
+        keywords="Nohar Photo Gallery, Village Photos, Bihar Rural Life, Nohar Moments"
       />
       <PageBanner pageKey="gallery" title="Village Gallery" subtitle="Explore the beauty of Nohar village through our photo collection" icon={Camera} />
 

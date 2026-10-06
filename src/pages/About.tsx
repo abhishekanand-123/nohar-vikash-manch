@@ -54,9 +54,9 @@ export default function About() {
   return (
     <div>
       <SEO
-        title="हमारे बारे में (About Us) — नोहर विकास युवक संघ"
-        description="नोहर विकास युवक संघ का इतिहास, लक्ष्य, गांव नोहर की समृद्ध सांस्कृतिक धरोहर एवं ग्रामीण उत्थान हेतु समर्पित सदस्यों का परिचय।"
-        keywords="नोहर विकास युवक संघ, हमारे बारे में, Nohar Vikash Yuvak Sangh, Madhepura Bihar, Nohar History"
+        title="About Us — Nohar Vikash Yuvak Sangh"
+        description="Learn about the history, vision, leadership, and community development initiatives of Nohar Vikash Yuvak Sangh in Village Nohar, Madhepura, Bihar."
+        keywords="About Nohar, Nohar Vikash Yuvak Sangh, Village History, Madhepura Community, Bihar Rural Development"
       />
       <PageBanner
         pageKey="about"

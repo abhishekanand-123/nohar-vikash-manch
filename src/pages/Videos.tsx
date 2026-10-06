@@ -28,9 +28,9 @@ export default function Videos() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-secondary/15 to-background">
       <SEO
-        title="वीडियो एवं झांकी दर्शन (Video Gallery)"
-        description="ग्राम नोहर के सांस्कृतिक कार्यक्रम, रामनवमी शोभायात्रा, दुर्गा पूजा आरती, खेल मैच व सामुदायिक आयोजनों के संपूर्ण वीडियो।"
-        keywords="नोहर वीडियो, रामनवमी वीडियो, Nohar Videos, Cultural Videos Bihar"
+        title="Video Gallery & Celebrations"
+        description="Watch community videos, Ramnavami procession, cultural evening performances, and sports events from Village Nohar."
+        keywords="Nohar Videos, Cultural Videos, Ramnavami Video, Bihar Village Videos"
       />
       <PageBanner
         pageKey="videos"

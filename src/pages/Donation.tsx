@@ -40,9 +40,9 @@ export default function Donation() {
   return (
     <div>
       <SEO
-        title="सहयोग एवं दान (Support & Donation)"
-        description="ग्राम नोहर के विकास, त्योहारों, मंदिर जीर्णोद्धार, पुस्तकालय एवं खेल गतिविधियों के लिए पारदर्शी ऑनलाइन दान व UPI सहयोग।"
-        keywords="नोहर दान, ऑनलाइन सहयोग, Donation Nohar, UPI 8770824752@ybl, SBI 4588"
+        title="Donate & Support Village Development"
+        description="Support village welfare, temple maintenance, rural library, and community festivals through verified transparent online donations."
+        keywords="Donate Nohar, Village Donation, Support Nohar Vikash, UPI Donation 8770824752@ybl"
       />
       <PageBanner
         pageKey="donation"

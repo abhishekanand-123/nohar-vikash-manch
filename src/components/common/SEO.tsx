@@ -12,12 +12,12 @@ export default function SEO({ title, description, keywords, ogImage }: SEOProps)
   const location = useLocation();
 
   useEffect(() => {
-    const defaultTitle = "NoharVikashManch — Empowering Our Village";
+    const defaultTitle = "Nohar Vikash Manch — Village Digital Portal";
     const fullTitle = title ? `${title} | Nohar Vikash Manch` : defaultTitle;
     document.title = fullTitle;
 
     const defaultDesc =
-      "NoharVikashManch is the official digital platform of Village Nohar, Madhepura, Bihar. Community development, festivals, cultural heritage, sports, Gram Udyog, and transparent accounts.";
+      "Official digital portal of Village Nohar, Madhepura, Bihar. Managed by Nohar Vikash Yuvak Sangh for rural community development, cultural festivals, sports, and local services.";
     const metaDesc = description || defaultDesc;
 
     // Helper to update or create meta tag

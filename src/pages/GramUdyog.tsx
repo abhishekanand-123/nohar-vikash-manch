@@ -99,9 +99,9 @@ export default function GramUdyog() {
   return (
     <div className="min-h-screen bg-background text-foreground pb-20">
       <SEO
-        title="ग्राम उद्योग एवं स्थानीय सेवाएं (Gram Udyog & Services)"
-        description="गाँव नोहर के कुशल कामगार, शिक्षक, मिस्त्री, इलेक्ट्रीशियन, स्वास्थ्य कर्मी, प्लंबर व स्थानीय व्यापार की डिजिटल डायरेक्टरी व संपर्क सूची।"
-        keywords="ग्राम उद्योग, नोहर मिस्त्री, नोहर शिक्षक, ग्राम सेवाएं, Madhepura Village Services, Gram Udyog Nohar"
+        title="Gram Udyog & Local Services Directory"
+        description="Comprehensive directory and contact details of local teachers, masons, electricians, health workers, plumbers, and skilled professionals in Village Nohar."
+        keywords="Gram Udyog, Nohar Services, Local Workers, Bihar Rural Services, Nohar Directory"
       />
 
       {/* Dynamic Database Page Banner */}

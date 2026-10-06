@@ -12,8 +12,8 @@ const NotFound = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-muted">
       <SEO
-        title="404 — पृष्ठ उपलब्ध नहीं है (Page Not Found)"
-        description="क्षमा करें, आपके द्वारा खोजा गया पेज उपलब्ध नहीं है या हटा दिया गया है।"
+        title="404 — Page Not Found"
+        description="The page you are looking for does not exist or has been moved."
       />
       <div className="text-center">
         <h1 className="mb-4 text-4xl font-bold">404</h1>
