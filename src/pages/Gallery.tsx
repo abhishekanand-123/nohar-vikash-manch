@@ -4,6 +4,7 @@ import { Camera } from "lucide-react";
 import PageBanner from "@/components/layout/PageBanner";
 import { supabase } from "@/integrations/supabase/client";
 import HoverImagePreview from "@/components/common/HoverImagePreview";
+import SEO from "@/components/common/SEO";
 
 interface GalleryItem {
   id: string;
@@ -37,6 +38,11 @@ export default function Gallery() {
 
   return (
     <div>
+      <SEO
+        title="फोटो गैलरी (Village Photo Gallery)"
+        description="ग्राम नोहर के उत्सवों, त्योहारों, प्राकृतिक सौंदर्य, मंदिर, खेल प्रतियोगिताओं और ग्राम सभाओं की खूबसूरत तस्वीरों का संग्रह।"
+        keywords="नोहर गैलरी, फोटो गैलरी नोहर, Nohar Photo Gallery, Village Photos Bihar"
+      />
       <PageBanner pageKey="gallery" title="Village Gallery" subtitle="Explore the beauty of Nohar village through our photo collection" icon={Camera} />
 
       <div className="container mx-auto px-6 py-16">

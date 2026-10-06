@@ -45,6 +45,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import SEO from "@/components/common/SEO";
 
 const PDF_CATEGORIES = [
   "वार्षिक आय-व्यय",
@@ -469,6 +470,10 @@ export default function ManageLekhaJokha() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-12">
+      <SEO
+        title="लेखा-जोखा प्रबंधन (Manage Lekha-Jokha) — Admin"
+        description="वार्षिक वित्तीय PDF दस्तावेज, सांस्कृतिक कार्यक्रम एवं बैनर प्रबंधन।"
+      />
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-6">
         <div>

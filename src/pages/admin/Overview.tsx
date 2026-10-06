@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { FileText, Users, Calendar, Trophy, Image, Heart, BarChart3, Smartphone } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import SEO from "@/components/common/SEO";
 
 export default function AdminOverview() {
   const [stats, setStats] = useState({ blogs: 0, members: 0, events: 0, sports: 0, gallery: 0, donations: 0, appInstalls: 0 });
@@ -46,6 +47,10 @@ export default function AdminOverview() {
 
   return (
     <div>
+      <SEO
+        title="डैशबोर्ड अवलोकन (Dashboard Overview) — Admin"
+        description="नोहर विकास मंच एडमिन पोर्टल ओवरव्यू एवं प्रमुख आंकड़े।"
+      />
       <h2 className="font-display text-xl font-bold mb-6 text-foreground">Dashboard Overview</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {cards.map((s) => (

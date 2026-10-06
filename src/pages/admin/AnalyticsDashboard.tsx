@@ -28,6 +28,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { BarChart3, Globe, MonitorSmartphone, Users, Video, Eye } from "lucide-react";
+import SEO from "@/components/common/SEO";
 
 type AnalyticsRow = Tables<"analytics_events">;
 type VideoRow = Tables<"videos">;
@@ -417,6 +418,10 @@ export default function AnalyticsDashboard() {
 
   return (
     <div className="space-y-8">
+      <SEO
+        title="वेबसाइट एनालिटिक्स (Analytics Dashboard) — Admin"
+        description="विज़िटर ट्रैफ़िक, पेज व्यूज, वीडियो वॉच टाइम और यूजर एंगेजमेंट एनालिटिक्स।"
+      />
       <div>
         <h1 className="font-display text-2xl font-bold text-foreground flex items-center gap-2">
           <BarChart3 className="h-7 w-7 text-primary" />

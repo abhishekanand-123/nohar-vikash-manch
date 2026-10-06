@@ -5,6 +5,7 @@ import PageBanner from "@/components/layout/PageBanner";
 import { supabase } from "@/integrations/supabase/client";
 import { Tables } from "@/integrations/supabase/types";
 import HoverImagePreview from "@/components/common/HoverImagePreview";
+import SEO from "@/components/common/SEO";
 
 type SportItem = Tables<"sports">;
 
@@ -57,6 +58,11 @@ export default function Sports() {
 
   return (
     <div>
+      <SEO
+        title="खेल क्लब एवं प्रतियोगिताएं (Sports Club — LNCC)"
+        description="नोहर विकास युवक संघ द्वारा संचालित नोहर स्पोर्ट्स क्लब (LNCC) — क्रिकेट, फुटबॉल, कबड्डी टूर्नामेंट, मैच शेड्यूल एवं युवा खिलाड़ियों की जानकारी।"
+        keywords="नोहर स्पोर्ट्स क्लब, LNCC Nohar, क्रिकेट टूर्नामेंट, खेल क्लब मधेपुरा, Sports Nohar"
+      />
       <PageBanner
         pageKey="sports"
         icon={Dribbble}

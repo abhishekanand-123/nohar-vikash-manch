@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { Pencil, Trash2, Plus, Calendar, Tag, Image as ImageIcon } from "lucide-react";
 import { parseVideoUrlLines } from "@/lib/video-embed";
+import SEO from "@/components/common/SEO";
 
 interface Blog {
   id: string;
@@ -261,6 +262,10 @@ export default function ManageBlogs() {
 
   return (
     <div>
+      <SEO
+        title="त्योहार ब्लॉग प्रबंधन (Manage Blogs) — Admin"
+        description="त्योहारों की कहानियां, उत्सव ब्लॉग व फोटो गैलरी का प्रबंधन।"
+      />
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="font-display text-xl font-bold text-foreground">Blog Posts & Festivals</h2>

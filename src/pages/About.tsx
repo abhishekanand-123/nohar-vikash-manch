@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import PageBanner from "@/components/layout/PageBanner";
 import { Info } from "lucide-react";
 import HoverImagePreview from "@/components/common/HoverImagePreview";
+import SEO from "@/components/common/SEO";
 
 interface Member {
   id: string;
@@ -52,6 +53,11 @@ export default function About() {
 
   return (
     <div>
+      <SEO
+        title="हमारे बारे में (About Us) — नोहर विकास युवक संघ"
+        description="नोहर विकास युवक संघ का इतिहास, लक्ष्य, गांव नोहर की समृद्ध सांस्कृतिक धरोहर एवं ग्रामीण उत्थान हेतु समर्पित सदस्यों का परिचय।"
+        keywords="नोहर विकास युवक संघ, हमारे बारे में, Nohar Vikash Yuvak Sangh, Madhepura Bihar, Nohar History"
+      />
       <PageBanner
         pageKey="about"
         icon={Info}

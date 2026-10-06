@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "sonner";
 import { BookOpen, Upload, FileText, ExternalLink, Trash2, CheckCircle2, AlertCircle, Save, Globe } from "lucide-react";
 import { Tables } from "@/integrations/supabase/types";
+import SEO from "@/components/common/SEO";
 
 type PageBanner = Tables<"page_banners">;
 
@@ -141,6 +142,10 @@ export default function ManageDocuments() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-8">
+      <SEO
+        title="दस्तावेज व PDF प्रबंधन (Manage Documents) — Admin"
+        description="धार्मिक पुस्तकें, स्तोत्र रत्नावली एवं सार्वजनिक PDF दस्तावेजों का प्रबंधन।"
+      />
       <div>
         <h1 className="text-2xl font-bold font-display text-foreground flex items-center gap-2">
           <BookOpen className="w-7 h-7 text-primary" />

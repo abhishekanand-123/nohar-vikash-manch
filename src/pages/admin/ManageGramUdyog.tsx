@@ -30,6 +30,7 @@ import {
 import { uploadFile } from "@/lib/supabase-helpers";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import SEO from "@/components/common/SEO";
 
 const DEFAULT_CATEGORIES = [
   "शिक्षक (Teacher)",
@@ -194,6 +195,10 @@ export default function ManageGramUdyog() {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 space-y-8 max-w-7xl mx-auto">
+      <SEO
+        title="ग्राम उद्योग प्रबंधन (Manage Gram Udyog) — Admin"
+        description="गाँव के शिक्षक, मिस्त्री, लेबर, डॉक्टर व सभी कामगारों की डायरेक्टरी का प्रबंधन करें।"
+      />
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>

@@ -4,6 +4,7 @@ import { Heart, Copy, Check, ExternalLink, Download } from "lucide-react";
 import PageBanner from "@/components/layout/PageBanner";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import SEO from "@/components/common/SEO";
 
 interface DonationItem {
   id: string;
@@ -38,6 +39,11 @@ export default function Donation() {
 
   return (
     <div>
+      <SEO
+        title="सहयोग एवं दान (Support & Donation)"
+        description="ग्राम नोहर के विकास, त्योहारों, मंदिर जीर्णोद्धार, पुस्तकालय एवं खेल गतिविधियों के लिए पारदर्शी ऑनलाइन दान व UPI सहयोग।"
+        keywords="नोहर दान, ऑनलाइन सहयोग, Donation Nohar, UPI 8770824752@ybl, SBI 4588"
+      />
       <PageBanner
         pageKey="donation"
         icon={Heart}

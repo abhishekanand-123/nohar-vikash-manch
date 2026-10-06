@@ -4,6 +4,7 @@ import VideoShowcaseItem from "@/components/common/VideoShowcaseItem";
 import { supabase } from "@/integrations/supabase/client";
 import { Tables } from "@/integrations/supabase/types";
 import { Video } from "lucide-react";
+import SEO from "@/components/common/SEO";
 
 type VideoRow = Tables<"videos">;
 
@@ -26,6 +27,11 @@ export default function Videos() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-secondary/15 to-background">
+      <SEO
+        title="वीडियो एवं झांकी दर्शन (Video Gallery)"
+        description="ग्राम नोहर के सांस्कृतिक कार्यक्रम, रामनवमी शोभायात्रा, दुर्गा पूजा आरती, खेल मैच व सामुदायिक आयोजनों के संपूर्ण वीडियो।"
+        keywords="नोहर वीडियो, रामनवमी वीडियो, Nohar Videos, Cultural Videos Bihar"
+      />
       <PageBanner
         pageKey="videos"
         icon={Video}

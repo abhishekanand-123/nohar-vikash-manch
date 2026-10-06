@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { Pencil, Trash2, Plus } from "lucide-react";
 import { Tables } from "@/integrations/supabase/types";
+import SEO from "@/components/common/SEO";
 
 type PageBanner = Tables<"page_banners">;
 
@@ -114,6 +115,10 @@ export default function ManageBanners() {
 
   return (
     <div>
+      <SEO
+        title="बैनर प्रबंधन (Manage Banners) — Admin"
+        description="वेबसाइट के सभी पेजों के शीर्ष बैनर व शीर्षक का प्रबंधन।"
+      />
       <div className="flex items-center justify-between mb-6">
         <h2 className="font-display text-xl font-bold text-foreground">Page Banners</h2>
         {isAdmin && (

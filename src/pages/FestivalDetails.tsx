@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import HoverImagePreview from "@/components/common/HoverImagePreview";
 import VideoEmbed from "@/components/common/VideoEmbed";
 import { Tables } from "@/integrations/supabase/types";
+import SEO from "@/components/common/SEO";
 
 interface BlogDetails {
   id: string;
@@ -70,6 +71,12 @@ export default function FestivalDetails() {
 
   return (
     <div className="container mx-auto px-6 py-14">
+      <SEO
+        title={post.title}
+        description={post.content ? post.content.substring(0, 160) : `${post.title} - नोहर विकास मंच`}
+        ogImage={post.image || undefined}
+        keywords={post.tags?.join(", ") || "नोहर, त्योहार, ब्लॉग"}
+      />
       <div className="mb-6">
         <Link to="/festivals" className="text-sm text-primary hover:underline">← Back to festival posts</Link>
       </div>

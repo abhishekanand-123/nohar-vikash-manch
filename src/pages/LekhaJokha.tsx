@@ -34,6 +34,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import HoverImagePreview from "@/components/common/HoverImagePreview";
+import SEO from "@/components/common/SEO";
 import { toast } from "sonner";
 
 export default function LekhaJokha() {
@@ -174,6 +175,12 @@ export default function LekhaJokha() {
 
   return (
     <div className="min-h-screen bg-background text-foreground pb-20">
+      <SEO
+        title="लेखा-जोखा एवं वार्षिक प्रतिवेदन 2026-2025"
+        description="नोहर विकास युवक संघ का पारदर्शी एवं प्रमाणित आय-व्यय विवरण। वर्ष 2026 व 2025 के वार्षिक वित्तीय PDF प्रतिवेदन, ऑडिट रिपोर्ट व सांस्कृतिक कार्यक्रमों का संपूर्ण ब्योरा।"
+        keywords="लेखा जोखा, वार्षिक विवरण, ऑडिट रिपोर्ट, सांस्कृतिक कार्यक्रम, नोहर विकास संघ, Lekha Jokha, Financial Report Nohar"
+      />
+
       {/* Banner Section - Manageable from Admin */}
       <PageBanner
         pageKey="lekha-jokha"

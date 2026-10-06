@@ -9,6 +9,7 @@ import HoverImagePreview from "@/components/common/HoverImagePreview";
 import VideoEmbed from "@/components/common/VideoEmbed";
 import { supabase } from "@/integrations/supabase/client";
 import { Tables } from "@/integrations/supabase/types";
+import SEO from "@/components/common/SEO";
 
 interface RamnavamiBlog {
   id: string;
@@ -81,6 +82,11 @@ export default function Ramnavami() {
 
   return (
     <div>
+      <SEO
+        title="श्री रामनवमी महोत्सव एवं अष्टयाम (Ramnavami Special)"
+        description="श्री राम जन्मोत्सव — लक्ष्मी नारायण स्थान, ग्राम नोहर में आयोजित भव्य 3-दिवसीय रामनवमी पूजा, अष्टयाम, कीर्तन, शोभायात्रा व महाप्रसाद भंडारा।"
+        keywords="रामनवमी, अष्टयाम, नोहर रामनवमी, लक्ष्मी नारायण स्थान, Ramnavami Nohar, Ashtajam Madhepura"
+      />
       <PageBanner
         pageKey="ramnavami"
         title="Ramnavami Puja & Ashtajam"

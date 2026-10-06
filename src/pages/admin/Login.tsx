@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Lock } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import SEO from "@/components/common/SEO";
 
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
@@ -28,6 +29,10 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-6">
+      <SEO
+        title="एडमिन लॉगिन (Admin Login)"
+        description="नोहर विकास मंच एडमिन पोर्टल लॉगिन।"
+      />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
