@@ -12,6 +12,7 @@ const pages = [
   { key: "home", label: "Home Page" },
   { key: "about", label: "About Page" },
   { key: "gram-udyog", label: "ग्राम उद्योग एवं विकास (Gram Udyog)" },
+  { key: "lekha-jokha", label: "लेखा-जोखा एवं रिपोर्ट (Lekha-Jokha)" },
   { key: "festivals", label: "Festivals Page" },
   { key: "gallery", label: "Gallery Page" },
   { key: "videos", label: "Videos Page" },

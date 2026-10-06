@@ -7,6 +7,7 @@ const navLinks = [
   { to: "/", label: "मुख्य पृष्ठ" },
   { to: "/about", label: "हमारे बारे में" },
   { to: "/gram-udyog", label: "ग्राम उद्योग" },
+  { to: "/lekha-jokha", label: "लेखा-जोखा" },
   { to: "/festivals", label: "त्योहार" },
   { to: "/ramnavami", label: "रामनवमी" },
   { to: "/sports", label: "खेल क्लब" },
