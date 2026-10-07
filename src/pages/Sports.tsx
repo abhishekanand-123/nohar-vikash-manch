@@ -7,12 +7,111 @@ import { Tables } from "@/integrations/supabase/types";
 import HoverImagePreview from "@/components/common/HoverImagePreview";
 import SEO from "@/components/common/SEO";
 
-type SportItem = Tables<"sports">;
+function SportsCountdown({ targetDate, title }: { targetDate: string; title: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const shadowRef = useRef<ShadowRoot | null>(null);
+
+  useEffect(() => {
+    if (containerRef.current && !shadowRef.current) {
+      try {
+        shadowRef.current = containerRef.current.attachShadow({ mode: "open" });
+      } catch {
+        shadowRef.current = containerRef.current.shadowRoot;
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    function render() {
+      if (!shadowRef.current) return;
+      const target = new Date(`${targetDate}T00:00:00`).getTime();
+      const diffMs = target - Date.now();
+      const diff =
+        diffMs <= 0
+          ? { days: 0, hrs: 0, min: 0, sec: 0 }
+          : {
+              days: Math.floor(diffMs / 86400000),
+              hrs: Math.floor((diffMs % 86400000) / 3600000),
+              min: Math.floor((diffMs % 3600000) / 60000),
+              sec: Math.floor((diffMs % 60000) / 1000),
+            };
+
+      const days = String(diff.days).padStart(2, "0");
+      const hrs = String(diff.hrs).padStart(2, "0");
+      const min = String(diff.min).padStart(2, "0");
+      const sec = String(diff.sec).padStart(2, "0");
+
+      shadowRef.current.innerHTML = `
+        <style>
+          * { box-sizing: border-box; margin: 0; padding: 0; font-family: inherit; }
+          :host { display: block; width: 100%; }
+          .card {
+            background: #ffffff;
+            border-radius: 1rem;
+            padding: 1.25rem;
+            border: 1px solid rgba(120, 120, 120, 0.15);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            user-select: none;
+          }
+          .title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #16a34a;
+            text-align: center;
+            margin-bottom: 0.75rem;
+          }
+          .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+          }
+          .unit {
+            text-align: center;
+            background: rgba(120, 120, 120, 0.07);
+            border-radius: 0.75rem;
+            padding: 0.75rem 0.25rem;
+            border: 1px solid rgba(120, 120, 120, 0.12);
+          }
+          .num {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #ea580c;
+            font-variant-numeric: tabular-nums;
+          }
+          .label {
+            font-size: 0.625rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #6b7280;
+            margin-top: 0.25rem;
+            font-weight: 600;
+          }
+        </style>
+        <div class="card notranslate" translate="no">
+          <div class="title">${title} — काउंटडाउन</div>
+          <div class="grid">
+            <div class="unit"><div class="num">${days}</div><div class="label">दिन</div></div>
+            <div class="unit"><div class="num">${hrs}</div><div class="label">घंटे</div></div>
+            <div class="unit"><div class="num">${min}</div><div class="label">मिनट</div></div>
+            <div class="unit"><div class="num">${sec}</div><div class="label">सेकंड</div></div>
+          </div>
+        </div>
+      `;
+    }
+
+    render();
+    const id = setInterval(render, 1000);
+    return () => clearInterval(id);
+  }, [targetDate, title]);
+
+  return <div ref={containerRef} className="skiptranslate notranslate mb-6" translate="no" />;
+}
 
 export default function Sports() {
   const [sportsItems, setSportsItems] = useState<SportItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [timeLeft, setTimeLeft] = useState({ days: 0, hrs: 0, min: 0, sec: 0 });
 
   useEffect(() => {
     async function load() {
@@ -37,24 +136,6 @@ export default function Sports() {
       .sort((a, b) => a.parsedDate.getTime() - b.parsedDate.getTime());
     return upcoming[0] ?? null;
   }, [sportsItems]);
-
-  useEffect(() => {
-    function getDiff() {
-      if (!nextSport?.event_date) return { days: 0, hrs: 0, min: 0, sec: 0 };
-      const target = new Date(`${nextSport.event_date}T00:00:00`).getTime();
-      const diff = target - Date.now();
-      if (diff <= 0) return { days: 0, hrs: 0, min: 0, sec: 0 };
-      return {
-        days: Math.floor(diff / 86400000),
-        hrs: Math.floor((diff % 86400000) / 3600000),
-        min: Math.floor((diff % 3600000) / 60000),
-        sec: Math.floor((diff % 60000) / 1000),
-      };
-    }
-    setTimeLeft(getDiff());
-    const timer = setInterval(() => setTimeLeft(getDiff()), 1000);
-    return () => clearInterval(timer);
-  }, [nextSport]);
 
   return (
     <div>
@@ -108,25 +189,8 @@ export default function Sports() {
         {/* Tournaments */}
         <div className="max-w-3xl mx-auto">
           <h2 className="font-display font-bold text-2xl mb-6 text-center text-foreground">खेल प्रतियोगिता सूचनाएँ</h2>
-          {nextSport && (
-            <div className="skiptranslate notranslate bg-card rounded-2xl p-5 shadow-card ring-1 ring-border mb-6 select-none" translate="no">
-              <p className="skiptranslate notranslate text-xs uppercase tracking-widest text-primary text-center font-semibold mb-3" translate="no">
-                {nextSport.title} — काउंटडाउन
-              </p>
-              <div className="grid grid-cols-4 gap-3">
-                {[
-                  { label: "Days / दिन", value: timeLeft.days },
-                  { label: "Hrs / घंटा", value: timeLeft.hrs },
-                  { label: "Min / मिनट", value: timeLeft.min },
-                  { label: "Sec / सेकंड", value: timeLeft.sec },
-                ].map((unit, idx) => (
-                  <div key={idx} className="text-center bg-secondary/40 rounded-xl py-3 ring-1 ring-border">
-                    <p className="text-xl font-bold text-accent tabular-nums select-none">{String(unit.value).padStart(2, "0")}</p>
-                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1 font-medium">{unit.label}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+          {nextSport && nextSport.event_date && (
+            <SportsCountdown targetDate={nextSport.event_date} title={nextSport.title} />
           )}
           {loading ? (
             <div className="flex justify-center py-12">

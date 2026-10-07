@@ -9,9 +9,10 @@ interface EventCountdownProps {
 }
 
 export default function EventCountdown({ showHeading = true }: EventCountdownProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const shadowRef = useRef<ShadowRoot | null>(null);
   const [target, setTarget] = useState<Date | null>(null);
   const [eventTitle, setEventTitle] = useState("दीवाली");
-  const [diff, setDiff] = useState({ days: 0, hrs: 0, min: 0, sec: 0 });
   const [hasEvent, setHasEvent] = useState(false);
 
   function getTimeDiff(targetDate: Date | null) {
@@ -40,9 +41,8 @@ export default function EventCountdown({ showHeading = true }: EventCountdownPro
       if (upcoming?.date) {
         const targetDate = new Date(upcoming.date);
         setTarget(targetDate);
-        setEventTitle(upcoming.title);
+        setEventTitle(upcoming.title || "दीवाली");
         setHasEvent(true);
-        setDiff(getTimeDiff(targetDate));
       } else {
         setHasEvent(false);
       }
@@ -52,51 +52,142 @@ export default function EventCountdown({ showHeading = true }: EventCountdownPro
   }, []);
 
   useEffect(() => {
-    const id = setInterval(() => setDiff(getTimeDiff(target)), 1000);
-    return () => clearInterval(id);
-  }, [target]);
+    if (containerRef.current && !shadowRef.current) {
+      try {
+        shadowRef.current = containerRef.current.attachShadow({ mode: "open" });
+      } catch {
+        shadowRef.current = containerRef.current.shadowRoot;
+      }
+    }
+  }, []);
 
-  const units = [
-    { label: "दिन", value: diff.days },
-    { label: "घंटे", value: diff.hrs },
-    { label: "मिनट", value: diff.min },
-    { label: "सेकंड", value: diff.sec },
-  ];
+  useEffect(() => {
+    function render() {
+      if (!shadowRef.current) return;
+      const diff = getTimeDiff(target);
+      const days = String(diff.days).padStart(2, "0");
+      const hrs = String(diff.hrs).padStart(2, "0");
+      const min = String(diff.min).padStart(2, "0");
+      const sec = String(diff.sec).padStart(2, "0");
 
-  return (
-    <div className="skiptranslate notranslate w-full select-none" translate="no">
-      {showHeading && (
-        <div className="skiptranslate notranslate flex items-center justify-center mb-3 sm:mb-4" translate="no">
-          <p className="skiptranslate notranslate text-center text-[12px] sm:text-xs font-semibold tracking-wider text-primary leading-tight px-1 flex items-center justify-center gap-1.5" translate="no">
-            <span className="skiptranslate notranslate text-base select-none" aria-hidden="true" translate="no">
-              🪔
-            </span>
-            <span className="skiptranslate notranslate font-bold text-primary" translate="no">
-              {hasEvent ? `${eventTitle} काउंटडाउन` : "उत्सव काउंटडाउन"}
-            </span>
-          </p>
-        </div>
-      )}
-      <div className="skiptranslate notranslate grid grid-cols-4 gap-2 sm:gap-3" translate="no">
-        {units.map((u, idx) => (
-          <div key={idx} className="skiptranslate notranslate text-center" translate="no">
-            <div
-              className="skiptranslate notranslate text-2xl sm:text-3xl font-bold text-accent tabular-nums font-display leading-none select-none tracking-tight"
-              translate="no"
-            >
-              {String(u.value).padStart(2, "0")}
+      const headingHtml = showHeading
+        ? `<div class="heading-row">
+            <span class="emoji">🪔</span>
+            <span class="title">${hasEvent ? `${eventTitle} काउंटडाउन` : "उत्सव काउंटडाउन"}</span>
+          </div>`
+        : "";
+
+      const noEventHtml = !hasEvent
+        ? `<div class="no-event">कोई आगामी कार्यक्रम उपलब्ध नहीं है।</div>`
+        : "";
+
+      shadowRef.current.innerHTML = `
+        <style>
+          * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: inherit;
+          }
+          :host {
+            display: block;
+            width: 100%;
+          }
+          .container {
+            width: 100%;
+            user-select: none;
+          }
+          .heading-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 12px;
+          }
+          .emoji {
+            font-size: 1.1rem;
+            line-height: 1;
+          }
+          .title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #15803d;
+            text-align: center;
+          }
+          .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            align-items: center;
+          }
+          .unit-card {
+            text-align: center;
+          }
+          .num {
+            font-size: 1.75rem;
+            font-weight: 800;
+            line-height: 1;
+            color: #ea580c;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: -0.02em;
+          }
+          @media (min-width: 640px) {
+            .num {
+              font-size: 2rem;
+            }
+          }
+          .label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #6b7280;
+            margin-top: 6px;
+          }
+          .no-event {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 12px;
+          }
+        </style>
+        <div class="container notranslate" translate="no">
+          ${headingHtml}
+          <div class="grid">
+            <div class="unit-card">
+              <div class="num">${days}</div>
+              <div class="label">दिन</div>
             </div>
-            <div className="skiptranslate notranslate text-[10px] sm:text-[11px] uppercase tracking-wider text-muted-foreground mt-1.5 font-semibold" translate="no">
-              {u.label}
+            <div class="unit-card">
+              <div class="num">${hrs}</div>
+              <div class="label">घंटे</div>
+            </div>
+            <div class="unit-card">
+              <div class="num">${min}</div>
+              <div class="label">मिनट</div>
+            </div>
+            <div class="unit-card">
+              <div class="num">${sec}</div>
+              <div class="label">सेकंड</div>
             </div>
           </div>
-        ))}
-      </div>
-      {!hasEvent && (
-        <p className="skiptranslate notranslate text-center text-xs text-muted-foreground mt-4" translate="no">
-          कोई आगामी कार्यक्रम उपलब्ध नहीं है।
-        </p>
-      )}
-    </div>
+          ${noEventHtml}
+        </div>
+      `;
+    }
+
+    render();
+    const id = setInterval(render, 1000);
+    return () => clearInterval(id);
+  }, [target, eventTitle, hasEvent, showHeading]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="skiptranslate notranslate w-full select-none"
+      translate="no"
+    />
   );
 }
