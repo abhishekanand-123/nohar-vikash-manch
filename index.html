@@ -30,6 +30,40 @@
     <link rel="icon" type="image/svg+xml" href="/pwa-icon.svg">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <link rel="mask-icon" href="/pwa-icon.svg" color="#169a4a">
+
+    <style>
+      /* Completely suppress and hide Google Translate top banner/bar */
+      .goog-te-banner-frame,
+      .goog-te-banner-frame.skiptranslate,
+      iframe.goog-te-banner-frame,
+      iframe.skiptranslate,
+      iframe[class*="goog-te-banner"],
+      .VIpgJd-ZVi9od-OR9Gae-OEVmcd,
+      .VIpgJd-ZVi9od-aZ2wEe-wOHMyf,
+      .VIpgJd-ZVi9od-aZ2wEe-OiiCO,
+      #goog-gt-tt,
+      .goog-te-balloon-frame {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        height: 0 !important;
+        width: 0 !important;
+        position: absolute !important;
+        top: -9999px !important;
+        left: -9999px !important;
+        z-index: -9999 !important;
+      }
+      body {
+        top: 0px !important;
+        position: static !important;
+        transform: none !important;
+      }
+      .goog-text-highlight {
+        background: none !important;
+        box-shadow: none !important;
+      }
+    </style>
   </head>
 
   <body>
@@ -48,6 +82,23 @@
           }, 'google_translate_element');
         }
       }
+
+      // Continuous watchdog to prevent Google Translate from shifting body or displaying banner
+      (function() {
+        const removeBanner = function() {
+          if (document.body && document.body.style.top && document.body.style.top !== '0px') {
+            document.body.style.top = '0px';
+          }
+          const banner = document.querySelector('.goog-te-banner-frame, iframe.skiptranslate, .VIpgJd-ZVi9od-OR9Gae-OEVmcd');
+          if (banner) {
+            banner.style.display = 'none';
+            banner.style.visibility = 'hidden';
+            banner.style.height = '0px';
+          }
+        };
+        setInterval(removeBanner, 200);
+        window.addEventListener('load', removeBanner);
+      })();
     </script>
     <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 

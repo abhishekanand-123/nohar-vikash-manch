@@ -170,15 +170,28 @@
 /* Google Translate Widget cleanup & customization */
 .goog-te-banner-frame.skiptranslate,
 iframe.goog-te-banner-frame,
-.goog-te-banner-frame {
+.goog-te-banner-frame,
+iframe.skiptranslate,
+iframe[class*="goog-te-banner"],
+.VIpgJd-ZVi9od-OR9Gae-OEVmcd,
+.VIpgJd-ZVi9od-aZ2wEe-wOHMyf,
+.VIpgJd-ZVi9od-aZ2wEe-OiiCO {
   display: none !important;
   visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
   height: 0 !important;
+  width: 0 !important;
+  position: absolute !important;
+  top: -9999px !important;
+  left: -9999px !important;
+  z-index: -9999 !important;
 }
 
 body {
   top: 0px !important;
   position: static !important;
+  transform: none !important;
 }
 
 #goog-gt-tt,
@@ -194,4 +207,5 @@ body {
 .notranslate {
   translate: no !important;
 }
+
 
