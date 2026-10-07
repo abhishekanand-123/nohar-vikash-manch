@@ -23,24 +23,6 @@ const DEFAULT_HERITAGE_ITEMS: HeritageItem[] = [
     display_order: 1,
     is_active: true,
   },
-  {
-    id: "default-2",
-    title: "प्राचीन मंदिर एवं पावन स्थल",
-    description: "गाँव के आस्था और अध्यात्म का मुख्य केंद्र, जहाँ सभी ग्रामीण मिलकर पूजा-अर्चना, रामनवमी, शिवरात्रि और धार्मिक अनुष्ठान संपन्न करते हैं।",
-    image: "/assets/temple-AR2vTjLz.jpg",
-    badge: "सांस्कृतिक धरोहर",
-    display_order: 2,
-    is_active: true,
-  },
-  {
-    id: "default-3",
-    title: "गाँव का खेल मैदान व युवक संघ चौपाल",
-    description: "युवाओं के खेलकूद, फिटनेस अभ्यास एवं सामाजिक जन-जागरूकता का प्रमुख केंद्र जहाँ नोहर विकास युवक संघ के नेतृत्व में सकारात्मक कार्य होते हैं।",
-    image: "/assets/hero-village-CM2PJpz1.jpg",
-    badge: "सामाजिक पहचान",
-    display_order: 3,
-    is_active: true,
-  },
 ];
 
 export default function VillageHeritage() {
@@ -111,7 +93,7 @@ export default function VillageHeritage() {
         </div>
 
         {/* Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <div className={`grid gap-6 sm:gap-8 ${items.length === 1 ? 'max-w-md mx-auto grid-cols-1' : items.length === 2 ? 'max-w-3xl mx-auto grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
           {items.map((item, idx) => (
             <motion.div
               key={item.id}
