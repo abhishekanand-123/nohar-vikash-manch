@@ -4,6 +4,7 @@ import VillageIntro from "@/components/home/VillageIntro";
 import GramUdyogPreview from "@/components/home/GramUdyogPreview";
 import FestivalHighlights from "@/components/home/FestivalHighlights";
 import GalleryPreview from "@/components/home/GalleryPreview";
+import VillageHeritage from "@/components/home/VillageHeritage";
 import MapSection from "@/components/home/MapSection";
 import SectionTracker from "@/components/analytics/SectionTracker";
 import SEO from "@/components/common/SEO";
@@ -31,6 +32,9 @@ export default function Index() {
       </SectionTracker>
       <SectionTracker sectionId="home-gallery">
         <GalleryPreview />
+      </SectionTracker>
+      <SectionTracker sectionId="home-heritage">
+        <VillageHeritage />
       </SectionTracker>
       <SectionTracker sectionId="home-map">
         <MapSection />

@@ -30,6 +30,7 @@ import ManageDocuments from "./pages/admin/ManageDocuments";
 import ManageVideos from "./pages/admin/ManageVideos";
 import ManageNotifications from "./pages/admin/ManageNotifications";
 import AnalyticsDashboard from "./pages/admin/AnalyticsDashboard";
+import ManageHeritage from "./pages/admin/ManageHeritage";
 import GramUdyog from "./pages/GramUdyog";
 import ManageGramUdyog from "./pages/admin/ManageGramUdyog";
 import LekhaJokha from "./pages/LekhaJokha";
@@ -67,6 +68,7 @@ const App = () => (
             <Route element={<AdminLayout />}>
               <Route path="/admin/dashboard" element={<AdminOverview />} />
               <Route path="/admin/analytics" element={<AnalyticsDashboard />} />
+              <Route path="/admin/heritage" element={<ManageHeritage />} />
               <Route path="/admin/notifications" element={<ManageNotifications />} />
               <Route path="/admin/lekha-jokha" element={<ManageLekhaJokha />} />
               <Route path="/admin/gram-udyog" element={<ManageGramUdyog />} />

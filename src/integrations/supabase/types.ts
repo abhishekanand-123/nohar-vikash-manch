@@ -365,6 +365,41 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      village_heritage: {
+        Row: {
+          id: string
+          title: string
+          description: string
+          image: string | null
+          badge: string | null
+          display_order: number
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          description: string
+          image?: string | null
+          badge?: string | null
+          display_order?: number
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          description?: string
+          image?: string | null
+          badge?: string | null
+          display_order?: number
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {
