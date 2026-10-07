@@ -121,8 +121,8 @@ export default function Sports() {
                   { label: "Sec", value: timeLeft.sec },
                 ].map((unit) => (
                   <div key={unit.label} className="text-center bg-secondary/40 rounded-xl py-3 ring-1 ring-border">
-                    <p className="text-xl font-bold text-accent tabular-nums">{String(unit.value).padStart(2, "0")}</p>
-                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground">{unit.label}</p>
+                    <p className="notranslate text-xl font-bold text-accent tabular-nums select-none" translate="no">{String(unit.value).padStart(2, "0")}</p>
+                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground mt-1 font-medium">{unit.label}</p>
                   </div>
                 ))}
               </div>

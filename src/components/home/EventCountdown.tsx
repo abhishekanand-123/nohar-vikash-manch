@@ -64,30 +64,33 @@ export default function EventCountdown({ showHeading = true }: EventCountdownPro
   ];
 
   return (
-    <>
+    <div className="w-full">
       {showHeading && (
-        <div className="flex items-center justify-center gap-2 mb-4 sm:mb-5">
-          <span className="text-lg sm:text-base" aria-hidden>
-            🪔
-          </span>
-          <p className="text-center text-[11px] sm:text-xs font-semibold uppercase tracking-widest text-primary leading-tight px-1">
-            {hasEvent ? `${eventTitle} Countdown` : "Festival Countdown"}
+        <div className="flex items-center justify-center mb-3 sm:mb-4">
+          <p className="text-center text-[11px] sm:text-xs font-semibold uppercase tracking-wider sm:tracking-widest text-primary leading-tight px-1 flex items-center justify-center gap-1.5 flex-wrap">
+            <span className="notranslate text-base select-none" aria-hidden="true" translate="no">
+              🪔
+            </span>
+            <span>{hasEvent ? `${eventTitle} Countdown` : "Festival Countdown"}</span>
           </p>
         </div>
       )}
-      <div className="grid grid-cols-4 gap-2 sm:gap-4">
+      <div className="grid grid-cols-4 gap-2 sm:gap-3">
         {units.map((u) => (
           <div key={u.label} className="text-center">
-            <div className="text-[1.65rem] sm:text-2xl font-bold text-accent tabular-nums font-display leading-none">
+            <div
+              className="notranslate text-2xl sm:text-3xl font-bold text-accent tabular-nums font-display leading-none select-none tracking-tight"
+              translate="no"
+            >
               {String(u.value).padStart(2, "0")}
             </div>
-            <div className="text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground mt-1">
+            <div className="text-[10px] sm:text-[11px] uppercase tracking-wider text-muted-foreground mt-1.5 font-medium">
               {u.label}
             </div>
           </div>
         ))}
       </div>
       {!hasEvent && <p className="text-center text-xs text-muted-foreground mt-4">No upcoming event date available yet.</p>}
-    </>
+    </div>
   );
 }
