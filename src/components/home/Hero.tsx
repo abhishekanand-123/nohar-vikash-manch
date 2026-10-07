@@ -166,8 +166,8 @@ export default function Hero() {
           </div>
 
           {/* Countdown Card (mobile/tablet) */}
-          <div className="mt-8 lg:hidden w-full max-w-[400px] mx-auto sm:mx-0 sm:max-w-[360px]">
-            <div className="bg-white/95 backdrop-blur-md rounded-2xl p-5 sm:p-6 shadow-xl ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-2xl">
+          <div className="skiptranslate notranslate mt-8 lg:hidden w-full max-w-[400px] mx-auto sm:mx-0 sm:max-w-[360px]" translate="no">
+            <div className="skiptranslate notranslate bg-white/95 backdrop-blur-md rounded-2xl p-5 sm:p-6 shadow-xl ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-2xl" translate="no">
               <EventCountdown />
             </div>
           </div>
@@ -178,9 +178,10 @@ export default function Hero() {
           initial={{ opacity: 0, scale: 0.92 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.55, delay: 0.2 }}
-          className="hidden lg:block justify-self-end"
+          className="skiptranslate notranslate hidden lg:block justify-self-end"
+          translate="no"
         >
-          <div className="bg-white rounded-2xl p-6 shadow-xl min-w-[280px] ring-1 ring-black/5 transition-all duration-300 hover:shadow-2xl hover:ring-primary/20">
+          <div className="skiptranslate notranslate bg-white rounded-2xl p-6 shadow-xl min-w-[280px] ring-1 ring-black/5 transition-all duration-300 hover:shadow-2xl hover:ring-primary/20" translate="no">
             <EventCountdown />
           </div>
         </motion.div>

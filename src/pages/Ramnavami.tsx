@@ -94,8 +94,7 @@ export default function Ramnavami() {
       />
 
       <div className="container mx-auto px-6 py-20">
-        <div className="max-w-xl mx-auto bg-card rounded-2xl p-8 shadow-card ring-1 ring-border mb-16">
-          <h3 className="font-display font-bold text-xl mb-6 text-center text-foreground">Countdown to Ramnavami</h3>
+        <div className="skiptranslate notranslate max-w-xl mx-auto bg-card rounded-2xl p-8 shadow-card ring-1 ring-border mb-16 select-none" translate="no">
           <EventCountdown />
         </div>
 

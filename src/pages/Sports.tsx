@@ -109,9 +109,9 @@ export default function Sports() {
         <div className="max-w-3xl mx-auto">
           <h2 className="font-display font-bold text-2xl mb-6 text-center text-foreground">खेल प्रतियोगिता सूचनाएँ</h2>
           {nextSport && (
-            <div className="notranslate bg-card rounded-2xl p-5 shadow-card ring-1 ring-border mb-6 select-none" translate="no">
-              <p className="text-xs uppercase tracking-widest text-primary text-center font-semibold mb-3">
-                {nextSport.title} — Countdown
+            <div className="skiptranslate notranslate bg-card rounded-2xl p-5 shadow-card ring-1 ring-border mb-6 select-none" translate="no">
+              <p className="skiptranslate notranslate text-xs uppercase tracking-widest text-primary text-center font-semibold mb-3" translate="no">
+                {nextSport.title} — काउंटडाउन
               </p>
               <div className="grid grid-cols-4 gap-3">
                 {[
