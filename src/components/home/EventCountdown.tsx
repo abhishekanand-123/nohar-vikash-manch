@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Tables } from "@/integrations/supabase/types";
 
@@ -7,6 +7,50 @@ type Event = Tables<"events">;
 interface EventCountdownProps {
   showHeading?: boolean;
 }
+
+function getLanguage(): "hi" | "mai" | "en" {
+  if (typeof window === "undefined") return "hi";
+  const local = localStorage.getItem("user_selected_lang");
+  if (local === "mai" || local === "en" || local === "hi") return local;
+
+  const match = document.cookie.match(/(?:^|;\s*)googtrans=([^;]+)/);
+  if (match && match[1]) {
+    const parts = match[1].split("/");
+    const lang = parts[parts.length - 1];
+    if (lang === "mai" || lang === "en" || lang === "hi") return lang;
+  }
+  return "hi";
+}
+
+const TRANSLATIONS = {
+  hi: {
+    days: "दिन",
+    hrs: "घंटे",
+    min: "मिनट",
+    sec: "सेकंड",
+    defaultTitle: "उत्सव काउंटडाउन",
+    suffix: "काउंटडाउन",
+    noEvent: "कोई आगामी कार्यक्रम उपलब्ध नहीं है।",
+  },
+  mai: {
+    days: "दिन",
+    hrs: "घंटा",
+    min: "मिनिट",
+    sec: "सेकेण्ड",
+    defaultTitle: "उत्सव / पावनि काउंटडाउन",
+    suffix: "काउंटडाउन",
+    noEvent: "कोनो आगाँ कार्यक्रम उपलब्ध नहि अछि।",
+  },
+  en: {
+    days: "Days",
+    hrs: "Hours",
+    min: "Mins",
+    sec: "Secs",
+    defaultTitle: "Event Countdown",
+    suffix: "Countdown",
+    noEvent: "No upcoming event available.",
+  },
+};
 
 export default function EventCountdown({ showHeading = true }: EventCountdownProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -64,21 +108,25 @@ export default function EventCountdown({ showHeading = true }: EventCountdownPro
   useEffect(() => {
     function render() {
       if (!shadowRef.current) return;
+      const lang = getLanguage();
+      const t = TRANSLATIONS[lang] || TRANSLATIONS.hi;
       const diff = getTimeDiff(target);
       const days = String(diff.days).padStart(2, "0");
       const hrs = String(diff.hrs).padStart(2, "0");
       const min = String(diff.min).padStart(2, "0");
       const sec = String(diff.sec).padStart(2, "0");
 
+      const titleText = hasEvent ? `${eventTitle} ${t.suffix}` : t.defaultTitle;
+
       const headingHtml = showHeading
         ? `<div class="heading-row">
             <span class="emoji">🪔</span>
-            <span class="title">${hasEvent ? `${eventTitle} काउंटडाउन` : "उत्सव काउंटडाउन"}</span>
+            <span class="title">${titleText}</span>
           </div>`
         : "";
 
       const noEventHtml = !hasEvent
-        ? `<div class="no-event">कोई आगामी कार्यक्रम उपलब्ध नहीं है।</div>`
+        ? `<div class="no-event">${t.noEvent}</div>`
         : "";
 
       shadowRef.current.innerHTML = `
@@ -158,19 +206,19 @@ export default function EventCountdown({ showHeading = true }: EventCountdownPro
           <div class="grid">
             <div class="unit-card">
               <div class="num">${days}</div>
-              <div class="label">दिन</div>
+              <div class="label">${t.days}</div>
             </div>
             <div class="unit-card">
               <div class="num">${hrs}</div>
-              <div class="label">घंटे</div>
+              <div class="label">${t.hrs}</div>
             </div>
             <div class="unit-card">
               <div class="num">${min}</div>
-              <div class="label">मिनट</div>
+              <div class="label">${t.min}</div>
             </div>
             <div class="unit-card">
               <div class="num">${sec}</div>
-              <div class="label">सेकंड</div>
+              <div class="label">${t.sec}</div>
             </div>
           </div>
           ${noEventHtml}

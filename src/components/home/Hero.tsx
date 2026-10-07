@@ -39,29 +39,12 @@ function AccentHeroTitle({ title }: { title: string }) {
   return <span className="text-white [text-shadow:0_2px_28px_rgba(0,0,0,0.55)]">{title}</span>;
 }
 
-function isMaithiliLanguage(): boolean {
-  if (typeof window === "undefined") return false;
-  const local = localStorage.getItem("user_selected_lang");
-  if (local === "mai") return true;
-
-  const match = document.cookie.match(/(?:^|;\s*)googtrans=([^;]+)/);
-  if (match && match[1]) {
-    const parts = match[1].split("/");
-    const lang = parts[parts.length - 1];
-    if (lang === "mai") return true;
-  }
-  return false;
-}
-
 export default function Hero() {
   const [homeBanner, setHomeBanner] = useState<PageBanner | null>(null);
   const [stotraDoc, setStotraDoc] = useState<PageBanner | null>(null);
-  const [isMaithili, setIsMaithili] = useState(false);
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
-    setIsMaithili(isMaithiliLanguage());
-
     async function loadData() {
       // Load Home Banner
       const { data: bannerData } = await supabase
@@ -182,30 +165,26 @@ export default function Hero() {
             </a>
           </div>
 
-          {/* Countdown Card (mobile/tablet) - Hidden in Maithili */}
-          {!isMaithili && (
-            <div className="skiptranslate notranslate mt-8 lg:hidden w-full max-w-[400px] mx-auto sm:mx-0 sm:max-w-[360px]" translate="no">
-              <div className="skiptranslate notranslate bg-white/95 backdrop-blur-md rounded-2xl p-5 sm:p-6 shadow-xl ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-2xl" translate="no">
-                <EventCountdown />
-              </div>
-            </div>
-          )}
-        </motion.div>
-
-        {/* Countdown Card (desktop) - Hidden in Maithili */}
-        {!isMaithili && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.55, delay: 0.2 }}
-            className="skiptranslate notranslate hidden lg:block justify-self-end"
-            translate="no"
-          >
-            <div className="skiptranslate notranslate bg-white rounded-2xl p-6 shadow-xl min-w-[280px] ring-1 ring-black/5 transition-all duration-300 hover:shadow-2xl hover:ring-primary/20" translate="no">
+          {/* Countdown Card (mobile/tablet) */}
+          <div className="skiptranslate notranslate mt-8 lg:hidden w-full max-w-[400px] mx-auto sm:mx-0 sm:max-w-[360px]" translate="no">
+            <div className="skiptranslate notranslate bg-white/95 backdrop-blur-md rounded-2xl p-5 sm:p-6 shadow-xl ring-1 ring-black/5 transition-shadow duration-300 hover:shadow-2xl" translate="no">
               <EventCountdown />
             </div>
-          </motion.div>
-        )}
+          </div>
+        </motion.div>
+
+        {/* Countdown Card (desktop) */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.92 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.55, delay: 0.2 }}
+          className="skiptranslate notranslate hidden lg:block justify-self-end"
+          translate="no"
+        >
+          <div className="skiptranslate notranslate bg-white rounded-2xl p-6 shadow-xl min-w-[280px] ring-1 ring-black/5 transition-all duration-300 hover:shadow-2xl hover:ring-primary/20" translate="no">
+            <EventCountdown />
+          </div>
+        </motion.div>
       </div>
     </section>
   );

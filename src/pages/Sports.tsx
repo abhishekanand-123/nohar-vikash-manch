@@ -1,11 +1,31 @@
 import { motion } from "framer-motion";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { Trophy, Users, Dribbble } from "lucide-react";
 import PageBanner from "@/components/layout/PageBanner";
 import { supabase } from "@/integrations/supabase/client";
 import { Tables } from "@/integrations/supabase/types";
 import HoverImagePreview from "@/components/common/HoverImagePreview";
 import SEO from "@/components/common/SEO";
+
+function getLanguage(): "hi" | "mai" | "en" {
+  if (typeof window === "undefined") return "hi";
+  const local = localStorage.getItem("user_selected_lang");
+  if (local === "mai" || local === "en" || local === "hi") return local;
+
+  const match = document.cookie.match(/(?:^|;\s*)googtrans=([^;]+)/);
+  if (match && match[1]) {
+    const parts = match[1].split("/");
+    const lang = parts[parts.length - 1];
+    if (lang === "mai" || lang === "en" || lang === "hi") return lang;
+  }
+  return "hi";
+}
+
+const COUNTDOWN_LABELS = {
+  hi: { days: "दिन", hrs: "घंटे", min: "मिनट", sec: "सेकंड", suffix: "काउंटडाउन" },
+  mai: { days: "दिन", hrs: "घंटा", min: "मिनिट", sec: "सेकेण्ड", suffix: "काउंटडाउन" },
+  en: { days: "Days", hrs: "Hours", min: "Mins", sec: "Secs", suffix: "Countdown" },
+};
 
 function SportsCountdown({ targetDate, title }: { targetDate: string; title: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -24,6 +44,8 @@ function SportsCountdown({ targetDate, title }: { targetDate: string; title: str
   useEffect(() => {
     function render() {
       if (!shadowRef.current) return;
+      const lang = getLanguage();
+      const labels = COUNTDOWN_LABELS[lang] || COUNTDOWN_LABELS.hi;
       const target = new Date(`${targetDate}T00:00:00`).getTime();
       const diffMs = target - Date.now();
       const diff =
@@ -90,12 +112,12 @@ function SportsCountdown({ targetDate, title }: { targetDate: string; title: str
           }
         </style>
         <div class="card notranslate" translate="no">
-          <div class="title">${title} — काउंटडाउन</div>
+          <div class="title">${title} — ${labels.suffix}</div>
           <div class="grid">
-            <div class="unit"><div class="num">${days}</div><div class="label">दिन</div></div>
-            <div class="unit"><div class="num">${hrs}</div><div class="label">घंटे</div></div>
-            <div class="unit"><div class="num">${min}</div><div class="label">मिनट</div></div>
-            <div class="unit"><div class="num">${sec}</div><div class="label">सेकंड</div></div>
+            <div class="unit"><div class="num">${days}</div><div class="label">${labels.days}</div></div>
+            <div class="unit"><div class="num">${hrs}</div><div class="label">${labels.hrs}</div></div>
+            <div class="unit"><div class="num">${min}</div><div class="label">${labels.min}</div></div>
+            <div class="unit"><div class="num">${sec}</div><div class="label">${labels.sec}</div></div>
           </div>
         </div>
       `;
