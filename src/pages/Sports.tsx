@@ -109,20 +109,20 @@ export default function Sports() {
         <div className="max-w-3xl mx-auto">
           <h2 className="font-display font-bold text-2xl mb-6 text-center text-foreground">खेल प्रतियोगिता सूचनाएँ</h2>
           {nextSport && (
-            <div className="bg-card rounded-2xl p-5 shadow-card ring-1 ring-border mb-6">
+            <div className="notranslate bg-card rounded-2xl p-5 shadow-card ring-1 ring-border mb-6 select-none" translate="no">
               <p className="text-xs uppercase tracking-widest text-primary text-center font-semibold mb-3">
-                Countdown - {nextSport.title}
+                {nextSport.title} — Countdown
               </p>
               <div className="grid grid-cols-4 gap-3">
                 {[
-                  { label: "Days", value: timeLeft.days },
-                  { label: "Hrs", value: timeLeft.hrs },
-                  { label: "Min", value: timeLeft.min },
-                  { label: "Sec", value: timeLeft.sec },
-                ].map((unit) => (
-                  <div key={unit.label} className="text-center bg-secondary/40 rounded-xl py-3 ring-1 ring-border">
-                    <p className="notranslate text-xl font-bold text-accent tabular-nums select-none" translate="no">{String(unit.value).padStart(2, "0")}</p>
-                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground mt-1 font-medium">{unit.label}</p>
+                  { label: "Days / दिन", value: timeLeft.days },
+                  { label: "Hrs / घंटा", value: timeLeft.hrs },
+                  { label: "Min / मिनट", value: timeLeft.min },
+                  { label: "Sec / सेकंड", value: timeLeft.sec },
+                ].map((unit, idx) => (
+                  <div key={idx} className="text-center bg-secondary/40 rounded-xl py-3 ring-1 ring-border">
+                    <p className="text-xl font-bold text-accent tabular-nums select-none">{String(unit.value).padStart(2, "0")}</p>
+                    <p className="text-[10px] uppercase tracking-wider text-muted-foreground mt-1 font-medium">{unit.label}</p>
                   </div>
                 ))}
               </div>
