@@ -79,9 +79,9 @@ export default function Navbar() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-card border-t border-border overflow-hidden"
+            className="lg:hidden bg-card border-t border-border max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain shadow-2xl [webkit-overflow-scrolling:touch]"
           >
-            <div className="container mx-auto px-4 sm:px-6 py-3 pb-5 flex flex-col gap-1.5">
+            <div className="container mx-auto px-4 sm:px-6 py-4 pb-12 flex flex-col gap-1.5">
               {/* Mobile Language Selector */}
               <div className="mb-2">
                 <LanguageSwitcher variant="mobile" />
@@ -101,23 +101,26 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              <button
-                type="button"
-                onClick={() => {
-                  setOpen(false);
-                  window.dispatchEvent(new CustomEvent("trigger-pwa-install"));
-                }}
-                className="px-4 py-3 min-h-[44px] rounded-xl text-sm font-medium border border-primary/30 text-primary bg-primary/5 hover:bg-primary/10 transition-colors flex items-center justify-center gap-2 mt-1"
-              >
-                📲 App Install करें
-              </button>
-              <Link
-                to="/admin/login"
-                onClick={() => setOpen(false)}
-                className="px-4 py-3 min-h-[44px] rounded-xl text-sm font-medium bg-accent text-accent-foreground flex items-center justify-center mt-1"
-              >
-                Admin
-              </Link>
+
+              <div className="pt-2 flex flex-col gap-2 border-t border-border/50 mt-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    window.dispatchEvent(new CustomEvent("trigger-pwa-install"));
+                  }}
+                  className="px-4 py-3 min-h-[44px] rounded-xl text-sm font-semibold border border-primary/30 text-primary bg-primary/5 hover:bg-primary/10 transition-colors flex items-center justify-center gap-2"
+                >
+                  📲 App Install करें
+                </button>
+                <Link
+                  to="/admin/login"
+                  onClick={() => setOpen(false)}
+                  className="px-4 py-3 min-h-[44px] rounded-xl text-sm font-semibold bg-accent text-accent-foreground flex items-center justify-center shadow-sm hover:opacity-95 transition-opacity"
+                >
+                  🔐 Admin Login
+                </Link>
+              </div>
             </div>
           </motion.div>
         )}
