@@ -82,11 +82,6 @@ export default function Navbar() {
             className="lg:hidden bg-card border-t border-border max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain shadow-2xl [webkit-overflow-scrolling:touch]"
           >
             <div className="container mx-auto px-4 sm:px-6 py-4 pb-12 flex flex-col gap-1.5">
-              {/* Mobile Language Selector */}
-              <div className="mb-2">
-                <LanguageSwitcher variant="mobile" />
-              </div>
-
               {navLinks.map((link) => (
                 <Link
                   key={link.to}
