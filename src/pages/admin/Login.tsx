@@ -32,6 +32,7 @@ export default function AdminLogin() {
       <SEO
         title="एडमिन लॉगिन (Admin Login)"
         description="नोहर विकास मंच एडमिन पोर्टल लॉगिन।"
+        noindex={true}
       />
       <motion.div
         initial={{ opacity: 0, y: 20 }}

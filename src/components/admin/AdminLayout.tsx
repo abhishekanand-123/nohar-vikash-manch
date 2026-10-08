@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, Link, useLocation, Outlet } from "react-router-dom";
 import { LayoutDashboard, FileText, Users, Image, Calendar, Trophy, PanelsTopLeft, Heart, LogOut, Menu, Video, BarChart3, BookOpen, Bell, Briefcase, FileSpreadsheet, Landmark } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import SEO from "@/components/common/SEO";
 
 const sidebarLinks = [
   { to: "/admin/dashboard", label: "Overview", icon: LayoutDashboard },
@@ -50,6 +51,7 @@ export default function AdminLayout() {
 
   return (
     <div className="min-h-screen flex bg-background">
+      <SEO title="Admin Panel" noindex={true} />
       {sidebarOpen && (
         <div className="fixed inset-0 bg-foreground/40 z-40 lg:hidden" onClick={() => setSidebarOpen(false)} />
       )}
