@@ -3,80 +3,62 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-  
-  <!-- Homepage -->
+
+  <!-- Main Static Pages -->
   <url>
     <loc>https://noharvikashmanch.in/</loc>
     <lastmod>2026-10-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
-
-  <!-- About Us -->
   <url>
     <loc>https://noharvikashmanch.in/about</loc>
     <lastmod>2026-10-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-
-  <!-- Festivals & Cultural Blogs -->
   <url>
     <loc>https://noharvikashmanch.in/festivals</loc>
     <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-
-  <!-- Ramnavami Mahotsav -->
   <url>
     <loc>https://noharvikashmanch.in/ramnavami</loc>
     <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
-
-  <!-- Sports Club & Tournaments -->
   <url>
     <loc>https://noharvikashmanch.in/sports</loc>
     <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-
-  <!-- Gram Udyog & Services Directory -->
   <url>
     <loc>https://noharvikashmanch.in/gram-udyog</loc>
     <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
-
-  <!-- Lekha Jokha / Financial Statements -->
   <url>
     <loc>https://noharvikashmanch.in/lekha-jokha</loc>
     <lastmod>2026-10-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-
-  <!-- Photo Gallery -->
   <url>
     <loc>https://noharvikashmanch.in/gallery</loc>
     <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
-
-  <!-- Video Gallery -->
   <url>
     <loc>https://noharvikashmanch.in/videos</loc>
     <lastmod>2026-10-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
-
-  <!-- Donation -->
   <url>
     <loc>https://noharvikashmanch.in/donation</loc>
     <lastmod>2026-10-08</lastmod>
@@ -84,4 +66,35 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- Dynamic Festival / Blog Posts from Database (5 items) -->
+  <url>
+    <loc>https://noharvikashmanch.in/festivals/980cc463-c746-44ca-b221-1a3cc4cfe210</loc>
+    <lastmod>2026-10-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://noharvikashmanch.in/festivals/12ba3d20-c6d7-410f-924a-23a76c16f409</loc>
+    <lastmod>2026-03-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://noharvikashmanch.in/festivals/cd2d3552-e7e5-45ae-bfa1-67441d91317e</loc>
+    <lastmod>2026-03-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://noharvikashmanch.in/festivals/a0b44e6c-1bb5-48ef-88da-88ad0f6a1fcf</loc>
+    <lastmod>2026-03-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://noharvikashmanch.in/festivals/03f12d99-4b6a-4343-b8fe-57e50619f9b4</loc>
+    <lastmod>2026-03-21</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>

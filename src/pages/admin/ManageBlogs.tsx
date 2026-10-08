@@ -3,9 +3,30 @@ import { supabase } from "@/integrations/supabase/client";
 import { uploadFile } from "@/lib/supabase-helpers";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
-import { Pencil, Trash2, Plus, Calendar, Tag, Image as ImageIcon } from "lucide-react";
+import {
+  Pencil,
+  Trash2,
+  Plus,
+  Calendar,
+  Tag,
+  Image as ImageIcon,
+  Globe,
+  Download,
+  Copy,
+  Check,
+  ExternalLink,
+  Search,
+  Sparkles,
+  FileCode,
+} from "lucide-react";
 import { parseVideoUrlLines } from "@/lib/video-embed";
 import SEO from "@/components/common/SEO";
+import {
+  generateSitemapXmlString,
+  downloadSitemapFile,
+  STATIC_SITEMAP_PAGES,
+  SITE_DOMAIN,
+} from "@/lib/sitemap-generator";
 
 interface Blog {
   id: string;
@@ -57,6 +78,8 @@ export default function ManageBlogs() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [showSitemapModal, setShowSitemapModal] = useState(false);
+  const [copiedSitemap, setCopiedSitemap] = useState(false);
   const [editing, setEditing] = useState<Blog | null>(null);
   const [form, setForm] = useState({
     title: "",
@@ -253,6 +276,20 @@ export default function ManageBlogs() {
     setShowForm(true);
   };
 
+  const handleCopySitemap = () => {
+    const xml = generateSitemapXmlString(blogs);
+    navigator.clipboard.writeText(xml);
+    setCopiedSitemap(true);
+    toast({ title: "Sitemap XML copied to clipboard!" });
+    setTimeout(() => setCopiedSitemap(false), 2500);
+  };
+
+  const handleDownloadSitemap = () => {
+    const xml = generateSitemapXmlString(blogs);
+    downloadSitemapFile(xml);
+    toast({ title: "sitemap.xml downloaded successfully!" });
+  };
+
   if (loading)
     return (
       <div className="flex justify-center py-12">
@@ -260,31 +297,196 @@ export default function ManageBlogs() {
       </div>
     );
 
+  const totalUrlsCount = STATIC_SITEMAP_PAGES.length + blogs.length;
+
   return (
     <div>
       <SEO
         title="त्योहार ब्लॉग प्रबंधन (Manage Blogs) — Admin"
         description="त्योहारों की कहानियां, उत्सव ब्लॉग व फोटो गैलरी का प्रबंधन।"
       />
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h2 className="font-display text-xl font-bold text-foreground">Blog Posts & Festivals</h2>
+          <h2 className="font-display text-xl font-bold text-foreground flex items-center gap-2">
+            Blog Posts & Festivals
+            <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-primary/10 text-primary">
+              {blogs.length} Posts
+            </span>
+          </h2>
           <p className="text-xs text-muted-foreground mt-0.5">
-            Manage festival posts, celebrations, and year archives (Newest shows first)
+            Manage festival posts, celebrations, and automatic dynamic sitemap indexing.
           </p>
         </div>
-        {canManageContent && (
+        <div className="flex items-center gap-2.5 flex-wrap">
           <button
-            onClick={() => {
-              resetForm();
-              setShowForm(true);
-            }}
-            className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-medium hover:opacity-90 shadow-sm"
+            onClick={() => setShowSitemapModal(true)}
+            className="flex items-center gap-2 bg-secondary text-secondary-foreground hover:bg-secondary/80 px-3.5 py-2 rounded-xl text-xs font-semibold ring-1 ring-border shadow-sm transition-all"
+            title="View dynamic sitemap & Google indexing tools"
           >
-            <Plus className="w-4 h-4" /> Add Blog / Festival Post
+            <Globe className="w-3.5 h-3.5 text-primary" />
+            Sitemap & Google SEO ({totalUrlsCount} URLs)
           </button>
-        )}
+          {canManageContent && (
+            <button
+              onClick={() => {
+                resetForm();
+                setShowForm(true);
+              }}
+              className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-medium hover:opacity-90 shadow-sm"
+            >
+              <Plus className="w-4 h-4" /> Add Blog / Festival Post
+            </button>
+          )}
+        </div>
       </div>
+
+      {/* Sitemap & SEO Modal / Drawer */}
+      {showSitemapModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-card rounded-2xl ring-1 ring-border max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            {/* Modal Header */}
+            <div className="p-5 border-b border-border flex items-center justify-between bg-muted/40">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                  <Globe className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-display font-bold text-foreground text-base">
+                    Dynamic Sitemap & Google Indexing Manager
+                  </h3>
+                  <p className="text-xs text-muted-foreground">
+                    All backend blog posts are dynamically included in sitemap for search engines.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowSitemapModal(false)}
+                className="text-muted-foreground hover:text-foreground text-sm font-bold p-1 px-2.5 rounded-lg hover:bg-secondary"
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Modal Content */}
+            <div className="p-5 overflow-y-auto space-y-5 text-sm">
+              {/* Stat Highlights */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="bg-background rounded-xl p-3 ring-1 ring-border text-center">
+                  <span className="text-xs text-muted-foreground block">Static Pages</span>
+                  <span className="font-bold text-foreground text-lg">{STATIC_SITEMAP_PAGES.length}</span>
+                </div>
+                <div className="bg-background rounded-xl p-3 ring-1 ring-border text-center">
+                  <span className="text-xs text-muted-foreground block">Dynamic Blogs</span>
+                  <span className="font-bold text-primary text-lg">{blogs.length}</span>
+                </div>
+                <div className="bg-background rounded-xl p-3 ring-1 ring-border text-center">
+                  <span className="text-xs text-muted-foreground block">Total URLs</span>
+                  <span className="font-bold text-accent text-lg">{totalUrlsCount}</span>
+                </div>
+                <div className="bg-background rounded-xl p-3 ring-1 ring-border text-center">
+                  <span className="text-xs text-muted-foreground block">Sitemap Status</span>
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400 text-xs flex items-center justify-center gap-1 mt-1">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" /> Live & Auto
+                  </span>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-2 pt-1">
+                <button
+                  onClick={handleCopySitemap}
+                  className="flex items-center gap-1.5 bg-primary text-primary-foreground px-3.5 py-2 rounded-xl text-xs font-semibold hover:opacity-90 transition-all shadow-sm"
+                >
+                  {copiedSitemap ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copiedSitemap ? "Copied XML!" : "Copy sitemap.xml"}
+                </button>
+                <button
+                  onClick={handleDownloadSitemap}
+                  className="flex items-center gap-1.5 bg-secondary text-secondary-foreground hover:bg-secondary/80 px-3.5 py-2 rounded-xl text-xs font-semibold ring-1 ring-border transition-all"
+                >
+                  <Download className="w-3.5 h-3.5" /> Download sitemap.xml
+                </button>
+                <a
+                  href="/sitemap.xml"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 bg-secondary text-secondary-foreground hover:bg-secondary/80 px-3.5 py-2 rounded-xl text-xs font-semibold ring-1 ring-border transition-all"
+                >
+                  <FileCode className="w-3.5 h-3.5 text-primary" /> View Live /sitemap.xml <ExternalLink className="w-3 h-3 opacity-60" />
+                </a>
+                <a
+                  href="https://search.google.com/search-console/sitemaps"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 bg-accent/20 text-accent hover:bg-accent/30 px-3.5 py-2 rounded-xl text-xs font-semibold ring-1 ring-accent/30 transition-all ml-auto"
+                >
+                  <Search className="w-3.5 h-3.5" /> Google Search Console <ExternalLink className="w-3 h-3 opacity-60" />
+                </a>
+              </div>
+
+              {/* Information / Hindi guide */}
+              <div className="bg-primary/5 rounded-xl p-3.5 ring-1 ring-primary/20 text-xs text-foreground space-y-1">
+                <p className="font-semibold flex items-center gap-1 text-primary">
+                  <Sparkles className="w-3.5 h-3.5" /> Google Indexing की जानकारी (How it Works):
+                </p>
+                <p className="text-muted-foreground leading-relaxed">
+                  1. जब भी आप कोई नया ब्लॉग पोस्ट जोड़ते हैं या एडिट करते हैं, वह स्वचालित रूप से Supabase डेटाबेस में सेव होता है।<br />
+                  2. बिल्ड / डिप्लॉयमेंट के समय <code className="bg-background px-1.5 py-0.5 rounded text-primary">scripts/generate-sitemap.js</code> अपने-आप सभी नए ब्लॉग्स को <code className="bg-background px-1.5 py-0.5 rounded text-primary">sitemap.xml</code> में शामिल कर देता है।<br />
+                  3. Google Search Console में केवल एक बार <code className="bg-background px-1.5 py-0.5 rounded text-primary">sitemap.xml</code> सबमिट करने पर गूगल अपने-आप नए ब्लॉग्स को क्रॉल और इंडेक्स करता रहता है।
+                </p>
+              </div>
+
+              {/* Dynamic Post URLs Table */}
+              <div>
+                <h4 className="font-semibold text-foreground text-xs uppercase tracking-wider mb-2 text-muted-foreground">
+                  Dynamically Indexed Festival Posts ({blogs.length})
+                </h4>
+                <div className="border border-border rounded-xl overflow-hidden divide-y divide-border max-h-56 overflow-y-auto text-xs bg-background">
+                  {blogs.map((b) => (
+                    <div key={b.id} className="p-2.5 flex items-center justify-between gap-3 hover:bg-muted/50 transition-colors">
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-foreground truncate">{b.title}</p>
+                        <p className="text-[11px] text-muted-foreground font-mono truncate">
+                          {SITE_DOMAIN}/festivals/{b.id}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        <span className="text-[10px] bg-secondary text-secondary-foreground px-2 py-0.5 rounded-md font-mono">
+                          {new Date(b.created_at).toISOString().split("T")[0]}
+                        </span>
+                        <a
+                          href={`/festivals/${b.id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="p-1 hover:text-primary rounded"
+                          title="Open post page"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5" />
+                        </a>
+                      </div>
+                    </div>
+                  ))}
+                  {blogs.length === 0 && (
+                    <div className="p-4 text-center text-muted-foreground">
+                      No blog posts yet. Create a blog post above to see it in the sitemap.
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-4 border-t border-border flex justify-end bg-muted/20">
+              <button
+                onClick={() => setShowSitemapModal(false)}
+                className="px-5 py-2 rounded-xl text-xs font-medium bg-secondary hover:bg-secondary/80 text-foreground"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {showForm && (
         <div className="bg-card rounded-2xl p-6 ring-1 ring-border mb-8 shadow-sm space-y-5">
