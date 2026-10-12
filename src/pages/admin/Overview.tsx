@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { FileText, Users, Calendar, Trophy, Image, Heart, BarChart3, Smartphone } from "lucide-react";
+import { FileText, Users, Calendar, Trophy, Image, Heart, BarChart3, Smartphone, Share2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import SEO from "@/components/common/SEO";
 
@@ -61,7 +61,7 @@ export default function AdminOverview() {
           </div>
         ))}
       </div>
-      <p className="mt-8 text-sm">
+      <div className="mt-8 flex flex-wrap items-center gap-6 text-sm">
         <Link
           to="/admin/analytics"
           className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
@@ -69,7 +69,14 @@ export default function AdminOverview() {
           <BarChart3 className="h-4 w-4" />
           Open analytics dashboard
         </Link>
-      </p>
+        <Link
+          to="/admin/social-links"
+          className="inline-flex items-center gap-2 text-primary font-medium hover:underline"
+        >
+          <Share2 className="h-4 w-4" />
+          Manage Social Links (Instagram & Facebook)
+        </Link>
+      </div>
     </div>
   );
 }

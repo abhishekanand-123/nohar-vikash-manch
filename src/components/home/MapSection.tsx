@@ -6,7 +6,7 @@ export default function MapSection() {
           <span className="text-primary font-semibold uppercase text-sm tracking-wide">Location</span>
           <h2 className="text-section font-display font-bold mt-2 text-foreground">मानचित्र पर हमारा स्थान देखें</h2>
           <p className="text-muted-foreground mt-2 text-[15px] sm:text-base leading-relaxed">
-            ग्राम – नौहर, पोस्ट – ग्वालपारा, जिला – मधेपुरा, बिहार, (भारत)
+            ग्राम – नौहर, पोस्ट – ग्वालपाड़ा / ग्वालपारा, जिला – मधेपुरा, बिहार, भारत (Nohar, Gwalpara, Madhepura, Bihar)
           </p>
         </div>
         <div className="rounded-2xl overflow-hidden shadow-card ring-1 ring-border aspect-[4/3] sm:aspect-video min-h-[220px]">

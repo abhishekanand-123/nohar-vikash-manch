@@ -69,7 +69,7 @@ export default function Hero() {
   const heroTitle = homeBanner?.title || "Empowering Nohar, Preserving Heritage";
   const heroSubtitle =
     homeBanner?.subtitle ||
-    "A thriving agriculture-based community in Madhepura, Bihar. Managed with care by Nohar Vikash Yuvak Sangh.";
+    "A thriving agriculture-based community in Nohar, Gwalpara, Madhepura (Bihar). Managed with care by Nohar Vikash Yuvak Sangh.";
   const heroBackground = homeBanner?.bg_image || heroImg;
 
   const pdfUrl = (stotraDoc?.is_active && stotraDoc?.bg_image) ? stotraDoc.bg_image : null;

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Instagram, Facebook } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import LanguageSwitcher from "@/components/common/LanguageSwitcher";
+import { useSocialLinks } from "@/hooks/useSocialLinks";
 
 const navLinks = [
   { to: "/", label: "मुख्य पृष्ठ" },
@@ -20,6 +21,7 @@ const navLinks = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const { data: socialLinks } = useSocialLinks();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-card/85 backdrop-blur-xl shadow-card border-b border-border/40 [padding-top:env(safe-area-inset-top,0px)]">
@@ -48,6 +50,36 @@ export default function Navbar() {
           <div className="ml-1">
             <LanguageSwitcher variant="desktop" />
           </div>
+
+          {/* Social Links (Instagram & Facebook) */}
+          {socialLinks?.is_active && (socialLinks.instagram || socialLinks.facebook) && (
+            <div className="flex items-center gap-1 ml-1 border-l border-border/60 pl-1.5">
+              {socialLinks.instagram && (
+                <a
+                  href={socialLinks.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Instagram"
+                  title="Instagram पर फॉलो करें"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-pink-600 hover:bg-pink-500/10 transition-colors"
+                >
+                  <Instagram className="w-4 h-4" />
+                </a>
+              )}
+              {socialLinks.facebook && (
+                <a
+                  href={socialLinks.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Facebook"
+                  title="Facebook पर फॉलो करें"
+                  className="w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-blue-600 hover:bg-blue-600/10 transition-colors"
+                >
+                  <Facebook className="w-4 h-4" />
+                </a>
+              )}
+            </div>
+          )}
 
           <Link
             to="/admin/login"
@@ -96,6 +128,34 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
+
+              {/* Mobile Social Links */}
+              {socialLinks?.is_active && (socialLinks.instagram || socialLinks.facebook) && (
+                <div className="flex items-center gap-2 pt-2 border-t border-border/50 mt-1">
+                  {socialLinks.instagram && (
+                    <a
+                      href={socialLinks.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 py-2.5 px-3 rounded-xl border border-border bg-secondary/40 hover:bg-pink-500/10 text-foreground hover:text-pink-600 flex items-center justify-center gap-2 text-xs font-semibold transition-colors"
+                    >
+                      <Instagram className="w-4 h-4 text-pink-600" />
+                      <span>Instagram</span>
+                    </a>
+                  )}
+                  {socialLinks.facebook && (
+                    <a
+                      href={socialLinks.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 py-2.5 px-3 rounded-xl border border-border bg-secondary/40 hover:bg-blue-600/10 text-foreground hover:text-blue-600 flex items-center justify-center gap-2 text-xs font-semibold transition-colors"
+                    >
+                      <Facebook className="w-4 h-4 text-blue-600" />
+                      <span>Facebook</span>
+                    </a>
+                  )}
+                </div>
+              )}
 
               <div className="pt-2 flex flex-col gap-2 border-t border-border/50 mt-1">
                 <button

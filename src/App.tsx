@@ -35,6 +35,7 @@ import GramUdyog from "./pages/GramUdyog";
 import ManageGramUdyog from "./pages/admin/ManageGramUdyog";
 import LekhaJokha from "./pages/LekhaJokha";
 import ManageLekhaJokha from "./pages/admin/ManageLekhaJokha";
+import ManageSocialLinks from "./pages/admin/ManageSocialLinks";
 import Videos from "./pages/Videos";
 import NotFound from "./pages/NotFound";
 
@@ -68,6 +69,7 @@ const App = () => (
             <Route element={<AdminLayout />}>
               <Route path="/admin/dashboard" element={<AdminOverview />} />
               <Route path="/admin/analytics" element={<AnalyticsDashboard />} />
+              <Route path="/admin/social-links" element={<ManageSocialLinks />} />
               <Route path="/admin/heritage" element={<ManageHeritage />} />
               <Route path="/admin/notifications" element={<ManageNotifications />} />
               <Route path="/admin/lekha-jokha" element={<ManageLekhaJokha />} />

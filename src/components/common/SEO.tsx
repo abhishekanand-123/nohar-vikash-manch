@@ -38,12 +38,12 @@ export default function SEO({
   const location = useLocation();
 
   useEffect(() => {
-    const defaultTitle = "नोहर विकास मंच — ग्राम नौहर का डिजिटल मंच";
-    const fullTitle = title ? `${title} | नोहर विकास मंच` : defaultTitle;
+    const defaultTitle = "Nohar Vikash Manch — ग्राम नौहर, ग्वालपाड़ा (मधेपुरा, बिहार) | Nohar, Gwalpara";
+    const fullTitle = title ? `${title} | Nohar Vikash Manch (नोहर, ग्वालपाड़ा)` : defaultTitle;
     document.title = fullTitle;
 
     const defaultDesc =
-      "ग्राम नौहर (मधेपुरा, बिहार) का आधिकारिक डिजिटल पोर्टल। नोहर विकास युवक संघ द्वारा संचालित ग्रामीण विकास, सांस्कृतिक पर्व-त्योहार, खेलकूद, ग्राम उद्योग व पारदर्शी जन सेवा।";
+      "ग्राम नौहर, ग्वालपाड़ा, मधेपुरा, बिहार (Nohar, Gwalpara, Madhepura, Bihar) का आधिकारिक डिजिटल पोर्टल — Nohar Vikash Manch। नोहर विकास युवक संघ द्वारा संचालित ग्रामीण विकास, सांस्कृतिक पर्व-त्योहार, खेलकूद, ग्राम उद्योग व पारदर्शी जन सेवा।";
     const metaDesc = (description && description.trim()) || defaultDesc;
 
     // Determine normalized canonical URL
@@ -166,9 +166,9 @@ export default function SEO({
     }
 
     // Keywords
-    if (keywords) {
-      updateMeta("keywords", keywords);
-    }
+    const defaultKeywords =
+      "nohar, gwalpara, nohar gwalpara, nohar vikash, nohar vikash manch, gram nohar, nohar madhepura, gwalpara madhepura, nohar bihar, nauhar, नौहर, ग्वालपाड़ा, ग्वालपारा, मधेपुरा, नोहर विकास मंच, नौहर विकास युवक संघ";
+    updateMeta("keywords", keywords || defaultKeywords);
 
     // JSON-LD Structured Data Schema
     let scriptTag = document.getElementById("structured-data-schema") as HTMLScriptElement | null;
@@ -209,10 +209,66 @@ export default function SEO({
           }
         : {
             "@context": "https://schema.org",
-            "@type": "WebSite",
-            name: "Nohar Vikash Manch",
-            url: SITE_BASE_URL,
-            description: metaDesc,
+            "@graph": [
+              {
+                "@type": "WebSite",
+                "@id": `${SITE_BASE_URL}/#website`,
+                url: `${SITE_BASE_URL}/`,
+                name: "Nohar Vikash Manch",
+                alternateName: [
+                  "Nohar",
+                  "Gwalpara",
+                  "Nohar Gwalpara",
+                  "Gram Nohar",
+                  "Nohar Vikash",
+                  "नौहर",
+                  "ग्वालपाड़ा",
+                  "ग्वालपारा",
+                  "नोहर विकास मंच",
+                  "नोहर विकास युवक संघ",
+                ],
+                description: metaDesc,
+              },
+              {
+                "@type": "NGO",
+                "@id": `${SITE_BASE_URL}/#organization`,
+                name: "Nohar Vikash Manch (नोहर विकास मंच)",
+                alternateName: ["Nohar Vikash Yuvak Sangh", "नोहर विकास युवक संघ"],
+                url: `${SITE_BASE_URL}/`,
+                logo: `${SITE_BASE_URL}/og-image.jpg`,
+                address: {
+                  "@type": "PostalAddress",
+                  streetAddress: "Gram Nohar",
+                  addressLocality: "Gwalpara",
+                  addressRegion: "Madhepura, Bihar",
+                  postalCode: "852115",
+                  addressCountry: "IN",
+                },
+                areaServed: [
+                  {
+                    "@type": "AdministrativeArea",
+                    name: "Nohar, Gwalpara, Madhepura, Bihar",
+                  },
+                ],
+              },
+              {
+                "@type": "Place",
+                "@id": `${SITE_BASE_URL}/#place`,
+                name: "Nohar (नौहर), Gwalpara",
+                address: {
+                  "@type": "PostalAddress",
+                  addressLocality: "Nohar, Gwalpara",
+                  addressRegion: "Madhepura, Bihar",
+                  postalCode: "852115",
+                  addressCountry: "IN",
+                },
+                geo: {
+                  "@type": "GeoCoordinates",
+                  latitude: "25.92",
+                  longitude: "86.78",
+                },
+              },
+            ],
           };
 
     scriptTag.textContent = JSON.stringify(schema || defaultSchema);

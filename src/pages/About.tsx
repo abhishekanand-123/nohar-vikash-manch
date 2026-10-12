@@ -54,9 +54,9 @@ export default function About() {
   return (
     <div>
       <SEO
-        title="हमारे बारे में (About Us) — नोहर विकास युवक संघ"
-        description="नोहर विकास युवक संघ का इतिहास, लक्ष्य, गांव नौहर की समृद्ध सांस्कृतिक धरोहर एवं ग्रामीण उत्थान हेतु समर्पित सदस्यों का परिचय।"
-        keywords="नोहर विकास युवक संघ, हमारे बारे में, Nohar Vikash Yuvak Sangh, Madhepura Bihar, Nohar History"
+        title="हमारे बारे में (About Us) — ग्राम नौहर, ग्वालपाड़ा | Nohar, Gwalpara"
+        description="नोहर विकास युवक संघ का इतिहास, लक्ष्य, गांव नौहर (ग्वालपाड़ा, मधेपुरा, बिहार) की समृद्ध सांस्कृतिक धरोहर एवं ग्रामीण उत्थान हेतु समर्पित सदस्यों का परिचय।"
+        keywords="nohar, gwalpara, nohar gwalpara, nohar vikash yuvak sangh, nohar history, madhepura bihar, नौहर, ग्वालपाड़ा, हमारे बारे में, नोहर विकास युवक संघ"
       />
       <PageBanner
         pageKey="about"

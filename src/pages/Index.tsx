@@ -13,9 +13,9 @@ export default function Index() {
   return (
     <>
       <SEO
-        title="मुख्य पृष्ठ — ग्राम नौहर डिजिटल मंच"
-        description="ग्राम नौहर (मधेपुरा, बिहार) का आधिकारिक डिजिटल मंच। नोहर विकास युवक संघ द्वारा संचालित ग्रामीण विकास, त्योहार, खेल क्लब, ग्राम उद्योग व पारदर्शी सार्वजनिक लेखा।"
-        keywords="नोहर, नोहर विकास मंच, मधेपुरा, बिहार, Nohar Vikash Manch, Gram Nohar, Madhepura"
+        title="ग्राम नौहर, ग्वालपाड़ा (मधेपुरा, बिहार) — Nohar, Gwalpara"
+        description="ग्राम नौहर, ग्वालपाड़ा (मधेपुरा, बिहार) का आधिकारिक डिजिटल मंच — Nohar Vikash Manch। नोहर विकास युवक संघ द्वारा संचालित ग्रामीण विकास, त्योहार, खेल क्लब, ग्राम उद्योग व पारदर्शी सार्वजनिक लेखा।"
+        keywords="nohar, gwalpara, nohar gwalpara, nohar vikash, nohar vikash manch, gram nohar, nohar madhepura, gwalpara madhepura, nauhar, nohar bihar, नौहर, ग्वालपाड़ा, ग्वालपारा, मधेपुरा, बिहार, नोहर विकास मंच"
       />
       <SectionTracker sectionId="home-hero">
         <Hero />

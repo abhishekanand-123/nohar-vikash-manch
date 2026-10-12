@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
-import { MapPin, Mail, Phone } from "lucide-react";
+import { MapPin, Mail, Phone, Instagram, Facebook } from "lucide-react";
+import { useSocialLinks } from "@/hooks/useSocialLinks";
 
 export default function Footer() {
+  const { data: socialLinks } = useSocialLinks();
+
   return (
     <footer className="bg-foreground text-background py-12 sm:py-16 pb-[max(3rem,env(safe-area-inset-bottom))]">
       <div className="container mx-auto px-4 sm:px-6">
@@ -13,6 +16,42 @@ export default function Footer() {
             <p className="text-background/70 text-sm leading-relaxed">
             नोहर विकास युवक संघ द्वारा संचालित। यह एक समुदाय है जो कृषि, शांति और मधेपुरा की जीवंत संस्कृति को समर्पित है।
             </p>
+
+            {socialLinks?.is_active && (socialLinks.instagram || socialLinks.facebook) && (
+              <div className="mt-6">
+                <span className="block text-xs uppercase tracking-wider text-background/60 font-semibold mb-2.5">
+                  सोशल मीडिया पर जुड़ें (Follow Us)
+                </span>
+                <div className="flex flex-wrap items-center gap-2.5">
+                  {socialLinks.instagram && (
+                    <a
+                      href={socialLinks.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Instagram"
+                      title="Follow us on Instagram"
+                      className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-background/10 hover:bg-pink-500/20 border border-background/15 hover:border-pink-500/40 text-background text-xs font-medium transition-all duration-200 group"
+                    >
+                      <Instagram className="w-4 h-4 text-pink-400 group-hover:scale-110 transition-transform" />
+                      <span>Instagram</span>
+                    </a>
+                  )}
+                  {socialLinks.facebook && (
+                    <a
+                      href={socialLinks.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Facebook"
+                      title="Follow us on Facebook"
+                      className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-background/10 hover:bg-blue-600/20 border border-background/15 hover:border-blue-500/40 text-background text-xs font-medium transition-all duration-200 group"
+                    >
+                      <Facebook className="w-4 h-4 text-blue-400 group-hover:scale-110 transition-transform" />
+                      <span>Facebook</span>
+                    </a>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
           <div>
             <h4 className="font-display font-semibold mb-4">महत्वपूर्ण लिंक</h4>
@@ -42,7 +81,7 @@ export default function Footer() {
             <ul className="space-y-3 text-sm text-background/70">
               <li className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 mt-0.5 shrink-0" />
-                <span>ग्राम – नोहर, पोस्ट – ग्वालपाड़ा, जिला – मधेपुरा, बिहार, भारत</span>
+                <span>ग्राम – नोहर, पोस्ट – ग्वालपाड़ा (Nohar, Gwalpara), जिला – मधेपुरा, बिहार, भारत</span>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 shrink-0" />

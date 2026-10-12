@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link, useLocation, Outlet } from "react-router-dom";
-import { LayoutDashboard, FileText, Users, Image, Calendar, Trophy, PanelsTopLeft, Heart, LogOut, Menu, Video, BarChart3, BookOpen, Bell, Briefcase, FileSpreadsheet, Landmark } from "lucide-react";
+import { LayoutDashboard, FileText, Users, Image, Calendar, Trophy, PanelsTopLeft, Heart, LogOut, Menu, Video, BarChart3, BookOpen, Bell, Briefcase, FileSpreadsheet, Landmark, Share2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import SEO from "@/components/common/SEO";
 
 const sidebarLinks = [
   { to: "/admin/dashboard", label: "Overview", icon: LayoutDashboard },
   { to: "/admin/analytics", label: "Analytics", icon: BarChart3 },
+  { to: "/admin/social-links", label: "सोशल लिंक्स (FB & Insta)", icon: Share2 },
   { to: "/admin/heritage", label: "गाँव की धरोहर (Heritage)", icon: Landmark },
   { to: "/admin/notifications", label: "Push Notifications", icon: Bell },
   { to: "/admin/lekha-jokha", label: "लेखा-जोखा (Accounts & PDF)", icon: FileSpreadsheet },
