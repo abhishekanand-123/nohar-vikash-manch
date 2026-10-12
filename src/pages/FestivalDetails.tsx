@@ -69,13 +69,66 @@ export default function FestivalDetails() {
     );
   }
 
+  const postDescription = useMemo(() => {
+    if (!post) return "";
+    if (post.content && post.content.trim()) {
+      // Strip markdown/html and excess whitespace
+      const clean = post.content
+        .replace(/<[^>]*>/g, "")
+        .replace(/[#*_~`]/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+      if (clean.length > 155) {
+        const slice = clean.substring(0, 155);
+        const lastSpace = slice.lastIndexOf(" ");
+        return (lastSpace > 110 ? slice.substring(0, lastSpace) : slice) + "...";
+      }
+      return clean;
+    }
+    if (post.highlights && post.highlights.length > 0) {
+      return `${post.title}: ${post.highlights.slice(0, 2).join(", ")}. ग्राम नौहर, मधेपुरा, बिहार का पावन उत्सव।`;
+    }
+    const dateText = post.festival_date ? ` (${post.festival_date})` : "";
+    const locText = post.location ? ` | स्थान: ${post.location}` : "";
+    return `${post.title}${dateText}${locText} — नोहर विकास मंच द्वारा ग्राम नौहर, मधेपुरा में आयोजित सांस्कृतिक उत्सव का विस्तृत विवरण एवं तस्वीरें।`;
+  }, [post]);
+
+  const postKeywords = useMemo(() => {
+    if (!post) return "नोहर, त्योहार, ब्लॉग";
+    const kw = [
+      post.title,
+      post.category,
+      ...(post.tags || []),
+      post.location,
+      "नोहर",
+      "ग्राम नौहर",
+      "मधेपुरा",
+      "बिहार",
+      "Nohar Vikash Manch",
+      "त्योहार ब्लॉग",
+    ].filter(Boolean) as string[];
+    return Array.from(new Set(kw)).join(", ");
+  }, [post]);
+
+  const postOgImage = useMemo(() => {
+    if (!post) return undefined;
+    if (post.image) return post.image;
+    if (post.gallery_images && post.gallery_images.length > 0) return post.gallery_images[0];
+    return undefined;
+  }, [post]);
+
   return (
     <div className="container mx-auto px-6 py-14">
       <SEO
         title={post.title}
-        description={post.content ? post.content.substring(0, 160) : `${post.title} - नोहर विकास मंच`}
-        ogImage={post.image || undefined}
-        keywords={post.tags?.join(", ") || "नोहर, त्योहार, ब्लॉग"}
+        description={postDescription}
+        ogImage={postOgImage}
+        keywords={postKeywords}
+        type="article"
+        publishedTime={post.created_at}
+        section={post.category || "Festivals"}
+        tags={post.tags || []}
+        canonical={`https://noharvikashmanch.in/festivals/${post.id}`}
       />
       <div className="mb-6">
         <Link to="/festivals" className="text-sm text-primary hover:underline">← Back to festival posts</Link>

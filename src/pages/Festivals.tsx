@@ -85,9 +85,9 @@ export default function Festivals() {
   return (
     <div>
       <SEO
-        title="Festivals & Cultural Highlights"
-        description="Celebrations, memories, photo stories, and blogs of Durga Puja, Ramnavami, Chhath Puja, and cultural festivals in Village Nohar."
-        keywords="Nohar Festivals, Durga Puja Nohar, Ramnavami, Chhath Puja, Bihar Culture, Festival Blog"
+        title="त्योहार एवं उत्सव ब्लॉग (Festivals & Celebrations)"
+        description="ग्राम नौहर के पावन पर्व, दुर्गा पूजा, रामनवमी, छठ पूजा, कृष्ण जन्माष्टमी और सांस्कृतिक संध्या की यादें, तस्वीरें व विस्तृत ब्लॉग।"
+        keywords="त्योहार, नोहर दुर्गा पूजा, नोहर रामनवमी, छठ पूजा नोहर, Nohar Festivals, Bihar Culture, ग्राम नौहर पर्व"
       />
       <PageBanner
         pageKey="festivals"

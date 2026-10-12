@@ -20,13 +20,18 @@ export default defineConfig(({ mode }) => ({
       registerType: "autoUpdate",
       includeAssets: [
         "favicon.ico",
+        "favicon-48x48.png",
+        "favicon-32x32.png",
         "apple-touch-icon.png",
         "pwa-icon.svg",
         "pwa-64x64.png",
         "pwa-192x192.png",
         "pwa-512x512.png",
         "maskable-icon-512x512.png",
+        "og-image.jpg",
+        "og-image.png",
         "robots.txt",
+        "sitemap.xml",
       ],
       manifest: {
         name: "Nohar Vikash Manch — Village Digital Portal",

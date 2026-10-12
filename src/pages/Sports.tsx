@@ -162,9 +162,9 @@ export default function Sports() {
   return (
     <div>
       <SEO
-        title="Sports Club & Tournaments (LNCC)"
-        description="Nohar Sports Club (LNCC) managed by Nohar Vikash Yuvak Sangh — cricket tournaments, football matches, athletics schedule, and youth sports development."
-        keywords="Nohar Sports Club, LNCC Nohar, Cricket Tournament, Football, Madhepura Sports"
+        title="खेल क्लब एवं प्रतियोगिताएं (Sports Club — LNCC)"
+        description="नोहर विकास युवक संघ द्वारा संचालित नोहर स्पोर्ट्स क्लब (LNCC) — क्रिकेट, फुटबॉल, कबड्डी टूर्नामेंट, मैच शेड्यूल एवं युवा खिलाड़ियों की संपूर्ण जानकारी।"
+        keywords="नोहर स्पोर्ट्स क्लब, LNCC Nohar, क्रिकेट टूर्नामेंट, खेल क्लब मधेपुरा, Sports Nohar, ग्राम नौहर खेल"
       />
       <PageBanner
         pageKey="sports"
