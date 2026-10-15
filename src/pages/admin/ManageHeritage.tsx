@@ -336,14 +336,16 @@ export default function ManageHeritage() {
                     >
                       <Edit2 className="w-4 h-4 text-primary" />
                     </button>
-                    <button
-                      type="button"
-                      onClick={() => handleDelete(item)}
-                      title="Delete"
-                      className="p-2 rounded-lg hover:bg-destructive/10 text-destructive transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    {isAdmin && (
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(item)}
+                        title="Delete"
+                        className="p-2 rounded-lg hover:bg-destructive/10 text-destructive transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

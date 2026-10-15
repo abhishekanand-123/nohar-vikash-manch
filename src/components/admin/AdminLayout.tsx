@@ -27,13 +27,14 @@ export default function AdminLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { user, isAdmin, loading, signOut } = useAuth();
+  const { user, isAdmin, isEditor, role, loading, signOut } = useAuth();
+  const canAccess = isAdmin || isEditor;
 
   useEffect(() => {
-    if (!loading && (!user || !isAdmin)) {
+    if (!loading && (!user || !canAccess)) {
       navigate("/admin/login");
     }
-  }, [loading, user, isAdmin, navigate]);
+  }, [loading, user, canAccess, navigate]);
 
   const handleLogout = async () => {
     await signOut();
@@ -62,7 +63,7 @@ export default function AdminLayout() {
       }`}>
         <div className="p-6 border-b border-sidebar-border">
           <h2 className="font-display font-bold text-lg text-sidebar-primary-foreground">
-            Nohar<span className="text-accent">Admin</span>
+            Nohar<span className="text-accent">{isAdmin ? "Admin" : "Editor"}</span>
           </h2>
         </div>
         <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
@@ -83,8 +84,21 @@ export default function AdminLayout() {
           ))}
         </nav>
         <div className="p-4 border-t border-sidebar-border">
-          <p className="text-xs text-sidebar-foreground/50 mb-2 px-4 truncate">{user.email}</p>
-          {!isAdmin && <p className="text-xs text-destructive px-4 mb-2">Not admin — read-only access</p>}
+          <p className="text-xs text-sidebar-foreground/50 mb-1 px-4 truncate">{user.email}</p>
+          <div className="px-4 mb-3 flex items-center justify-between">
+            <span className="text-xs text-sidebar-foreground/60">Role:</span>
+            <span
+              className={`text-[11px] font-semibold px-2 py-0.5 rounded-full capitalize ${
+                isAdmin
+                  ? "bg-primary/20 text-primary"
+                  : isEditor
+                  ? "bg-amber-500/20 text-amber-400"
+                  : "bg-destructive/20 text-destructive"
+              }`}
+            >
+              {isAdmin ? "Admin" : isEditor ? "Editor" : "User"}
+            </span>
+          </div>
           <button
             onClick={handleLogout}
             className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-sidebar-foreground/70 hover:bg-sidebar-accent/50 hover:text-sidebar-foreground transition-colors w-full"

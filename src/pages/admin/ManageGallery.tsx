@@ -15,7 +15,8 @@ interface GalleryItem {
 const categories = ["festival", "sports", "village"];
 
 export default function ManageGallery() {
-  const { isAdmin } = useAuth();
+  const { isAdmin, isEditor } = useAuth();
+  const canManage = isAdmin || isEditor;
   const [items, setItems] = useState<GalleryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -59,7 +60,7 @@ export default function ManageGallery() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h2 className="font-display text-xl font-bold text-foreground">Gallery</h2>
-        {isAdmin && (
+        {canManage && (
           <button onClick={() => setShowForm(true)} className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-medium hover:opacity-90">
             <Plus className="w-4 h-4" /> Upload Image
           </button>

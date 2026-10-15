@@ -31,6 +31,7 @@ import { uploadFile } from "@/lib/supabase-helpers";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import SEO from "@/components/common/SEO";
+import { useAuth } from "@/contexts/AuthContext";
 
 const DEFAULT_CATEGORIES = [
   "शिक्षक (Teacher)",
@@ -46,6 +47,7 @@ const DEFAULT_CATEGORIES = [
 ];
 
 export default function ManageGramUdyog() {
+  const { isAdmin } = useAuth();
   const [services, setServices] = useState<VillageService[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -356,15 +358,17 @@ export default function ManageGramUdyog() {
                           >
                             <Pencil className="w-3.5 h-3.5" />
                           </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleDelete(item.id, item.name)}
-                            className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10"
-                            title="Delete"
-                          >
-                            <Trash2 className="w-3.5 h-3.5" />
-                          </Button>
+                          {isAdmin && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDelete(item.id, item.name)}
+                              className="h-8 w-8 p-0 text-destructive hover:bg-destructive/10"
+                              title="Delete"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </Button>
+                          )}
                         </div>
                       </td>
                     </tr>

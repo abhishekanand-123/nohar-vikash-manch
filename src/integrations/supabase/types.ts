@@ -455,7 +455,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "user"
+      app_role: "admin" | "editor" | "user"
       video_placement: "site" | "ramnavami" | "blog"
     }
     CompositeTypes: {

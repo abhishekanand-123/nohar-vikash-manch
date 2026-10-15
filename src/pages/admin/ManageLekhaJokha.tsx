@@ -667,15 +667,17 @@ export default function ManageLekhaJokha() {
                       >
                         <Pencil className="w-3.5 h-3.5 text-primary" /> एडिट
                       </Button>
-                      <Button
-                        type="button"
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => handleDeletePdf(item.id)}
-                        className="h-8 px-2.5 rounded-lg text-xs gap-1"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" /> हटाएं
-                      </Button>
+                      {isAdmin && (
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => handleDeletePdf(item.id)}
+                          className="h-8 px-2.5 rounded-lg text-xs gap-1"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" /> हटाएं
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </Card>
@@ -782,15 +784,17 @@ export default function ManageLekhaJokha() {
                       >
                         <Pencil className="w-3.5 h-3.5 text-accent" /> एडिट
                       </Button>
-                      <Button
-                        type="button"
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => handleDeleteEvent(ev.id)}
-                        className="h-8 px-2.5 rounded-lg text-xs gap-1"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" /> हटाएं
-                      </Button>
+                      {isAdmin && (
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="sm"
+                          onClick={() => handleDeleteEvent(ev.id)}
+                          className="h-8 px-2.5 rounded-lg text-xs gap-1"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" /> हटाएं
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </Card>

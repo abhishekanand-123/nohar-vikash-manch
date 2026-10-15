@@ -14,7 +14,8 @@ interface Event {
 }
 
 export default function ManageEvents() {
-  const { isAdmin } = useAuth();
+  const { isAdmin, isEditor } = useAuth();
+  const canManage = isAdmin || isEditor;
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -77,7 +78,7 @@ export default function ManageEvents() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h2 className="font-display text-xl font-bold text-foreground">Events</h2>
-        {isAdmin && (
+        {canManage && (
           <button onClick={() => { resetForm(); setShowForm(true); }} className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-medium hover:opacity-90">
             <Plus className="w-4 h-4" /> Add Event
           </button>
