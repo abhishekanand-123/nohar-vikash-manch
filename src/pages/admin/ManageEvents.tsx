@@ -60,6 +60,10 @@ export default function ManageEvents() {
   };
 
   const handleDelete = async (id: string) => {
+    if (!isAdmin) {
+      toast({ title: "अनुमति नहीं है", description: "केवल Admin ही इवेंट डिलीट कर सकते हैं।", variant: "destructive" });
+      return;
+    }
     if (!confirm("Delete this event?")) return;
     const { error } = await supabase.from("events").delete().eq("id", id);
     if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
@@ -109,10 +113,12 @@ export default function ManageEvents() {
               <p className="text-xs text-muted-foreground">{e.date ? new Date(e.date).toLocaleDateString() : "No date"}</p>
               <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{e.description}</p>
             </div>
-            {isAdmin && (
+            {canManage && (
               <div className="flex gap-1 flex-shrink-0">
-                <button onClick={() => startEdit(e)} className="p-2 rounded-lg hover:bg-secondary"><Pencil className="w-4 h-4" /></button>
-                <button onClick={() => handleDelete(e.id)} className="p-2 rounded-lg hover:bg-destructive/10 text-destructive"><Trash2 className="w-4 h-4" /></button>
+                <button onClick={() => startEdit(e)} className="p-2 rounded-lg hover:bg-secondary" title="Edit event"><Pencil className="w-4 h-4" /></button>
+                {isAdmin && (
+                  <button onClick={() => handleDelete(e.id)} className="p-2 rounded-lg hover:bg-destructive/10 text-destructive" title="Delete event"><Trash2 className="w-4 h-4" /></button>
+                )}
               </div>
             )}
           </div>

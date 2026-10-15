@@ -38,7 +38,8 @@ const BADGE_OPTIONS = [
 ];
 
 export default function ManageHeritage() {
-  const { isAdmin } = useAuth();
+  const { isAdmin, isEditor } = useAuth();
+  const canManage = isAdmin || isEditor;
   const [items, setItems] = useState<HeritageRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -179,6 +180,10 @@ export default function ManageHeritage() {
   };
 
   const handleDelete = async (item: HeritageRecord) => {
+    if (!isAdmin) {
+      toast({ title: "अनुमति नहीं है", description: "केवल Admin ही धरोहर को डिलीट कर सकते हैं।", variant: "destructive" });
+      return;
+    }
     if (!confirm(`क्या आप "${item.title}" को डिलीट करना चाहते हैं?`)) return;
 
     try {
@@ -235,7 +240,7 @@ export default function ManageHeritage() {
           </p>
         </div>
 
-        {isAdmin && (
+        {canManage && (
           <button
             type="button"
             onClick={openAddModal}

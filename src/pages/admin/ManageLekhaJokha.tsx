@@ -69,7 +69,8 @@ const EVENT_CATEGORIES = [
 ];
 
 export default function ManageLekhaJokha() {
-  const { isAdmin } = useAuth();
+  const { isAdmin, isEditor } = useAuth();
+  const canManage = isAdmin || isEditor;
   const [activeAdminTab, setActiveAdminTab] = useState<"annual-pdf" | "events" | "banner">("annual-pdf");
 
   // Data states
@@ -205,8 +206,8 @@ export default function ManageLekhaJokha() {
 
   const handleSavePdf = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isAdmin) {
-      toast.error("केवल एडमिन ही डेटा सुरक्षित कर सकते हैं");
+    if (!canManage) {
+      toast.error("केवल एडमिन या एडिटर ही डेटा सुरक्षित कर सकते हैं");
       return;
     }
 
@@ -281,6 +282,10 @@ export default function ManageLekhaJokha() {
   };
 
   const handleDeletePdf = async (id: string) => {
+    if (!isAdmin) {
+      toast.error("केवल एडमिन ही हटा सकते हैं");
+      return;
+    }
     if (!confirm("क्या आप वाकई इस लेखा PDF को हटाना चाहते हैं?")) return;
     try {
       await deleteLekhaJokhaRecord(id);
@@ -332,8 +337,8 @@ export default function ManageLekhaJokha() {
 
   const handleSaveEvent = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isAdmin) {
-      toast.error("केवल एडमिन ही डेटा सुरक्षित कर सकते हैं");
+    if (!canManage) {
+      toast.error("केवल एडमिन या एडिटर ही डेटा सुरक्षित कर सकते हैं");
       return;
     }
 
@@ -397,6 +402,10 @@ export default function ManageLekhaJokha() {
   };
 
   const handleDeleteEvent = async (id: string) => {
+    if (!isAdmin) {
+      toast.error("केवल एडमिन ही हटा सकते हैं");
+      return;
+    }
     if (!confirm("क्या आप वाकई इस सांस्कृतिक कार्यक्रम रिकॉर्ड को हटाना चाहते हैं?")) return;
     try {
       await deleteLekhaJokhaEvent(id);
@@ -410,8 +419,8 @@ export default function ManageLekhaJokha() {
   // ==================== BANNER SAVE HANDLER ====================
   const handleSaveBanner = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!isAdmin) {
-      toast.error("केवल एडमिन ही बैनर बदल सकते हैं");
+    if (!canManage) {
+      toast.error("केवल एडमिन या एडिटर ही बैनर बदल सकते हैं");
       return;
     }
 

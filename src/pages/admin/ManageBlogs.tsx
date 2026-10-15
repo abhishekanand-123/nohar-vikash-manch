@@ -243,6 +243,10 @@ export default function ManageBlogs() {
   };
 
   const handleDelete = async (id: string) => {
+    if (!isAdmin) {
+      toast({ title: "अनुमति नहीं है", description: "केवल Admin ही ब्लॉग पोस्ट डिलीट कर सकते हैं।", variant: "destructive" });
+      return;
+    }
     if (!confirm("Delete this blog post?")) return;
     const { error } = await supabase.from("blogs").delete().eq("id", id);
     if (error) toast({ title: "Error", description: error.message, variant: "destructive" });

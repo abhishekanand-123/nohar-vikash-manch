@@ -12,7 +12,8 @@ const sportTypes = ["Cricket", "Football", "Kabaddi", "Volleyball", "Athletics",
 const statuses = ["Upcoming", "Ongoing", "Completed"];
 
 export default function ManageSports() {
-  const { isAdmin } = useAuth();
+  const { isAdmin, isEditor } = useAuth();
+  const canManage = isAdmin || isEditor;
   const [sports, setSports] = useState<Sport[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -81,6 +82,10 @@ export default function ManageSports() {
   };
 
   const handleDelete = async (id: string) => {
+    if (!isAdmin) {
+      toast({ title: "अनुमति नहीं है", description: "केवल Admin ही स्पोर्ट्स आइटम डिलीट कर सकते हैं।", variant: "destructive" });
+      return;
+    }
     if (!confirm("Delete this sports item?")) return;
     const { error } = await supabase.from("sports").delete().eq("id", id);
     if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
@@ -109,7 +114,7 @@ export default function ManageSports() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h2 className="font-display text-xl font-bold text-foreground">Sports</h2>
-        {isAdmin && (
+        {canManage && (
           <button onClick={() => { resetForm(); setShowForm(true); }} className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-medium hover:opacity-90">
             <Plus className="w-4 h-4" /> Add Sports Item
           </button>
@@ -153,10 +158,12 @@ export default function ManageSports() {
                 {item.status || "Status"}
               </span>
             </div>
-            {isAdmin && (
+            {canManage && (
               <div className="flex gap-1 flex-shrink-0">
-                <button onClick={() => startEdit(item)} className="p-2 rounded-lg hover:bg-secondary"><Pencil className="w-4 h-4" /></button>
-                <button onClick={() => handleDelete(item.id)} className="p-2 rounded-lg hover:bg-destructive/10 text-destructive"><Trash2 className="w-4 h-4" /></button>
+                <button onClick={() => startEdit(item)} className="p-2 rounded-lg hover:bg-secondary" title="Edit"><Pencil className="w-4 h-4" /></button>
+                {isAdmin && (
+                  <button onClick={() => handleDelete(item.id)} className="p-2 rounded-lg hover:bg-destructive/10 text-destructive" title="Delete"><Trash2 className="w-4 h-4" /></button>
+                )}
               </div>
             )}
           </div>

@@ -13,7 +13,8 @@ interface Member {
 }
 
 export default function ManageMembers() {
-  const { isAdmin } = useAuth();
+  const { isAdmin, isEditor } = useAuth();
+  const canManage = isAdmin || isEditor;
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -56,6 +57,10 @@ export default function ManageMembers() {
   };
 
   const handleDelete = async (id: string) => {
+    if (!isAdmin) {
+      toast({ title: "अनुमति नहीं है", description: "केवल Admin ही सदस्य को डिलीट कर सकते हैं।", variant: "destructive" });
+      return;
+    }
     if (!confirm("Delete this member?")) return;
     const { error } = await supabase.from("members").delete().eq("id", id);
     if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
@@ -74,7 +79,7 @@ export default function ManageMembers() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <h2 className="font-display text-xl font-bold text-foreground">Members</h2>
-        {isAdmin && (
+        {canManage && (
           <button onClick={() => { resetForm(); setShowForm(true); }} className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-medium hover:opacity-90">
             <Plus className="w-4 h-4" /> Add Member
           </button>
@@ -101,10 +106,12 @@ export default function ManageMembers() {
             {m.image && <img src={m.image} alt={m.name} className="w-full h-40 object-cover rounded-lg mb-3" />}
             <h3 className="font-semibold text-foreground">{m.name}</h3>
             <p className="text-sm text-muted-foreground">{m.role}</p>
-            {isAdmin && (
+            {canManage && (
               <div className="flex gap-2 mt-3">
-                <button onClick={() => startEdit(m)} className="p-2 rounded-lg hover:bg-secondary"><Pencil className="w-4 h-4" /></button>
-                <button onClick={() => handleDelete(m.id)} className="p-2 rounded-lg hover:bg-destructive/10 text-destructive"><Trash2 className="w-4 h-4" /></button>
+                <button onClick={() => startEdit(m)} className="p-2 rounded-lg hover:bg-secondary" title="Edit member"><Pencil className="w-4 h-4" /></button>
+                {isAdmin && (
+                  <button onClick={() => handleDelete(m.id)} className="p-2 rounded-lg hover:bg-destructive/10 text-destructive" title="Delete member"><Trash2 className="w-4 h-4" /></button>
+                )}
               </div>
             )}
           </div>

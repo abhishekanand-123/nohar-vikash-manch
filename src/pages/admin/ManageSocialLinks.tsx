@@ -15,7 +15,8 @@ import { Tables } from "@/integrations/supabase/types";
 type PageBanner = Tables<"page_banners">;
 
 export default function ManageSocialLinks() {
-  const { isAdmin } = useAuth();
+  const { isAdmin, isEditor } = useAuth();
+  const canManage = isAdmin || isEditor;
   const queryClient = useQueryClient();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -71,8 +72,8 @@ export default function ManageSocialLinks() {
 
   const handleSave = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (!isAdmin) {
-      toast.error("आपको बदलाव सहेजने के लिए एडमिन अनुमतियों की आवश्यकता है।");
+    if (!canManage) {
+      toast.error("आपको बदलाव सहेजने के लिए एडमिन या एडिटर अनुमतियों की आवश्यकता है।");
       return;
     }
 

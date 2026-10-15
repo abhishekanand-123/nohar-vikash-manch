@@ -10,7 +10,8 @@ import SEO from "@/components/common/SEO";
 type PageBanner = Tables<"page_banners">;
 
 export default function ManageDocuments() {
-  const { isAdmin } = useAuth();
+  const { isAdmin, isEditor } = useAuth();
+  const canManage = isAdmin || isEditor;
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [docBanner, setDocBanner] = useState<PageBanner | null>(null);
@@ -54,8 +55,8 @@ export default function ManageDocuments() {
 
   const handleSave = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (!isAdmin) {
-      toast.error("You need admin privileges to save changes.");
+    if (!canManage) {
+      toast.error("You need admin or editor privileges to save changes.");
       return;
     }
 
@@ -112,6 +113,10 @@ export default function ManageDocuments() {
   };
 
   const handleRemovePdf = async () => {
+    if (!isAdmin) {
+      toast.error("केवल Admin ही PDF हटा सकते हैं।");
+      return;
+    }
     if (!confirm("Are you sure you want to remove the current PDF? The button will revert to '#' until a new PDF is added.")) return;
     setSaving(true);
     try {
@@ -231,15 +236,17 @@ export default function ManageDocuments() {
                   <ExternalLink className="w-3.5 h-3.5" />
                   <span>Open PDF</span>
                 </a>
-                <button
-                  type="button"
-                  onClick={handleRemovePdf}
-                  disabled={saving}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-destructive/10 hover:bg-destructive/20 text-destructive text-xs font-medium rounded-lg transition-colors"
-                >
-                  <Trash2 className="w-3.5 h-3.5" />
-                  <span>Remove</span>
-                </button>
+                {isAdmin && (
+                  <button
+                    type="button"
+                    onClick={handleRemovePdf}
+                    disabled={saving}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-destructive/10 hover:bg-destructive/20 text-destructive text-xs font-medium rounded-lg transition-colors"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Remove</span>
+                  </button>
+                )}
               </div>
             </div>
           )}

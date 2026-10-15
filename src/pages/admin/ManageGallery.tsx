@@ -47,6 +47,10 @@ export default function ManageGallery() {
   };
 
   const handleDelete = async (item: GalleryItem) => {
+    if (!isAdmin) {
+      toast({ title: "अनुमति नहीं है", description: "केवल Admin ही फोटो डिलीट कर सकते हैं।", variant: "destructive" });
+      return;
+    }
     if (!confirm("Delete this image?")) return;
     await deleteFile(item.image);
     const { error } = await supabase.from("gallery").delete().eq("id", item.id);

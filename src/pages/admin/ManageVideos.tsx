@@ -38,7 +38,8 @@ function rowPlacementSummary(v: VideoRow): string {
 }
 
 export default function ManageVideos() {
-  const { isAdmin } = useAuth();
+  const { isAdmin, isEditor } = useAuth();
+  const canManage = isAdmin || isEditor;
   const [videos, setVideos] = useState<VideoRow[]>([]);
   const [blogs, setBlogs] = useState<BlogOption[]>([]);
   const [loading, setLoading] = useState(true);
@@ -166,6 +167,10 @@ export default function ManageVideos() {
   };
 
   const handleDelete = async (v: VideoRow) => {
+    if (!isAdmin) {
+      toast({ title: "अनुमति नहीं है", description: "केवल Admin ही वीडियो डिलीट कर सकते हैं।", variant: "destructive" });
+      return;
+    }
     if (!confirm("Delete this video?")) return;
     if (v.file_url) await deleteFile(v.file_url);
     const { error } = await supabase.from("videos").delete().eq("id", v.id);
@@ -228,7 +233,7 @@ export default function ManageVideos() {
               {f.label}
             </button>
           ))}
-          {isAdmin && (
+          {canManage && (
             <button
               type="button"
               onClick={() => {
@@ -415,7 +420,7 @@ export default function ManageVideos() {
                 {rowPlacementSummary(v)} · {v.file_url ? "File" : "Embed"}
               </p>
             </div>
-            {isAdmin && (
+            {canManage && (
               <div className="flex gap-1">
                 <Link
                   to={`/admin/analytics?tab=videos&videoId=${v.id}`}
@@ -424,12 +429,14 @@ export default function ManageVideos() {
                 >
                   <BarChart3 className="h-4 w-4" />
                 </Link>
-                <button type="button" onClick={() => startEdit(v)} className="rounded-lg p-2 hover:bg-secondary">
+                <button type="button" onClick={() => startEdit(v)} className="rounded-lg p-2 hover:bg-secondary" title="Edit video">
                   <Pencil className="h-4 w-4" />
                 </button>
-                <button type="button" onClick={() => handleDelete(v)} className="rounded-lg p-2 text-destructive hover:bg-destructive/10">
-                  <Trash2 className="h-4 w-4" />
-                </button>
+                {isAdmin && (
+                  <button type="button" onClick={() => handleDelete(v)} className="rounded-lg p-2 text-destructive hover:bg-destructive/10" title="Delete video">
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                )}
               </div>
             )}
           </div>

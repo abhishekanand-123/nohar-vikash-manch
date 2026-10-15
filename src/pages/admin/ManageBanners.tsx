@@ -23,7 +23,8 @@ const pages = [
 ];
 
 export default function ManageBanners() {
-  const { isAdmin } = useAuth();
+  const { isAdmin, isEditor } = useAuth();
+  const canManage = isAdmin || isEditor;
   const [banners, setBanners] = useState<PageBanner[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -90,6 +91,10 @@ export default function ManageBanners() {
   };
 
   const handleDelete = async (id: string) => {
+    if (!isAdmin) {
+      toast({ title: "अनुमति नहीं है", description: "केवल Admin ही बैनर डिलीट कर सकते हैं।", variant: "destructive" });
+      return;
+    }
     if (!confirm("Delete this banner?")) return;
     const { error } = await supabase.from("page_banners").delete().eq("id", id);
     if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
@@ -121,7 +126,7 @@ export default function ManageBanners() {
       />
       <div className="flex items-center justify-between mb-6">
         <h2 className="font-display text-xl font-bold text-foreground">Page Banners</h2>
-        {isAdmin && (
+        {canManage && (
           <button onClick={() => { resetForm(); setShowForm(true); }} className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-medium hover:opacity-90">
             <Plus className="w-4 h-4" /> Add Banner
           </button>
@@ -158,10 +163,12 @@ export default function ManageBanners() {
               <p className="text-xs text-muted-foreground">{banner.page_key} • {banner.is_active ? "Active" : "Inactive"}</p>
               <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{banner.subtitle}</p>
             </div>
-            {isAdmin && (
+            {canManage && (
               <div className="flex gap-1 flex-shrink-0">
-                <button onClick={() => startEdit(banner)} className="p-2 rounded-lg hover:bg-secondary"><Pencil className="w-4 h-4" /></button>
-                <button onClick={() => handleDelete(banner.id)} className="p-2 rounded-lg hover:bg-destructive/10 text-destructive"><Trash2 className="w-4 h-4" /></button>
+                <button onClick={() => startEdit(banner)} className="p-2 rounded-lg hover:bg-secondary" title="Edit banner"><Pencil className="w-4 h-4" /></button>
+                {isAdmin && (
+                  <button onClick={() => handleDelete(banner.id)} className="p-2 rounded-lg hover:bg-destructive/10 text-destructive" title="Delete banner"><Trash2 className="w-4 h-4" /></button>
+                )}
               </div>
             )}
           </div>

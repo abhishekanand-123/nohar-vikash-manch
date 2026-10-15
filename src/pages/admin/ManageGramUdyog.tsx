@@ -172,6 +172,10 @@ export default function ManageGramUdyog() {
   };
 
   const handleDelete = async (id: string, itemName: string) => {
+    if (!isAdmin) {
+      toast.error("केवल Admin ही इसे हटा सकते हैं।");
+      return;
+    }
     if (confirm(`क्या आप वाकई "${itemName}" को हटाना चाहते हैं?`)) {
       await deleteVillageService(id);
       toast.success("हटा दिया गया!");
