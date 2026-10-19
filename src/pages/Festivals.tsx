@@ -3,10 +3,12 @@ import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import PageBanner from "@/components/layout/PageBanner";
-import { Sparkles, Calendar, Filter, Search } from "lucide-react";
+import { Sparkles, Calendar, Filter, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { Tables } from "@/integrations/supabase/types";
 import HoverImagePreview from "@/components/common/HoverImagePreview";
 import SEO from "@/components/common/SEO";
+import GramUdyogBlogWidget from "@/components/common/GramUdyogBlogWidget";
+import { stripHtmlToPlainText } from "@/components/common/RichContentView";
 
 interface Blog {
   id: string;
@@ -32,10 +34,13 @@ function getPostYear(post: Blog): string {
   return new Date(post.created_at).getFullYear().toString();
 }
 
+const ITEMS_PER_PAGE = 6;
+
 export default function Festivals() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [activeYear, setActiveYear] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
@@ -52,6 +57,11 @@ export default function Festivals() {
     }
     load();
   }, []);
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeCategory, activeYear, searchQuery]);
 
   const categories = useMemo(() => [
     "All",
@@ -81,6 +91,21 @@ export default function Festivals() {
       return matchesCategory && matchesYear && matchesSearch;
     });
   }, [blogs, activeCategory, activeYear, searchQuery]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredBlogs.length / ITEMS_PER_PAGE));
+
+  const paginatedBlogs = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredBlogs.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredBlogs, currentPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    const blogHeader = document.getElementById("blog-list-top");
+    if (blogHeader) {
+      blogHeader.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <div>
@@ -163,17 +188,21 @@ export default function Festivals() {
           <>
             {filteredBlogs.length > 0 && (
               <>
-                <div className="flex items-center justify-between mb-6">
+                <div id="blog-list-top" className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6 scroll-mt-24">
                   <h3 className="font-display text-xl font-bold text-foreground">
                     Blog Posts {activeYear !== "All" ? `(${activeYear})` : ""}
                   </h3>
-                  <span className="text-xs text-muted-foreground">{filteredBlogs.length} posts found</span>
+                  <span className="text-xs text-muted-foreground font-medium">
+                    कुल {filteredBlogs.length} ब्लॉग (पेज {currentPage} / {totalPages})
+                  </span>
                 </div>
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
                   <AnimatePresence mode="popLayout">
-                    {filteredBlogs.map((post, i) => {
+                    {paginatedBlogs.map((post, i) => {
                       const year = getPostYear(post);
+                      const cleanContent = stripHtmlToPlainText(post.content);
+                      const rawSnippet = cleanContent;
                       return (
                         <motion.article
                           key={post.id}
@@ -185,12 +214,21 @@ export default function Festivals() {
                           className="bg-card rounded-2xl overflow-hidden shadow-card ring-1 ring-border hover:shadow-xl transition-all flex flex-col group"
                         >
                           {post.image && (
-                            <HoverImagePreview
-                              src={post.image}
-                              alt={post.title}
-                              containerClassName="aspect-video overflow-hidden relative"
-                              imageClassName="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                            />
+                            <div className="relative aspect-[16/10] sm:aspect-video overflow-hidden bg-muted/40 border-b border-border flex items-center justify-center">
+                              {/* Ambient blur backdrop */}
+                              <div
+                                className="absolute inset-0 bg-cover bg-center filter blur-lg opacity-25 scale-110 pointer-events-none"
+                                style={{ backgroundImage: `url(${post.image})` }}
+                              />
+                              {/* Foreground image - object-contain prevents cropping/cutting off on mobile */}
+                              <img
+                                src={post.image}
+                                alt={post.title}
+                                loading="lazy"
+                                decoding="async"
+                                className="relative z-10 max-h-full max-w-full object-contain p-1 group-hover:scale-105 transition-transform duration-300"
+                              />
+                            </div>
                           )}
                           <div className="p-6 flex-1 flex flex-col">
                             <div className="flex items-center justify-between gap-2 mb-2">
@@ -203,11 +241,13 @@ export default function Festivals() {
                               </span>
                             </div>
 
-                            <h3 className="font-display font-bold text-lg mt-1 mb-2 text-foreground group-hover:text-primary transition-colors">
+                            <h3 className="font-display font-bold text-lg mt-1 mb-2 text-foreground group-hover:text-primary transition-colors line-clamp-2">
                               {post.title}
                             </h3>
 
-                            <p className="text-sm text-muted-foreground mb-4 line-clamp-3 flex-1">{post.content}</p>
+                            <p className="text-sm text-muted-foreground mb-4 line-clamp-3 flex-1 leading-relaxed">
+                              {rawSnippet || "ब्लॉग का विस्तृत विवरण पढ़ने के लिए नीचे दिए गए लिंक पर क्लिक करें..."}
+                            </p>
 
                             {post.tags && post.tags.length > 0 && (
                               <div className="flex flex-wrap gap-1.5 mb-4">
@@ -231,7 +271,7 @@ export default function Festivals() {
                                     day: "numeric",
                                   })}
                               </span>
-                              <Link to={`/festivals/${post.id}`} className="text-primary font-medium hover:underline">
+                              <Link to={`/festivals/${post.id}`} className="text-primary font-semibold hover:underline">
                                 Read Details →
                               </Link>
                             </div>
@@ -241,8 +281,65 @@ export default function Festivals() {
                     })}
                   </AnimatePresence>
                 </div>
+
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                  <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-border pt-6">
+                    <p className="text-xs text-muted-foreground">
+                      दिखाए जा रहे हैं {(currentPage - 1) * ITEMS_PER_PAGE + 1} -{" "}
+                      {Math.min(currentPage * ITEMS_PER_PAGE, filteredBlogs.length)} (कुल {filteredBlogs.length} में से)
+                    </p>
+
+                    <div className="flex items-center gap-1.5 flex-wrap justify-center">
+                      {/* Previous Page */}
+                      <button
+                        type="button"
+                        onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                        disabled={currentPage === 1}
+                        className="flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-semibold bg-card border border-border text-foreground hover:bg-secondary disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                        <span>पिछला (Prev)</span>
+                      </button>
+
+                      {/* Numbered Page Buttons */}
+                      {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((pageNum) => (
+                        <button
+                          key={pageNum}
+                          type="button"
+                          onClick={() => handlePageChange(pageNum)}
+                          className={`w-9 h-9 rounded-xl text-xs font-bold transition-all ${
+                            currentPage === pageNum
+                              ? "bg-primary text-primary-foreground shadow-sm scale-105"
+                              : "bg-card border border-border text-foreground hover:bg-secondary"
+                          }`}
+                        >
+                          {pageNum}
+                        </button>
+                      ))}
+
+                      {/* Next Page */}
+                      <button
+                        type="button"
+                        onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                        disabled={currentPage === totalPages}
+                        className="flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-semibold bg-card border border-border text-foreground hover:bg-secondary disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                      >
+                        <span>अगला (Next)</span>
+                        <ChevronRight className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+                )}
               </>
             )}
+
+            {/* Gram Udyog Widget on Blog Page (Shows 3 services related to Gram Udyog) */}
+            <GramUdyogBlogWidget
+              limit={3}
+              title="ग्राम उद्योग एवं कामगार डायरेक्टरी"
+              subtitle="गाँव नोहर के शिक्षक, मिस्त्री, इलेक्ट्रीशियन, स्वास्थ्य कर्मी व कामगारों से सीधे संपर्क करें।"
+            />
 
             {filteredBlogs.length === 0 && (
               <div className="text-center py-12 bg-card rounded-2xl border border-dashed border-border max-w-md mx-auto">

@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { AnalyticsConsentProvider } from "@/contexts/AnalyticsConsentContext";
 import AnalyticsProvider from "@/components/analytics/AnalyticsProvider";
 import CookieConsentBanner from "@/components/analytics/CookieConsentBanner";
+import QuickScrollNavigator from "@/components/common/QuickScrollNavigator";
 
 export default function PublicLayout() {
   const location = useLocation();
@@ -26,6 +27,7 @@ export default function PublicLayout() {
           <Footer />
         </div>
       </AnalyticsProvider>
+      <QuickScrollNavigator />
       <CookieConsentBanner />
     </AnalyticsConsentProvider>
   );

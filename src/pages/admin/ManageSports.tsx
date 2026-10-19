@@ -5,6 +5,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { Pencil, Trash2, Plus } from "lucide-react";
 import { Tables } from "@/integrations/supabase/types";
+import RichTextEditor from "@/components/common/RichTextEditor";
+import RichContentView from "@/components/common/RichContentView";
 
 type Sport = Tables<"sports">;
 
@@ -124,7 +126,15 @@ export default function ManageSports() {
       {showForm && (
         <div className="bg-card rounded-xl p-6 ring-1 ring-border mb-6 space-y-4">
           <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Title" className="w-full px-4 py-3 rounded-xl bg-background border border-input text-foreground text-sm" />
-          <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Description" rows={4} className="w-full px-4 py-3 rounded-xl bg-background border border-input text-foreground text-sm" />
+          <div>
+            <label className="text-xs font-semibold text-foreground block mb-1">विवरण (Description & Links)</label>
+            <RichTextEditor
+              value={form.description}
+              onChange={(val) => setForm({ ...form, description: val })}
+              placeholder="स्पोर्ट्स या टूर्नामेंट का विवरण व लिंक यहाँ लिखें..."
+              minHeight="140px"
+            />
+          </div>
           <div className="grid sm:grid-cols-3 gap-4">
             <select value={form.sport_type} onChange={(e) => setForm({ ...form, sport_type: e.target.value })} className="w-full px-4 py-3 rounded-xl bg-background border border-input text-foreground text-sm">
               {sportTypes.map((type) => <option key={type} value={type}>{type}</option>)}
@@ -153,7 +163,9 @@ export default function ManageSports() {
               <p className="text-xs text-muted-foreground">
                 {item.sport_type || "General"} {item.event_date ? `• ${new Date(item.event_date).toLocaleDateString()}` : ""}
               </p>
-              <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{item.description}</p>
+              <div className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                <RichContentView content={item.description} compact />
+              </div>
               <span className={`inline-flex mt-2 px-2.5 py-1 rounded-full text-xs font-semibold ${item.status === "Upcoming" ? "bg-primary/10 text-primary" : item.status === "Ongoing" ? "bg-accent/20 text-accent-foreground" : "bg-muted text-muted-foreground"}`}>
                 {item.status || "Status"}
               </span>

@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Tables } from "@/integrations/supabase/types";
 import HoverImagePreview from "@/components/common/HoverImagePreview";
 import SEO from "@/components/common/SEO";
+import { formatAutoLinks } from "@/components/common/RichContentView";
 
 function getLanguage(): "hi" | "mai" | "en" {
   if (typeof window === "undefined") return "hi";
@@ -230,7 +231,11 @@ export default function Sports() {
                       {item.event_date ? new Date(item.event_date).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" }) : "Date will be announced"}
                       {item.sport_type ? ` • ${item.sport_type}` : ""}
                     </p>
-                    {item.description && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{item.description}</p>}
+                    {item.description && (
+                      <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                        {formatAutoLinks(item.description)}
+                      </div>
+                    )}
                   </div>
                   <span className={`px-3 py-1 rounded-full text-xs font-semibold ${item.status === "Upcoming" ? "bg-primary/10 text-primary" : item.status === "Ongoing" ? "bg-accent/20 text-accent-foreground" : "bg-muted text-muted-foreground"
                     }`}>

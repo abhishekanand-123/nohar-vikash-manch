@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Landmark, Sparkles, MapPin, Eye, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import RichContentView from "@/components/common/RichContentView";
 
 export interface HeritageItem {
   id: string;
@@ -150,9 +151,9 @@ export default function VillageHeritage() {
                   <h3 className="text-lg sm:text-xl font-bold font-display text-foreground group-hover:text-primary transition-colors line-clamp-1">
                     {item.title}
                   </h3>
-                  <p className="mt-2.5 text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-3">
-                    {item.description}
-                  </p>
+                  <div className="mt-2.5 text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-3">
+                    <RichContentView content={item.description} compact />
+                  </div>
                 </div>
 
                 <div className="mt-4 pt-4 border-t border-border/50 flex items-center justify-between text-xs font-semibold text-primary">
@@ -207,9 +208,10 @@ export default function VillageHeritage() {
                   <MapPin className="w-3.5 h-3.5 text-primary" />
                   <span>ग्राम नोहर (वार्ड स्तर), मधेपुरा, बिहार</span>
                 </div>
-                <p className="text-sm sm:text-base text-foreground/90 leading-relaxed whitespace-pre-line">
-                  {selectedItem.description}
-                </p>
+                <RichContentView
+                  content={selectedItem.description}
+                  className="text-sm sm:text-base text-foreground/90 leading-relaxed"
+                />
 
                 <div className="mt-6 flex justify-end">
                   <button

@@ -27,6 +27,8 @@ import {
   STATIC_SITEMAP_PAGES,
   SITE_DOMAIN,
 } from "@/lib/sitemap-generator";
+import RichTextEditor from "@/components/common/RichTextEditor";
+import RichContentView, { stripHtmlToPlainText } from "@/components/common/RichContentView";
 
 interface Blog {
   id: string;
@@ -517,15 +519,17 @@ export default function ManageBlogs() {
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-foreground block mb-1">
-                Content & Story (विवरण)
+              <label className="text-xs font-semibold text-foreground block mb-1.5 flex items-center justify-between">
+                <span>Content & Story (विवरण व लिंक)</span>
+                <span className="text-[11px] text-muted-foreground font-normal">
+                  (यहाँ आप टेक्स्ट को बोल्ड, हेडिंग व लिंक जोड़ सकते हैं)
+                </span>
               </label>
-              <textarea
+              <RichTextEditor
                 value={form.content}
-                onChange={(e) => setForm({ ...form, content: e.target.value })}
-                placeholder="Write detailed festival description, memories, rituals..."
-                rows={5}
-                className="w-full px-4 py-2.5 rounded-xl bg-background border border-input text-foreground text-sm focus:ring-2 focus:ring-primary"
+                onChange={(val) => setForm({ ...form, content: val })}
+                placeholder="यहाँ ब्लॉग या त्यौहार की विस्तृत जानकारी, कहानी, तिथियाँ या आधिकारिक लिंक लिखें..."
+                minHeight="220px"
               />
             </div>
 
@@ -717,7 +721,10 @@ export default function ManageBlogs() {
                 </div>
 
                 <h3 className="font-semibold text-foreground text-base">{b.title}</h3>
-                <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{b.content}</p>
+                <div className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                  <RichContentView content={b.content} compact />
+                  {!b.content?.trim() && <p>कोई विवरण उपलब्ध नहीं</p>}
+                </div>
 
                 {b.tags && b.tags.length > 0 && (
                   <div className="flex flex-wrap gap-1 mt-2">

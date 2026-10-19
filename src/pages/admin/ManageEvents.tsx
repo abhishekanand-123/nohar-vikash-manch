@@ -4,6 +4,8 @@ import { uploadFile } from "@/lib/supabase-helpers";
 import { useAuth } from "@/contexts/AuthContext";
 import { toast } from "@/hooks/use-toast";
 import { Pencil, Trash2, Plus } from "lucide-react";
+import RichTextEditor from "@/components/common/RichTextEditor";
+import RichContentView from "@/components/common/RichContentView";
 
 interface Event {
   id: string;
@@ -92,7 +94,15 @@ export default function ManageEvents() {
       {showForm && (
         <div className="bg-card rounded-xl p-6 ring-1 ring-border mb-6 space-y-4">
           <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Event title" className="w-full px-4 py-3 rounded-xl bg-background border border-input text-foreground text-sm" />
-          <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Description" rows={4} className="w-full px-4 py-3 rounded-xl bg-background border border-input text-foreground text-sm" />
+          <div>
+            <label className="text-xs font-semibold text-foreground block mb-1">विवरण (Description & Links)</label>
+            <RichTextEditor
+              value={form.description}
+              onChange={(val) => setForm({ ...form, description: val })}
+              placeholder="इवेंट का विवरण व लिंक यहाँ लिखें..."
+              minHeight="140px"
+            />
+          </div>
           <input type="date" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} className="w-full px-4 py-3 rounded-xl bg-background border border-input text-foreground text-sm" />
           <input type="file" accept="image/*" onChange={(e) => setForm({ ...form, imageFile: e.target.files?.[0] ?? null })} className="text-sm" />
           <div className="flex gap-3">
@@ -111,7 +121,9 @@ export default function ManageEvents() {
             <div className="flex-1 min-w-0">
               <h3 className="font-semibold text-foreground">{e.title}</h3>
               <p className="text-xs text-muted-foreground">{e.date ? new Date(e.date).toLocaleDateString() : "No date"}</p>
-              <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{e.description}</p>
+              <div className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                <RichContentView content={e.description} compact />
+              </div>
             </div>
             {canManage && (
               <div className="flex gap-1 flex-shrink-0">

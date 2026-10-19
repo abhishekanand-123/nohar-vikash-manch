@@ -32,6 +32,7 @@ import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import SEO from "@/components/common/SEO";
 import { useAuth } from "@/contexts/AuthContext";
+import RichTextEditor from "@/components/common/RichTextEditor";
 
 const DEFAULT_CATEGORIES = [
   "शिक्षक (Teacher)",
@@ -511,12 +512,17 @@ export default function ManageGramUdyog() {
 
             {/* Extra Description */}
             <div className="space-y-1">
-              <label className="font-semibold text-foreground">अतिरिक्त विवरण (Description)</label>
-              <Textarea
+              <label className="font-semibold text-foreground flex items-center justify-between">
+                <span>अतिरिक्त विवरण (Description व लिंक्स)</span>
+                <span className="text-[10px] text-muted-foreground font-normal">
+                  (यहाँ आप लिंक या विशेष विवरण जोड़ सकते हैं)
+                </span>
+              </label>
+              <RichTextEditor
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                placeholder="काम का समय, विशेष सुविधाएँ या अन्य जानकारी..."
-                rows={2}
+                onChange={(val) => setDescription(val)}
+                placeholder="काम का समय, विशेष सुविधाएँ, वेबसाइट/सोशल लिंक या अन्य जानकारी..."
+                minHeight="140px"
               />
             </div>
 

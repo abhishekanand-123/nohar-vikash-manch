@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import HoverImagePreview from "@/components/common/HoverImagePreview";
 import { Calendar, Filter, ArrowRight, Sparkles } from "lucide-react";
+import { stripHtmlToPlainText } from "@/components/common/RichContentView";
 
 interface Blog {
   id: string;
@@ -141,10 +142,12 @@ export default function FestivalHighlights() {
             <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+          <div className="grid sm:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto">
             <AnimatePresence mode="popLayout">
-              {filteredFestivals.slice(0, 6).map((f, i) => {
+              {filteredFestivals.slice(0, 2).map((f, i) => {
                 const year = getPostYear(f);
+                const cleanContent = stripHtmlToPlainText(f.content);
+                const rawSnippet = cleanContent;
                 return (
                   <motion.div
                     key={f.id}
@@ -159,16 +162,25 @@ export default function FestivalHighlights() {
                       className="block h-full bg-card rounded-2xl overflow-hidden shadow-card ring-1 ring-border hover:shadow-xl hover:ring-primary/40 transition-all duration-300 group flex flex-col"
                     >
                       {f.image && (
-                        <HoverImagePreview
-                          src={f.image}
-                          alt={f.title}
-                          containerClassName="aspect-video overflow-hidden relative"
-                          imageClassName="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
+                        <div className="relative aspect-[16/10] sm:aspect-video overflow-hidden bg-muted/40 border-b border-border flex items-center justify-center">
+                          {/* Ambient blur backdrop */}
+                          <div
+                            className="absolute inset-0 bg-cover bg-center filter blur-lg opacity-25 scale-110 pointer-events-none"
+                            style={{ backgroundImage: `url(${f.image})` }}
+                          />
+                          {/* Foreground image - object-contain prevents image cutting off on mobile */}
+                          <img
+                            src={f.image}
+                            alt={f.title}
+                            loading="lazy"
+                            decoding="async"
+                            className="relative z-10 max-h-full max-w-full object-contain p-1 group-hover:scale-105 transition-transform duration-300"
+                          />
+                        </div>
                       )}
 
-                      <div className="p-5 flex-1 flex flex-col">
-                        <div className="flex items-center justify-between gap-2 mb-2">
+                      <div className="p-5 sm:p-6 flex-1 flex flex-col">
+                        <div className="flex items-center justify-between gap-2 mb-2.5">
                           {f.category ? (
                             <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary uppercase tracking-wide">
                               {f.category}
@@ -181,15 +193,15 @@ export default function FestivalHighlights() {
                           </span>
                         </div>
 
-                        <h3 className="font-display font-semibold text-lg text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                        <h3 className="font-display font-semibold text-lg sm:text-xl text-foreground group-hover:text-primary transition-colors line-clamp-2">
                           {f.title}
                         </h3>
 
-                        <p className="text-sm text-muted-foreground mt-2 line-clamp-2 flex-1">
-                          {f.content || "Read latest festival updates and stories from the village."}
+                        <p className="text-sm text-muted-foreground mt-2 line-clamp-3 flex-1 leading-relaxed">
+                          {rawSnippet || "नोहर गाँव के इस पावन पर्व व उत्सव का विस्तृत विवरण और तस्वीरें यहाँ देखें..."}
                         </p>
 
-                        <div className="mt-4 pt-3 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
+                        <div className="mt-5 pt-3.5 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
                           <span>
                             {f.festival_date ||
                               new Date(f.created_at).toLocaleDateString("en-IN", {
@@ -198,8 +210,8 @@ export default function FestivalHighlights() {
                                 day: "numeric",
                               })}
                           </span>
-                          <span className="text-primary font-medium flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                            पूरी जानकारी <ArrowRight className="w-3.5 h-3.5" />
+                          <span className="text-primary font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                            पूरी जानकारी पढ़ें <ArrowRight className="w-3.5 h-3.5" />
                           </span>
                         </div>
                       </div>

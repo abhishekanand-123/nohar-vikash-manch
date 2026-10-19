@@ -15,6 +15,8 @@ import {
   Loader2,
   Sparkles,
 } from "lucide-react";
+import RichTextEditor from "@/components/common/RichTextEditor";
+import RichContentView from "@/components/common/RichContentView";
 
 export interface HeritageRecord {
   id: string;
@@ -305,9 +307,9 @@ export default function ManageHeritage() {
               <div className="p-5 flex-1 flex flex-col justify-between">
                 <div>
                   <h3 className="font-bold text-lg text-foreground font-display line-clamp-1">{item.title}</h3>
-                  <p className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-3">
-                    {item.description}
-                  </p>
+                  <div className="mt-2 text-xs sm:text-sm text-muted-foreground leading-relaxed line-clamp-3">
+                    <RichContentView content={item.description} compact />
+                  </div>
                 </div>
 
                 {/* Actions */}
@@ -429,16 +431,17 @@ export default function ManageHeritage() {
 
               {/* Description */}
               <div>
-                <label className="block text-xs font-semibold text-foreground mb-1.5">
-                  विवरण / Description <span className="text-destructive">*</span>
+                <label className="block text-xs font-semibold text-foreground mb-1.5 flex items-center justify-between">
+                  <span>विवरण / Description व लिंक्स <span className="text-destructive">*</span></span>
+                  <span className="text-[10px] text-muted-foreground font-normal">
+                    (बोल्ड, हेडिंग या लिंक जोड़ सकते हैं)
+                  </span>
                 </label>
-                <textarea
-                  required
-                  rows={4}
+                <RichTextEditor
                   value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                  onChange={(val) => setDescription(val)}
                   placeholder="इस धरोहर या गाँव की पहचान का ऐतिहासिक व सांस्कृतिक विवरण लिखें..."
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-background border border-input text-foreground text-sm focus:ring-2 focus:ring-primary focus:outline-none leading-relaxed"
+                  minHeight="140px"
                 />
               </div>
 

@@ -10,6 +10,7 @@ import VideoEmbed from "@/components/common/VideoEmbed";
 import { supabase } from "@/integrations/supabase/client";
 import { Tables } from "@/integrations/supabase/types";
 import SEO from "@/components/common/SEO";
+import RichContentView from "@/components/common/RichContentView";
 
 interface RamnavamiBlog {
   id: string;
@@ -116,9 +117,13 @@ export default function Ramnavami() {
               <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
                 <h2 className="font-display font-bold text-2xl mb-4 text-foreground">{sectionTitle}</h2>
                 <div className="space-y-4 text-muted-foreground leading-relaxed">
-                  {paragraphs.map((p, idx) => (
-                    <p key={idx}>{p}</p>
-                  ))}
+                  {post?.content ? (
+                    <RichContentView content={post.content} />
+                  ) : (
+                    paragraphs.map((p, idx) => (
+                      <p key={idx}>{p}</p>
+                    ))
+                  )}
                 </div>
                 {post?.id && (
                   <p className="mt-6">

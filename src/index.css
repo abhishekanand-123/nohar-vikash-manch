@@ -85,16 +85,50 @@
   }
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   body {
     @apply bg-background text-foreground;
     font-family: 'Plus Jakarta Sans', sans-serif;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Outfit', sans-serif;
     letter-spacing: -0.02em;
     text-wrap: balance;
+  }
+
+  /* Universal distinct link color (vibrant blue) */
+  .rich-rendered-content a,
+  .rich-plain-content a,
+  .prose a {
+    color: #2563eb !important;
+    text-decoration: underline !important;
+    text-underline-offset: 4px !important;
+    text-decoration-color: rgba(37, 99, 235, 0.6) !important;
+    font-weight: 600 !important;
+    word-break: break-all !important;
+    transition: color 0.15s ease, text-decoration-color 0.15s ease;
+  }
+  .rich-rendered-content a:hover,
+  .rich-plain-content a:hover,
+  .prose a:hover {
+    color: #1d4ed8 !important;
+    text-decoration-color: #1d4ed8 !important;
+  }
+  .dark .rich-rendered-content a,
+  .dark .rich-plain-content a,
+  .dark .prose a {
+    color: #60a5fa !important;
+    text-decoration-color: rgba(96, 165, 250, 0.6) !important;
+  }
+  .dark .rich-rendered-content a:hover,
+  .dark .rich-plain-content a:hover,
+  .dark .prose a:hover {
+    color: #93c5fd !important;
+    text-decoration-color: #93c5fd !important;
   }
 }
 
@@ -206,6 +240,25 @@ body {
 
 .notranslate {
   translate: no !important;
+}
+
+/* Content links styling matching site brand colors (Primary Green -> Saffron Accent on Hover) */
+.rich-rendered-content a,
+.rich-plain-content a {
+  color: hsl(var(--primary)) !important;
+  text-decoration: underline !important;
+  text-underline-offset: 4px !important;
+  text-decoration-color: hsl(var(--primary) / 0.6) !important;
+  font-weight: 600 !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  cursor: pointer !important;
+}
+
+.rich-rendered-content a:hover,
+.rich-plain-content a:hover {
+  color: hsl(var(--accent)) !important;
+  text-decoration-color: hsl(var(--accent)) !important;
+  text-underline-offset: 2px !important;
 }
 
 

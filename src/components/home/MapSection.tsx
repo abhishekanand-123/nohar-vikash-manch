@@ -1,4 +1,9 @@
+import { useState } from "react";
+import { MapPin, Navigation } from "lucide-react";
+
 export default function MapSection() {
+  const [interactive, setInteractive] = useState(false);
+
   return (
     <section className="py-14 sm:py-20">
       <div className="container mx-auto px-4 sm:px-6">
@@ -9,7 +14,11 @@ export default function MapSection() {
             ग्राम – नौहर, पोस्ट – ग्वालपाड़ा / ग्वालपारा, जिला – मधेपुरा, बिहार, भारत (Nohar, Gwalpara, Madhepura, Bihar)
           </p>
         </div>
-        <div className="rounded-2xl overflow-hidden shadow-card ring-1 ring-border aspect-[4/3] sm:aspect-video min-h-[220px]">
+
+        <div
+          className="relative rounded-2xl overflow-hidden shadow-card ring-1 ring-border aspect-[4/3] sm:aspect-video min-h-[220px]"
+          onClick={() => setInteractive(true)}
+        >
           <iframe
             title="Nohar Village Map"
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14371.54!2d86.78!3d25.92!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDU1JzEyLjAiTiA4NsKwNDYnNDguMCJF!5e0!3m2!1sen!2sin!4v1"
@@ -19,7 +28,38 @@ export default function MapSection() {
             allowFullScreen
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
+            className={interactive ? "pointer-events-auto" : "pointer-events-none sm:pointer-events-auto"}
           />
+
+          {/* Mobile Touch Guard: prevents accidental swipe interception while finger-scrolling */}
+          {!interactive && (
+            <div className="sm:hidden absolute inset-0 bg-transparent flex items-end justify-center pb-4 pointer-events-auto">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setInteractive(true);
+                }}
+                className="bg-card/90 backdrop-blur-md text-foreground text-xs font-semibold px-4 py-2 rounded-full shadow-lg border border-border flex items-center gap-1.5 active:scale-95"
+              >
+                <MapPin className="w-3.5 h-3.5 text-primary" />
+                <span>मानचित्र चलाने के लिए टैप करें (Tap to move map)</span>
+              </button>
+            </div>
+          )}
+
+          {interactive && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setInteractive(false);
+              }}
+              className="sm:hidden absolute top-3 right-3 bg-card/90 backdrop-blur-md text-foreground text-[11px] font-semibold px-3 py-1.5 rounded-full shadow border border-border"
+            >
+              लॉन्च लॉक करें (Lock Map)
+            </button>
+          )}
         </div>
       </div>
     </section>

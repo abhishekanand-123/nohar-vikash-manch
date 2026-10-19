@@ -16,6 +16,7 @@ import {
   Award,
 } from "lucide-react";
 import { fetchVillageServices, VillageService } from "@/lib/servicesApi";
+import { formatAutoLinks } from "@/components/common/RichContentView";
 
 function getCategoryIcon(category: string) {
   const cat = category.toLowerCase();
@@ -155,19 +156,26 @@ export default function GramUdyogPreview() {
                   <div>
                     {/* Top Info */}
                     <div className="flex items-start justify-between gap-3">
-                      <div className="flex items-center gap-3 min-w-0">
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
                         {item.image ? (
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="w-12 h-12 rounded-xl object-cover border border-border shrink-0"
-                          />
+                          <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 border border-border bg-muted flex items-center justify-center">
+                            <img
+                              src={item.image}
+                              alt={item.name}
+                              loading="lazy"
+                              decoding="async"
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                (e.target as HTMLElement).style.display = "none";
+                              }}
+                            />
+                          </div>
                         ) : (
                           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 text-primary flex items-center justify-center shrink-0 border border-primary/20">
                             <IconComp className="w-6 h-6" />
                           </div>
                         )}
-                        <div className="min-w-0">
+                        <div className="min-w-0 flex-1">
                           <h3 className="font-bold text-base text-foreground group-hover:text-primary transition-colors truncate">
                             {item.name}
                           </h3>
@@ -186,14 +194,20 @@ export default function GramUdyogPreview() {
                       )}
                     </div>
 
-                    {/* Skill & Address */}
+                    {/* Skill, Description & Address */}
                     <div className="mt-4 space-y-2 text-xs">
                       {item.skill && (
-                        <div className="bg-secondary/50 p-2.5 rounded-xl text-foreground font-medium text-[11px]">
+                        <div className="bg-secondary/50 p-2.5 rounded-xl text-foreground font-medium text-[11px] leading-relaxed break-words">
                           <span className="text-muted-foreground block text-[10px] font-normal uppercase tracking-wider mb-0.5">
                             विशेषता:
                           </span>
-                          {item.skill}
+                          {formatAutoLinks(item.skill)}
+                        </div>
+                      )}
+
+                      {item.description && (
+                        <div className="text-muted-foreground text-[11px] leading-relaxed break-words">
+                          {formatAutoLinks(item.description)}
                         </div>
                       )}
 
