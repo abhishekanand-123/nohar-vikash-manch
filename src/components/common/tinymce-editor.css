@@ -1,5 +1,8 @@
 /* TinyMCE sits inside admin cards and Radix dialogs */
 .tox-tinymce {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
   border-radius: 0.75rem !important;
   overflow: hidden;
 }
@@ -8,7 +11,33 @@
   z-index: 80 !important;
 }
 
+.tinymce-editor-shell {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
 .tinymce-editor-shell .tox-statusbar {
   border-bottom-left-radius: 0.75rem;
   border-bottom-right-radius: 0.75rem;
+}
+
+/* Mobile optimizations: Hide redundant desktop menubar to maximize typing area on phones */
+@media (max-width: 640px) {
+  .tinymce-editor-shell .tox-menubar {
+    display: none !important;
+  }
+
+  .tinymce-editor-shell .tox-toolbar__primary {
+    padding: 2px 4px !important;
+  }
+
+  .tinymce-editor-shell .tox-tbtn {
+    margin: 1px !important;
+  }
+
+  .tinymce-editor-shell .tox-statusbar {
+    font-size: 11px !important;
+    padding: 2px 8px !important;
+  }
 }

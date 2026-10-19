@@ -32,6 +32,7 @@ export interface TinyMceEditorProps {
   minHeight?: string;
   className?: string;
   label?: string;
+  menubar?: boolean;
 }
 
 function parseMinHeight(minHeight: string | undefined): number {
@@ -64,6 +65,7 @@ export default function TinyMceEditor({
   minHeight = "180px",
   className = "",
   label,
+  menubar = true,
 }: TinyMceEditorProps) {
   const height = parseMinHeight(minHeight);
 
@@ -81,7 +83,7 @@ export default function TinyMceEditor({
   const init = useMemo(
     () => ({
       height,
-      menubar: true,
+      menubar,
       branding: false,
       promotion: false,
       skin: false,
@@ -112,7 +114,7 @@ export default function TinyMceEditor({
         img { max-width: 100%; height: auto; }
       `,
     }),
-    [height, placeholder],
+    [height, placeholder, menubar],
   );
 
   return (

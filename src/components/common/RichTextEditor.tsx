@@ -7,6 +7,7 @@ interface RichTextEditorProps {
   minHeight?: string;
   className?: string;
   label?: string;
+  menubar?: boolean;
 }
 
 const TinyMceEditor = lazy(() => import("./TinyMceEditor"));
