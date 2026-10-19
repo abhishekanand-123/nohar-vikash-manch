@@ -22,7 +22,7 @@ import PageBanner from "@/components/layout/PageBanner";
 import { fetchVillageServices, VillageService } from "@/lib/servicesApi";
 import SEO from "@/components/common/SEO";
 import { toast } from "sonner";
-import { formatAutoLinks } from "@/components/common/RichContentView";
+import RichContentView, { formatAutoLinks } from "@/components/common/RichContentView";
 
 // Helper to get category icon
 function getCategoryIcon(category: string) {
@@ -288,7 +288,7 @@ export default function GramUdyog() {
 
                         {item.description && (
                           <div className="text-muted-foreground text-[11px] leading-relaxed break-words">
-                            {formatAutoLinks(item.description)}
+                            <RichContentView content={item.description} compact />
                           </div>
                         )}
 

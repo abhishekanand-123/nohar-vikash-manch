@@ -6,7 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Tables } from "@/integrations/supabase/types";
 import HoverImagePreview from "@/components/common/HoverImagePreview";
 import SEO from "@/components/common/SEO";
-import { formatAutoLinks } from "@/components/common/RichContentView";
+import RichContentView from "@/components/common/RichContentView";
 
 function getLanguage(): "hi" | "mai" | "en" {
   if (typeof window === "undefined") return "hi";
@@ -233,7 +233,7 @@ export default function Sports() {
                     </p>
                     {item.description && (
                       <div className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                        {formatAutoLinks(item.description)}
+                        <RichContentView content={item.description} compact />
                       </div>
                     )}
                   </div>

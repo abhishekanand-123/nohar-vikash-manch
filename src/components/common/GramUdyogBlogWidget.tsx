@@ -16,7 +16,7 @@ import {
   Award,
 } from "lucide-react";
 import { fetchVillageServices, VillageService } from "@/lib/servicesApi";
-import { formatAutoLinks } from "@/components/common/RichContentView";
+import RichContentView, { formatAutoLinks } from "@/components/common/RichContentView";
 
 function getCategoryIcon(category: string) {
   const cat = category.toLowerCase();
@@ -172,7 +172,7 @@ export default function GramUdyogBlogWidget({
 
                     {item.description && (
                       <div className="text-muted-foreground text-[11px] leading-relaxed break-words">
-                        {formatAutoLinks(item.description)}
+                        <RichContentView content={item.description} compact />
                       </div>
                     )}
 

@@ -1,0 +1,14 @@
+/* TinyMCE sits inside admin cards and Radix dialogs */
+.tox-tinymce {
+  border-radius: 0.75rem !important;
+  overflow: hidden;
+}
+
+.tox-tinymce-aux {
+  z-index: 80 !important;
+}
+
+.tinymce-editor-shell .tox-statusbar {
+  border-bottom-left-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
+}

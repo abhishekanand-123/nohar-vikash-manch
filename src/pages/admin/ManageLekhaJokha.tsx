@@ -26,6 +26,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import RichTextEditor from "@/components/common/RichTextEditor";
+import RichContentView from "@/components/common/RichContentView";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -634,9 +636,9 @@ export default function ManageLekhaJokha() {
                     </h4>
 
                     {item.description && (
-                      <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
-                        {item.description}
-                      </p>
+                      <div className="line-clamp-2">
+                        <RichContentView content={item.description} compact />
+                      </div>
                     )}
 
                     {(item.total_income || item.total_expense) && (
@@ -1262,12 +1264,11 @@ export default function ManageLekhaJokha() {
               <label className="block text-xs font-semibold text-foreground mb-1">
                 विस्तृत विवरण
               </label>
-              <Textarea
+              <RichTextEditor
                 value={eventDescription}
-                onChange={(e) => setEventDescription(e.target.value)}
+                onChange={setEventDescription}
                 placeholder="कार्यक्रम का विवरण लिखें..."
-                rows={2}
-                className="rounded-xl text-xs"
+                minHeight="160px"
               />
             </div>
 

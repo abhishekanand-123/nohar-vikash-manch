@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import VideoEmbed from "./VideoEmbed";
+import RichContentView from "./RichContentView";
 
 interface VideoShowcaseItemProps {
   title: string;
@@ -37,7 +38,10 @@ export default function VideoShowcaseItem({
             {title}
           </Heading>
           {description?.trim() && (
-            <p className="mt-1.5 max-w-3xl text-sm leading-relaxed text-muted-foreground sm:mt-3 sm:text-base">{description}</p>
+            <RichContentView
+              content={description}
+              className="mt-1.5 max-w-3xl text-sm leading-relaxed text-muted-foreground sm:mt-3 sm:text-base"
+            />
           )}
           <div className="mt-3 w-full min-w-0 sm:mt-6">
             <VideoEmbed

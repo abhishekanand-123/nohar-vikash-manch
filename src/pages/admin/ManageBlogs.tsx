@@ -522,7 +522,7 @@ export default function ManageBlogs() {
               <label className="text-xs font-semibold text-foreground block mb-1.5 flex items-center justify-between">
                 <span>Content & Story (विवरण व लिंक)</span>
                 <span className="text-[11px] text-muted-foreground font-normal">
-                  (यहाँ आप टेक्स्ट को बोल्ड, हेडिंग व लिंक जोड़ सकते हैं)
+                  TinyMCE — बोल्ड, हेडिंग, टेबल, इमेज व लिंक
                 </span>
               </label>
               <RichTextEditor

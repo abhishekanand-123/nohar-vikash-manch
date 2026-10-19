@@ -8,6 +8,7 @@ import { Pencil, Trash2, Plus, BarChart3 } from "lucide-react";
 import { toEmbedUrl } from "@/lib/video-embed";
 import { PAGE_VIDEO_OPTIONS } from "@/lib/page-video-routes";
 import { Tables } from "@/integrations/supabase/types";
+import RichTextEditor from "@/components/common/RichTextEditor";
 
 type VideoRow = Tables<"videos">;
 type Placement = VideoRow["placement"];
@@ -266,12 +267,11 @@ export default function ManageVideos() {
             placeholder="Title"
             className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm text-foreground"
           />
-          <textarea
+          <RichTextEditor
             value={form.description}
-            onChange={(e) => setForm({ ...form, description: e.target.value })}
-            placeholder="Description (optional)"
-            rows={2}
-            className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm text-foreground"
+            onChange={(val) => setForm({ ...form, description: val })}
+            placeholder="वीडियो का विवरण यहाँ लिखें..."
+            minHeight="140px"
           />
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground">Video file</label>

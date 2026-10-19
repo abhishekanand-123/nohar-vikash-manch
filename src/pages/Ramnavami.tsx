@@ -147,7 +147,9 @@ export default function Ramnavami() {
                       viewport={{ once: true }}
                     >
                       <h3 className="font-display font-semibold text-lg text-foreground mb-2">{v.title}</h3>
-                      {v.description && <p className="text-muted-foreground text-sm mb-3 leading-relaxed">{v.description}</p>}
+                      {v.description && (
+                        <RichContentView content={v.description} className="text-muted-foreground text-sm mb-3 leading-relaxed" />
+                      )}
                       <VideoEmbed embedUrl={v.embed_url} fileUrl={v.file_url} title={v.title} videoId={v.id} />
                     </motion.div>
                   ))}

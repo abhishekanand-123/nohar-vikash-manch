@@ -35,6 +35,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import HoverImagePreview from "@/components/common/HoverImagePreview";
 import SEO from "@/components/common/SEO";
+import RichContentView from "@/components/common/RichContentView";
 import { toast } from "sonner";
 
 export default function LekhaJokha() {
@@ -405,9 +406,9 @@ export default function LekhaJokha() {
                             </h4>
 
                             {item.description && (
-                              <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
-                                {item.description}
-                              </p>
+                              <div className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
+                                <RichContentView content={item.description} compact />
+                              </div>
                             )}
 
                             {/* Financial Mini Tags if present */}
@@ -626,9 +627,9 @@ export default function LekhaJokha() {
                           )}
 
                           {event.description && (
-                            <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
-                              {event.description}
-                            </p>
+                            <div className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                              <RichContentView content={event.description} compact />
+                            </div>
                           )}
 
                           {/* Financial Ledger Mini Cards */}
@@ -873,9 +874,7 @@ export default function LekhaJokha() {
               {selectedEvent.description && (
                 <div className="space-y-2">
                   <h5 className="text-sm font-bold text-foreground">विस्तृत विवरण (Description)</h5>
-                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    {selectedEvent.description}
-                  </p>
+                  <RichContentView content={selectedEvent.description} className="text-xs sm:text-sm text-muted-foreground" />
                 </div>
               )}
 

@@ -8,7 +8,7 @@ import { Tables } from "@/integrations/supabase/types";
 import HoverImagePreview from "@/components/common/HoverImagePreview";
 import SEO from "@/components/common/SEO";
 import GramUdyogBlogWidget from "@/components/common/GramUdyogBlogWidget";
-import { stripHtmlToPlainText } from "@/components/common/RichContentView";
+import RichContentView, { stripHtmlToPlainText } from "@/components/common/RichContentView";
 
 interface Blog {
   id: string;
@@ -391,9 +391,13 @@ export default function Festivals() {
                               })
                             : "Date to be announced"}
                         </p>
-                        <p className="text-sm text-muted-foreground mt-3 line-clamp-3">
-                          {event.description || "More details will be shared soon."}
-                        </p>
+                        <div className="text-sm text-muted-foreground mt-3 line-clamp-3">
+                          {event.description ? (
+                            <RichContentView content={event.description} compact />
+                          ) : (
+                            "More details will be shared soon."
+                          )}
+                        </div>
                       </div>
                     </motion.article>
                   ))}
