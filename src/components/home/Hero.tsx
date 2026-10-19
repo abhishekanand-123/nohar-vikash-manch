@@ -84,13 +84,13 @@ export default function Hero() {
   const titleMotion = prefersReducedMotion
     ? {}
     : {
-        scale: [1, 1.03, 1],
-        textShadow: [
-          "0 0 0px rgba(255,255,255,0)",
-          "0 0 36px rgba(255,255,255,0.4)",
-          "0 0 0px rgba(255,255,255,0)",
-        ],
-      };
+      scale: [1, 1.03, 1],
+      textShadow: [
+        "0 0 0px rgba(255,255,255,0)",
+        "0 0 36px rgba(255,255,255,0.4)",
+        "0 0 0px rgba(255,255,255,0)",
+      ],
+    };
 
   const titleTransition = prefersReducedMotion
     ? undefined
@@ -189,3 +189,4 @@ export default function Hero() {
     </section>
   );
 }
+
