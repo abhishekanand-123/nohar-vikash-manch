@@ -179,19 +179,14 @@ export default function FestivalDetails() {
           </div>
         )}
 
-        {/* Main Featured Blog Image (Adaptive Zero-Crop with Ambient Backdrop) */}
+        {/* Main Featured Blog Image (Adaptive Zero-Crop with clean high-performance backdrop) */}
         {post.image && (
-          <div className="mt-7 mb-8 rounded-2xl overflow-hidden border border-border bg-muted/40 shadow-sm relative group flex items-center justify-center">
-            {/* Ambient blurred backdrop so portrait / poster images fill the container smoothly */}
-            <div
-              className="absolute inset-0 bg-cover bg-center filter blur-xl opacity-25 scale-110 pointer-events-none"
-              style={{ backgroundImage: `url(${post.image})` }}
-            />
+          <div className="mt-7 mb-8 rounded-2xl overflow-hidden border border-border bg-slate-100 dark:bg-slate-900/60 shadow-sm relative group flex items-center justify-center p-2">
             {/* Foreground image: object-contain so 100% of the image is visible on mobile and desktop without any cut-offs */}
             <img
               src={post.image}
               alt={post.title}
-              className="relative z-10 w-full max-h-[380px] sm:max-h-[500px] md:max-h-[580px] object-contain mx-auto block p-1.5"
+              className="w-full max-h-[380px] sm:max-h-[500px] md:max-h-[580px] object-contain mx-auto block rounded-xl"
               loading="eager"
             />
           </div>

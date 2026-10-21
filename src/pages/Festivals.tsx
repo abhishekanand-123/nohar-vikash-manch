@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -198,38 +198,30 @@ export default function Festivals() {
                 </div>
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
-                  <AnimatePresence mode="popLayout">
-                    {paginatedBlogs.map((post, i) => {
-                      const year = getPostYear(post);
-                      const cleanContent = stripHtmlToPlainText(post.content);
-                      const rawSnippet = cleanContent;
-                      return (
-                        <motion.article
-                          key={post.id}
-                          layout
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, scale: 0.95 }}
-                          transition={{ delay: i * 0.05 }}
-                          className="bg-card rounded-2xl overflow-hidden shadow-card ring-1 ring-border hover:shadow-xl transition-all flex flex-col group"
-                        >
-                          {post.image && (
-                            <div className="relative aspect-[16/10] sm:aspect-video overflow-hidden bg-muted/40 border-b border-border flex items-center justify-center">
-                              {/* Ambient blur backdrop */}
-                              <div
-                                className="absolute inset-0 bg-cover bg-center filter blur-lg opacity-25 scale-110 pointer-events-none"
-                                style={{ backgroundImage: `url(${post.image})` }}
-                              />
-                              {/* Foreground image - object-contain prevents cropping/cutting off on mobile */}
-                              <img
-                                src={post.image}
-                                alt={post.title}
-                                loading="lazy"
-                                decoding="async"
-                                className="relative z-10 max-h-full max-w-full object-contain p-1 group-hover:scale-105 transition-transform duration-300"
-                              />
-                            </div>
-                          )}
+                  {paginatedBlogs.map((post) => {
+                    const year = getPostYear(post);
+                    const cleanContent = stripHtmlToPlainText(post.content);
+                    const rawSnippet = cleanContent;
+                    return (
+                      <motion.article
+                        key={post.id}
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.25, ease: "easeOut" }}
+                        className="bg-card rounded-2xl overflow-hidden shadow-card ring-1 ring-border hover:shadow-xl transition-shadow flex flex-col group"
+                      >
+                        {post.image && (
+                          <div className="relative aspect-[16/10] sm:aspect-video overflow-hidden bg-slate-100 dark:bg-slate-900/60 border-b border-border flex items-center justify-center p-1.5">
+                            {/* Foreground image - object-contain preserves full banner/poster without cropping */}
+                            <img
+                              src={post.image}
+                              alt={post.title}
+                              loading="lazy"
+                              decoding="async"
+                              className="w-full h-full object-contain rounded-lg group-hover:scale-[1.02] transition-transform duration-300"
+                            />
+                          </div>
+                        )}
                           <div className="p-6 flex-1 flex flex-col">
                             <div className="flex items-center justify-between gap-2 mb-2">
                               <span className="text-xs font-semibold text-accent uppercase tracking-wider">
@@ -279,7 +271,6 @@ export default function Festivals() {
                         </motion.article>
                       );
                     })}
-                  </AnimatePresence>
                 </div>
 
                 {/* Pagination Controls */}

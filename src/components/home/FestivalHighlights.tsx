@@ -1,8 +1,7 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import HoverImagePreview from "@/components/common/HoverImagePreview";
 import { Calendar, Filter, ArrowRight, Sparkles } from "lucide-react";
 import { stripHtmlToPlainText } from "@/components/common/RichContentView";
 
@@ -143,41 +142,33 @@ export default function FestivalHighlights() {
           </div>
         ) : (
           <div className="grid sm:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto">
-            <AnimatePresence mode="popLayout">
-              {filteredFestivals.slice(0, 2).map((f, i) => {
-                const year = getPostYear(f);
-                const cleanContent = stripHtmlToPlainText(f.content);
-                const rawSnippet = cleanContent;
-                return (
-                  <motion.div
-                    key={f.id}
-                    layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ delay: i * 0.05 }}
+            {filteredFestivals.slice(0, 2).map((f) => {
+              const year = getPostYear(f);
+              const cleanContent = stripHtmlToPlainText(f.content);
+              const rawSnippet = cleanContent;
+              return (
+                <motion.div
+                  key={f.id}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                >
+                  <Link
+                    to={`/festivals/${f.id}`}
+                    className="block h-full bg-card rounded-2xl overflow-hidden shadow-card ring-1 ring-border hover:shadow-xl hover:ring-primary/40 transition-shadow transition-colors duration-300 group flex flex-col"
                   >
-                    <Link
-                      to={`/festivals/${f.id}`}
-                      className="block h-full bg-card rounded-2xl overflow-hidden shadow-card ring-1 ring-border hover:shadow-xl hover:ring-primary/40 transition-all duration-300 group flex flex-col"
-                    >
-                      {f.image && (
-                        <div className="relative aspect-[16/10] sm:aspect-video overflow-hidden bg-muted/40 border-b border-border flex items-center justify-center">
-                          {/* Ambient blur backdrop */}
-                          <div
-                            className="absolute inset-0 bg-cover bg-center filter blur-lg opacity-25 scale-110 pointer-events-none"
-                            style={{ backgroundImage: `url(${f.image})` }}
-                          />
-                          {/* Foreground image - object-contain prevents image cutting off on mobile */}
-                          <img
-                            src={f.image}
-                            alt={f.title}
-                            loading="lazy"
-                            decoding="async"
-                            className="relative z-10 max-h-full max-w-full object-contain p-1 group-hover:scale-105 transition-transform duration-300"
-                          />
-                        </div>
-                      )}
+                    {f.image && (
+                      <div className="relative aspect-[16/10] sm:aspect-video overflow-hidden bg-slate-100 dark:bg-slate-900/60 border-b border-border flex items-center justify-center p-1.5">
+                        {/* Foreground image - object-contain prevents image cutting off on mobile */}
+                        <img
+                          src={f.image}
+                          alt={f.title}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full h-full object-contain rounded-lg group-hover:scale-[1.02] transition-transform duration-300"
+                        />
+                      </div>
+                    )}
 
                       <div className="p-5 sm:p-6 flex-1 flex flex-col">
                         <div className="flex items-center justify-between gap-2 mb-2.5">
@@ -219,7 +210,6 @@ export default function FestivalHighlights() {
                   </motion.div>
                 );
               })}
-            </AnimatePresence>
           </div>
         )}
 
