@@ -20,7 +20,7 @@ export default function PublicLayout() {
       <AnalyticsProvider>
         <div className="min-h-screen flex flex-col">
           <Navbar />
-          <main className="flex-1 pt-[calc(4rem+env(safe-area-inset-top,0px))]">
+          <main className="flex-1 w-full max-w-full overflow-x-hidden pt-[calc(4rem+env(safe-area-inset-top,0px))]">
             <Outlet />
             <PageRouteAndGlobalVideos />
           </main>

@@ -20,6 +20,9 @@ interface BlogDetails {
   highlights: string[] | null;
   location: string | null;
   festival_date: string | null;
+  meta_title?: string | null;
+  meta_description?: string | null;
+  meta_keywords?: string | null;
   created_at: string;
 }
 
@@ -73,6 +76,9 @@ export default function FestivalDetails() {
 
   const postDescription = useMemo(() => {
     if (!post) return "";
+    if (post.meta_description && post.meta_description.trim()) {
+      return post.meta_description.trim();
+    }
     if (post.content && post.content.trim()) {
       const clean = stripHtmlToPlainText(post.content);
       if (clean.length > 155) {
@@ -92,6 +98,9 @@ export default function FestivalDetails() {
 
   const postKeywords = useMemo(() => {
     if (!post) return "नोहर, त्योहार, ब्लॉग";
+    if (post.meta_keywords && post.meta_keywords.trim()) {
+      return post.meta_keywords.trim();
+    }
     const kw = [
       post.title,
       post.category,
@@ -131,10 +140,12 @@ export default function FestivalDetails() {
     );
   }
 
+  const seoTitle = post.meta_title && post.meta_title.trim() ? post.meta_title.trim() : post.title;
+
   return (
     <div className="container mx-auto px-6 py-14">
       <SEO
-        title={post.title}
+        title={seoTitle}
         description={postDescription}
         ogImage={postOgImage}
         keywords={postKeywords}

@@ -41,6 +41,9 @@ interface Blog {
   highlights: string[] | null;
   location: string | null;
   festival_date: string | null;
+  meta_title?: string | null;
+  meta_description?: string | null;
+  meta_keywords?: string | null;
   created_at: string;
 }
 
@@ -95,6 +98,9 @@ export default function ManageBlogs() {
     location: "",
     festivalDate: "",
     videoUrlsText: "",
+    metaTitle: "",
+    metaDescription: "",
+    metaKeywords: "",
   });
   const [saving, setSaving] = useState(false);
 
@@ -121,6 +127,9 @@ export default function ManageBlogs() {
       location: "",
       festivalDate: "",
       videoUrlsText: "",
+      metaTitle: "",
+      metaDescription: "",
+      metaKeywords: "",
     });
     setEditing(null);
     setShowForm(false);
@@ -173,27 +182,51 @@ export default function ManageBlogs() {
       return;
     }
 
+    const basePayload = {
+      title: form.title,
+      content: form.content,
+      category: form.category,
+      image: imageUrl,
+      gallery_images: galleryImages,
+      tags,
+      highlights,
+      location: form.location || null,
+      festival_date: form.festivalDate || null,
+    };
+
+    const fullPayload = {
+      ...basePayload,
+      meta_title: form.metaTitle.trim() || null,
+      meta_description: form.metaDescription.trim() || null,
+      meta_keywords: form.metaKeywords.trim() || null,
+    };
+
     if (editing) {
-      const { error } = await supabase
+      let { error } = await supabase
         .from("blogs")
-        .update({
-          title: form.title,
-          content: form.content,
-          category: form.category,
-          image: imageUrl,
-          gallery_images: galleryImages,
-          tags,
-          highlights,
-          location: form.location || null,
-          festival_date: form.festivalDate || null,
-        })
+        .update(fullPayload)
         .eq("id", editing.id);
+
+      // If meta columns do not exist in remote DB yet, fallback gracefully to basePayload
+      if (error && (error.code === "42703" || error.message?.includes("meta_title") || error.message?.includes("column"))) {
+        console.warn("Retrying save without meta fields because column is not in DB yet:", error.message);
+        const retry = await supabase.from("blogs").update(basePayload).eq("id", editing.id);
+        error = retry.error;
+        if (!error) {
+          toast({
+            title: "Blog updated successfully!",
+            description: "नोट: Supabase SQL Editor में migration चलाएं ताकि Meta Title/Description भी डेटाबेस में सुरक्षित रहे।",
+          });
+        }
+      } else if (!error) {
+        toast({ title: "Blog updated successfully with SEO Meta!" });
+      }
+
       if (error) {
         toast({ title: "Error", description: error.message, variant: "destructive" });
       } else {
         try {
           await replaceBlogVideosFromForm(editing.id, form.videoUrlsText);
-          toast({ title: "Blog updated successfully!" });
         } catch (e) {
           toast({
             title: "Blog saved; video sync failed",
@@ -208,28 +241,43 @@ export default function ManageBlogs() {
           ? user.id
           : null;
 
-      const { data: inserted, error } = await supabase
+      let { data: inserted, error } = await supabase
         .from("blogs")
         .insert({
-          title: form.title,
-          content: form.content,
-          category: form.category,
-          image: imageUrl,
-          gallery_images: galleryImages,
-          tags,
-          highlights,
-          location: form.location || null,
-          festival_date: form.festivalDate || null,
+          ...fullPayload,
           created_by: validUserId,
         })
         .select("id")
         .single();
+
+      // Graceful fallback if meta columns not created yet in DB
+      if (error && (error.code === "42703" || error.message?.includes("meta_title") || error.message?.includes("column"))) {
+        console.warn("Retrying insert without meta fields because column is not in DB yet:", error.message);
+        const retry = await supabase
+          .from("blogs")
+          .insert({
+            ...basePayload,
+            created_by: validUserId,
+          })
+          .select("id")
+          .single();
+        inserted = retry.data;
+        error = retry.error;
+        if (!error && inserted?.id) {
+          toast({
+            title: "New Blog added successfully!",
+            description: "नोट: Supabase SQL Editor में migration चलाएं ताकि Meta Title/Description भी डेटाबेस में सुरक्षित रहे।",
+          });
+        }
+      } else if (!error && inserted?.id) {
+        toast({ title: "New Blog added with SEO Meta!" });
+      }
+
       if (error) {
         toast({ title: "Error", description: error.message, variant: "destructive" });
       } else if (inserted?.id) {
         try {
           await replaceBlogVideosFromForm(inserted.id, form.videoUrlsText);
-          toast({ title: "New Blog added successfully!" });
         } catch (e) {
           toast({
             title: "Blog added; video sync failed",
@@ -278,6 +326,9 @@ export default function ManageBlogs() {
       location: b.location ?? "",
       festivalDate: b.festival_date ?? "",
       videoUrlsText: (vids ?? []).map((v) => v.embed_url).filter(Boolean).join("\n"),
+      metaTitle: b.meta_title ?? "",
+      metaDescription: b.meta_description ?? "",
+      metaKeywords: b.meta_keywords ?? "",
     });
     setShowForm(true);
   };
@@ -636,6 +687,139 @@ export default function ManageBlogs() {
                 rows={2}
                 className="w-full px-4 py-2 rounded-xl bg-background border border-input text-foreground text-xs font-mono"
               />
+            </div>
+
+            {/* SEO & Search Engine Optimization Card */}
+            <div className="bg-secondary/40 rounded-2xl p-4 sm:p-5 ring-1 ring-border/80 space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border/60 pb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+                    <Search className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-foreground text-sm flex items-center gap-1.5">
+                      SEO & Search Engine Optimization (मेटा सेटिंग्स)
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-mono">
+                        Google Ready
+                      </span>
+                    </h4>
+                    <p className="text-[11px] text-muted-foreground">
+                      Custom Meta Title और Meta Description सर्च इंजन व सोशल मीडिया रैंकिंग में सुधार करते हैं।
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    let cleanText = stripHtmlToPlainText(form.content || "");
+                    if (cleanText.length > 155) {
+                      const slice = cleanText.substring(0, 155);
+                      const lastSpace = slice.lastIndexOf(" ");
+                      cleanText = (lastSpace > 110 ? slice.substring(0, lastSpace) : slice) + "...";
+                    }
+                    const combinedTags = normalizeTags(form.tags, form.customTags).join(", ");
+                    setForm((prev) => ({
+                      ...prev,
+                      metaTitle: prev.metaTitle || prev.title,
+                      metaDescription: prev.metaDescription || cleanText,
+                      metaKeywords:
+                        prev.metaKeywords || combinedTags || "नोहर, मधेपुरा, बिहार, Nohar Vikash Manch",
+                    }));
+                    toast({ title: "SEO मेटा फ़ील्ड्स ऑटो-भर दिए गए!" });
+                  }}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-background hover:bg-secondary text-primary ring-1 ring-border text-xs font-semibold shadow-xs transition-colors self-start sm:self-auto"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-accent" /> ऑटो-जनरेट करें (Auto Fill)
+                </button>
+              </div>
+
+              {/* Google Search Live Preview Card */}
+              <div className="bg-background rounded-xl p-3.5 ring-1 ring-border/70 shadow-xs space-y-1">
+                <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider block mb-1">
+                  Google Search Snippet Preview
+                </span>
+                <div className="flex items-center gap-1.5 text-xs text-muted-foreground font-mono truncate">
+                  <span className="w-3.5 h-3.5 rounded-full bg-primary/20 text-primary flex items-center justify-center text-[9px] font-bold">N</span>
+                  <span>{SITE_DOMAIN} › festivals › {editing?.id ? editing.id.slice(0, 8) + "..." : "post-id"}</span>
+                </div>
+                <p className="text-base text-blue-600 dark:text-blue-400 font-medium hover:underline cursor-pointer truncate">
+                  {form.metaTitle.trim() || form.title.trim() || "नोहर विकास मंच — ब्लॉग शीर्षक"}
+                </p>
+                <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed">
+                  {form.metaDescription.trim() ||
+                    (form.content
+                      ? stripHtmlToPlainText(form.content).slice(0, 155) + "..."
+                      : "गूगल और सोशल मीडिया सर्च में दिखने वाला विवरण यहाँ दिखाई देगा...")}
+                </p>
+              </div>
+
+              {/* Meta Title Input */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-xs font-semibold text-foreground">
+                    SEO Meta Title (सर्च इंजन शीर्षक)
+                  </label>
+                  <span
+                    className={`text-[11px] font-mono ${
+                      form.metaTitle.length > 60
+                        ? "text-amber-500 font-semibold"
+                        : "text-muted-foreground"
+                    }`}
+                  >
+                    {form.metaTitle.length} / 60 अक्षर (Recommended)
+                  </span>
+                </div>
+                <input
+                  value={form.metaTitle}
+                  onChange={(e) => setForm({ ...form, metaTitle: e.target.value })}
+                  placeholder="e.g. नोहर की ऐतिहासिक दीपावली और सांस्कृतिक उत्सव 2026"
+                  className="w-full px-4 py-2 rounded-xl bg-background border border-input text-foreground text-sm focus:ring-2 focus:ring-primary"
+                />
+                <p className="text-[11px] text-muted-foreground mt-1">
+                  खाली छोड़ने पर मुख्य शीर्षक ({form.title || "Post Title"}) का उपयोग होगा।
+                </p>
+              </div>
+
+              {/* Meta Description Textarea */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-xs font-semibold text-foreground">
+                    SEO Meta Description (सर्च इंजन विवरण व स्निपेट)
+                  </label>
+                  <span
+                    className={`text-[11px] font-mono ${
+                      form.metaDescription.length > 160
+                        ? "text-amber-500 font-semibold"
+                        : "text-muted-foreground"
+                    }`}
+                  >
+                    {form.metaDescription.length} / 160 अक्षर (Recommended)
+                  </span>
+                </div>
+                <textarea
+                  value={form.metaDescription}
+                  onChange={(e) => setForm({ ...form, metaDescription: e.target.value })}
+                  placeholder="Google और WhatsApp शेयर में दिखने वाला 1-2 पंक्तियों का आकर्षक विवरण लिखें..."
+                  rows={3}
+                  className="w-full px-4 py-2 rounded-xl bg-background border border-input text-foreground text-sm focus:ring-2 focus:ring-primary"
+                />
+                <p className="text-[11px] text-muted-foreground mt-1">
+                  खाली छोड़ने पर ब्लॉग कंटेंट से ऑटो-जनरेटेड विवरण लिया जाएगा।
+                </p>
+              </div>
+
+              {/* Meta Keywords Input */}
+              <div>
+                <label className="text-xs font-semibold text-foreground block mb-1">
+                  SEO Keywords (कीवर्ड्स - अल्पविराम / Comma से अलग करें)
+                </label>
+                <input
+                  value={form.metaKeywords}
+                  onChange={(e) => setForm({ ...form, metaKeywords: e.target.value })}
+                  placeholder="e.g. नोहर, मधेपुरा, छठ पूजा, दीवाली, Nohar Vikash Manch, Madhepura Festivals"
+                  className="w-full px-4 py-2 rounded-xl bg-background border border-input text-foreground text-sm"
+                />
+              </div>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4 pt-2">

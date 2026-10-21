@@ -54,18 +54,18 @@ export default function VillageHeritage() {
   }, []);
 
   return (
-    <section className="py-16 sm:py-20 bg-gradient-to-b from-background via-secondary/20 to-background relative overflow-hidden">
+    <section className="py-8 sm:py-16 bg-gradient-to-b from-background via-secondary/20 to-background relative overflow-hidden">
       {/* Decorative background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-12">
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs sm:text-sm font-semibold mb-4 shadow-sm"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs sm:text-sm font-semibold mb-3 shadow-xs"
           >
             <Landmark className="w-4 h-4" />
             <span>धरोहर एवं संस्कृति</span>
@@ -87,21 +87,21 @@ export default function VillageHeritage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="mt-3 text-sm sm:text-base text-muted-foreground leading-relaxed"
+            className="mt-2.5 text-xs sm:text-sm md:text-base text-muted-foreground leading-relaxed"
           >
             गाँव नोहर की ऐतिहासिक, सांस्कृतिक और प्राकृतिक विरासत जो सदियों से हमारे आपसी प्रेम, एकता और गौरव की प्रतीक है।
           </motion.p>
         </div>
 
         {/* Cards Grid */}
-        <div className={`grid gap-6 sm:gap-8 ${items.length === 1 ? 'max-w-md mx-auto grid-cols-1' : items.length === 2 ? 'max-w-3xl mx-auto grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
+        <div className={`grid gap-5 sm:gap-8 ${items.length === 1 ? 'max-w-md mx-auto grid-cols-1' : items.length === 2 ? 'max-w-3xl mx-auto grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
           {items.map((item, idx) => (
             <motion.div
               key={item.id}
-              initial={{ opacity: 0, y: 25 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
+              transition={{ delay: idx * 0.08 }}
               onClick={() => setSelectedItem(item)}
               className="group relative bg-card rounded-2xl sm:rounded-3xl border border-border/70 overflow-hidden shadow-card hover:shadow-xl hover:border-primary/40 transition-all duration-300 flex flex-col cursor-pointer"
             >
@@ -113,6 +113,7 @@ export default function VillageHeritage() {
                     alt={item.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                     loading="lazy"
+                    decoding="async"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-secondary text-muted-foreground">

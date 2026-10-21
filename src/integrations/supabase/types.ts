@@ -97,6 +97,9 @@ export type Database = {
           id: string
           image: string | null
           location: string | null
+          meta_description: string | null
+          meta_keywords: string | null
+          meta_title: string | null
           tags: string[] | null
           title: string
         }
@@ -111,6 +114,9 @@ export type Database = {
           id?: string
           image?: string | null
           location?: string | null
+          meta_description?: string | null
+          meta_keywords?: string | null
+          meta_title?: string | null
           tags?: string[] | null
           title: string
         }
@@ -125,6 +131,9 @@ export type Database = {
           id?: string
           image?: string | null
           location?: string | null
+          meta_description?: string | null
+          meta_keywords?: string | null
+          meta_title?: string | null
           tags?: string[] | null
           title?: string
         }

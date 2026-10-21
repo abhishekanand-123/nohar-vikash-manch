@@ -7,16 +7,23 @@ export default function QuickScrollNavigator() {
   const [showBottom, setShowBottom] = useState(true);
 
   useEffect(() => {
+    let ticking = false;
     const handleScroll = () => {
-      const scrollY = window.scrollY || document.documentElement.scrollTop;
-      const scrollHeight = document.documentElement.scrollHeight;
-      const clientHeight = document.documentElement.clientHeight;
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const scrollY = window.scrollY || document.documentElement.scrollTop;
+          const scrollHeight = document.documentElement.scrollHeight;
+          const clientHeight = document.documentElement.clientHeight;
 
-      // Show top button if scrolled down more than 160px
-      setShowTop(scrollY > 160);
+          // Show top button if scrolled down more than 200px
+          setShowTop(scrollY > 200);
 
-      // Show bottom button if not near the bottom
-      setShowBottom(scrollY + clientHeight < scrollHeight - 200);
+          // Show bottom button if not near the bottom
+          setShowBottom(scrollY + clientHeight < scrollHeight - 220);
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
