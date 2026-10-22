@@ -66,7 +66,7 @@ export default function GramUdyogPreview() {
     if (activeCat !== "all") {
       list = services.filter((s) => s.category.toLowerCase() === activeCat.toLowerCase());
     }
-    return list.slice(0, 6); // show up to 6 on home page
+    return list.slice(0, 3); // show exactly 3 on home page
   }, [services, activeCat]);
 
   return (

@@ -1,5 +1,7 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { Editor } from "@tinymce/tinymce-react";
+import { Code, Copy, Check, Eye } from "lucide-react";
+import { toast } from "sonner";
 
 import "tinymce/tinymce";
 import "tinymce/icons/default";
@@ -68,17 +70,48 @@ export default function TinyMceEditor({
   menubar = true,
 }: TinyMceEditorProps) {
   const height = parseMinHeight(minHeight);
+  const [isSourceMode, setIsSourceMode] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const editorRef = useRef<any>(null);
 
+  // Prevent Radix Dialog / parent modal from stealing focus or blocking copy/selection in TinyMCE dialogs
   useEffect(() => {
-    const keepTinyDialogsFocusable = (event: FocusEvent) => {
+    const allowTinyAuxEvents = (event: Event) => {
       const target = event.target as HTMLElement | null;
-      if (target?.closest(".tox-tinymce-aux, .tox-dialog, .tox-menu")) {
+      if (
+        target?.closest(
+          ".tox-tinymce-aux, .tox-dialog, .tox-dialog-wrap, .tox-menu, .tox-collection, textarea.tox-textarea, .tox-control-wrap"
+        )
+      ) {
         event.stopImmediatePropagation();
       }
     };
-    document.addEventListener("focusin", keepTinyDialogsFocusable, true);
-    return () => document.removeEventListener("focusin", keepTinyDialogsFocusable, true);
+    const events = ["focusin", "focus", "pointerdown", "mousedown", "touchstart", "copy", "selectstart"];
+    events.forEach((evt) => {
+      document.addEventListener(evt, allowTinyAuxEvents, true);
+    });
+    return () => {
+      events.forEach((evt) => {
+        document.removeEventListener(evt, allowTinyAuxEvents, true);
+      });
+    };
   }, []);
+
+  const handleCopyHtml = async () => {
+    try {
+      const currentHtml = isSourceMode
+        ? value || ""
+        : editorRef.current
+        ? editorRef.current.getContent()
+        : value || "";
+      await navigator.clipboard.writeText(currentHtml);
+      setCopied(true);
+      toast.success("HTML सोर्स कोड कॉपी हो गया!");
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      toast.error("कॉपी करने में विफल");
+    }
+  };
 
   const init = useMemo(
     () => ({
@@ -92,8 +125,8 @@ export default function TinyMceEditor({
       plugins:
         "advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table wordcount",
       toolbar:
-        "undo redo | blocks | bold italic underline strikethrough | alignleft aligncenter alignright | bullist numlist outdent indent | link image media table | removeformat | code fullscreen",
-      toolbar_mode: "sliding" as const,
+        "undo redo | code | blocks | bold italic underline strikethrough | link image media table | bullist numlist | alignleft aligncenter alignright | removeformat | fullscreen",
+      toolbar_mode: "wrap" as const,
       contextmenu: "link image table",
       relative_urls: false,
       convert_urls: false,
@@ -119,18 +152,74 @@ export default function TinyMceEditor({
 
   return (
     <div className={`tinymce-editor-shell ${className}`}>
-      {label && (
-        <div className="mb-1.5 flex items-center justify-between px-0.5">
+      {/* Editor Top Bar with Label, HTML Source Code Toggle, and One-Click Copy */}
+      <div className="mb-2 flex items-center justify-between gap-2 flex-wrap">
+        {label ? (
           <span className="text-xs font-semibold text-foreground">{label}</span>
-          <span className="text-[11px] text-muted-foreground">TinyMCE editor</span>
+        ) : (
+          <span className="text-[11px] text-muted-foreground font-medium">Editor Toolbar</span>
+        )}
+
+        <div className="flex items-center gap-1.5 ml-auto">
+          {/* Quick Copy HTML */}
+          <button
+            type="button"
+            onClick={handleCopyHtml}
+            className="px-2.5 py-1 rounded-lg text-[11px] font-semibold flex items-center gap-1 transition-all border border-border bg-secondary hover:bg-secondary/80 text-secondary-foreground shadow-xs active:scale-95"
+            title="पूरा HTML सोर्स कोड क्लिपबोर्ड पर कॉपी करें"
+          >
+            {copied ? <Check className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+            <span>{copied ? "Copied!" : "Copy HTML"}</span>
+          </button>
+
+          {/* Mode toggle: Visual View / HTML Source Code */}
+          <button
+            type="button"
+            onClick={() => setIsSourceMode(!isSourceMode)}
+            className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold flex items-center gap-1 transition-all border shadow-xs active:scale-95 ${
+              isSourceMode
+                ? "bg-accent text-accent-foreground border-accent shadow-sm"
+                : "bg-secondary hover:bg-secondary/80 text-secondary-foreground border-border"
+            }`}
+            title={isSourceMode ? "विजुअल एडिटर (Visual View) पर जाएँ" : "HTML सोर्स कोड देखें व संपादित करें"}
+          >
+            {isSourceMode ? <Eye className="w-3.5 h-3.5" /> : <Code className="w-3.5 h-3.5" />}
+            <span>{isSourceMode ? "Visual View" : "Source Code (<>)"}</span>
+          </button>
         </div>
+      </div>
+
+      {/* Editor Content Area: Source Code Mode vs TinyMCE Visual Mode */}
+      {isSourceMode ? (
+        <div className="border border-border rounded-xl overflow-hidden bg-slate-900 text-slate-100 flex flex-col shadow-sm">
+          <div className="flex items-center justify-between px-3 py-2 bg-slate-800/90 border-b border-slate-700 text-xs">
+            <span className="font-mono text-emerald-400 flex items-center gap-1.5 text-xs font-semibold">
+              <Code className="w-3.5 h-3.5" /> HTML Source Code View
+            </span>
+            <span className="text-[10px] text-slate-400">
+              सीधे HTML कोड संपादित या कॉपी करें
+            </span>
+          </div>
+          <textarea
+            value={value || ""}
+            onChange={(e) => onChange(e.target.value)}
+            className="w-full bg-slate-950 font-mono text-xs text-slate-100 p-3.5 focus:outline-none resize-y leading-relaxed border-none"
+            style={{ minHeight: `${height}px` }}
+            placeholder="<p>यहाँ HTML कोड लिखें या पेस्ट करें...</p>"
+            spellCheck={false}
+          />
+        </div>
+      ) : (
+        <Editor
+          licenseKey="gpl"
+          onInit={(_evt, editor) => {
+            editorRef.current = editor;
+          }}
+          value={value || ""}
+          onEditorChange={(html) => onChange(normalizeHtml(html))}
+          init={init}
+        />
       )}
-      <Editor
-        licenseKey="gpl"
-        value={value || ""}
-        onEditorChange={(html) => onChange(normalizeHtml(html))}
-        init={init}
-      />
     </div>
   );
 }

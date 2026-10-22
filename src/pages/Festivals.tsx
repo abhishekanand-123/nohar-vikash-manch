@@ -211,14 +211,14 @@ export default function Festivals() {
                         className="bg-card rounded-2xl overflow-hidden shadow-card ring-1 ring-border hover:shadow-xl transition-shadow flex flex-col group"
                       >
                         {post.image && (
-                          <div className="relative aspect-[16/10] sm:aspect-video overflow-hidden bg-slate-100 dark:bg-slate-900/60 border-b border-border flex items-center justify-center p-1.5">
-                            {/* Foreground image - object-contain preserves full banner/poster without cropping */}
+                          <div className="relative aspect-[16/10] sm:aspect-video overflow-hidden bg-slate-100 dark:bg-slate-900/60 border-b border-border flex items-center justify-center p-2 sm:p-2.5 pr-3 sm:pr-2.5">
+                            {/* Foreground image - object-contain with right margin preserves full banner without cropping */}
                             <img
                               src={post.image}
                               alt={post.title}
                               loading="lazy"
                               decoding="async"
-                              className="w-full h-full object-contain rounded-lg group-hover:scale-[1.02] transition-transform duration-300"
+                              className="w-full h-full max-w-full max-h-full object-contain rounded-lg md:group-hover:scale-[1.01] transition-transform duration-300"
                             />
                           </div>
                         )}

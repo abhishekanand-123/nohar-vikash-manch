@@ -17,6 +17,8 @@ import {
   Zap,
   Stethoscope,
   Filter,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import PageBanner from "@/components/layout/PageBanner";
 import { fetchVillageServices, VillageService } from "@/lib/servicesApi";
@@ -45,11 +47,14 @@ function getCategoryIcon(category: string) {
   return Briefcase;
 }
 
+const ITEMS_PER_PAGE = 6;
+
 export default function GramUdyog() {
   const [services, setServices] = useState<VillageService[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     async function loadData() {
@@ -60,6 +65,11 @@ export default function GramUdyog() {
     }
     loadData();
   }, []);
+
+  // Reset pagination when category or search changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory, searchQuery]);
 
   // Extract all distinct categories
   const categories = useMemo(() => {
@@ -90,6 +100,21 @@ export default function GramUdyog() {
       return matchCategory && matchSearch;
     });
   }, [services, selectedCategory, searchQuery]);
+
+  const totalPages = Math.max(1, Math.ceil(filteredServices.length / ITEMS_PER_PAGE));
+
+  const paginatedServices = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredServices.slice(start, start + ITEMS_PER_PAGE);
+  }, [filteredServices, currentPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    const directoryTop = document.getElementById("directory-grid-top");
+    if (directoryTop) {
+      directoryTop.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   const handleShareProfile = (item: VillageService) => {
     const text = `*${item.name}* (${item.category})\nकाम: ${item.skill || "सेवा"}\nपता: ${item.address || "ग्राम नोहर"}\nफ़ोन: ${item.phone}\n\n_नोहर विकास मंच डिजिटल डायरेक्टरी_`;
@@ -217,12 +242,14 @@ export default function GramUdyog() {
             </button>
           </div>
         ) : (
-          <motion.div
-            layout
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          >
-            <AnimatePresence>
-              {filteredServices.map((item) => {
+          <>
+            <div id="directory-grid-top" className="scroll-mt-24" />
+            <motion.div
+              layout
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            >
+              <AnimatePresence>
+                {paginatedServices.map((item) => {
                 const IconComp = getCategoryIcon(item.category);
                 return (
                   <motion.div
@@ -337,7 +364,58 @@ export default function GramUdyog() {
               })}
             </AnimatePresence>
           </motion.div>
-        )}
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-border pt-6">
+              <p className="text-xs text-muted-foreground">
+                दिखाए जा रहे हैं {(currentPage - 1) * ITEMS_PER_PAGE + 1} -{" "}
+                {Math.min(currentPage * ITEMS_PER_PAGE, filteredServices.length)} (कुल {filteredServices.length} में से) — पेज {currentPage} / {totalPages}
+              </p>
+
+              <div className="flex items-center gap-1.5 flex-wrap justify-center">
+                {/* Previous Page */}
+                <button
+                  type="button"
+                  onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                  disabled={currentPage === 1}
+                  className="flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-semibold bg-card border border-border text-foreground hover:bg-secondary disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  <span>पिछला (Prev)</span>
+                </button>
+
+                {/* Numbered Page Buttons */}
+                {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((pageNum) => (
+                  <button
+                    key={pageNum}
+                    type="button"
+                    onClick={() => handlePageChange(pageNum)}
+                    className={`w-9 h-9 rounded-xl text-xs font-bold transition-all flex items-center justify-center ${
+                      currentPage === pageNum
+                        ? "bg-primary text-primary-foreground shadow-sm scale-105"
+                        : "bg-card border border-border text-foreground hover:bg-secondary"
+                    }`}
+                  >
+                    {pageNum}
+                  </button>
+                ))}
+
+                {/* Next Page */}
+                <button
+                  type="button"
+                  onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                  disabled={currentPage === totalPages}
+                  className="flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-semibold bg-card border border-border text-foreground hover:bg-secondary disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                >
+                  <span>अगला (Next)</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+        </>
+      )}
 
         {/* Bottom Callout for Villagers */}
         <div className="bg-gradient-to-br from-primary/10 via-card to-accent/10 border border-primary/20 rounded-2xl p-6 sm:p-8 text-center space-y-3 shadow-md">
