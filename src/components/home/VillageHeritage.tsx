@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Landmark, Sparkles, MapPin, Eye, X } from "lucide-react";
+import { Landmark, Sparkles, MapPin, Eye, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import RichContentView from "@/components/common/RichContentView";
 
@@ -26,10 +26,13 @@ const DEFAULT_HERITAGE_ITEMS: HeritageItem[] = [
   },
 ];
 
+const HERITAGE_PER_PAGE = 4;
+
 export default function VillageHeritage() {
   const [items, setItems] = useState<HeritageItem[]>(DEFAULT_HERITAGE_ITEMS);
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState<HeritageItem | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     async function fetchHeritage() {
@@ -53,12 +56,29 @@ export default function VillageHeritage() {
     fetchHeritage();
   }, []);
 
+  const totalPages = Math.max(1, Math.ceil(items.length / HERITAGE_PER_PAGE));
+
+  const paginatedItems = useMemo(() => {
+    const start = (currentPage - 1) * HERITAGE_PER_PAGE;
+    return items.slice(start, start + HERITAGE_PER_PAGE);
+  }, [items, currentPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    const topEl = document.getElementById("heritage-section-top");
+    if (topEl) {
+      topEl.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <section className="py-8 sm:py-16 bg-gradient-to-b from-background via-secondary/20 to-background relative overflow-hidden">
       {/* Decorative background glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-primary/5 rounded-full blur-3xl pointer-events-none" />
 
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
+        <div id="heritage-section-top" className="scroll-mt-24" />
+
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-6 sm:mb-12">
           <motion.div
@@ -94,8 +114,8 @@ export default function VillageHeritage() {
         </div>
 
         {/* Cards Grid */}
-        <div className={`grid gap-5 sm:gap-8 ${items.length === 1 ? 'max-w-md mx-auto grid-cols-1' : items.length === 2 ? 'max-w-3xl mx-auto grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'}`}>
-          {items.map((item, idx) => (
+        <div className={`grid gap-5 sm:gap-8 ${paginatedItems.length === 1 ? 'max-w-md mx-auto grid-cols-1' : paginatedItems.length === 2 ? 'max-w-3xl mx-auto grid-cols-1 md:grid-cols-2' : 'grid-cols-1 md:grid-cols-2'}`}>
+          {paginatedItems.map((item, idx) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, y: 20 }}
@@ -165,6 +185,56 @@ export default function VillageHeritage() {
             </motion.div>
           ))}
         </div>
+
+        {/* Pagination Controls */}
+        {totalPages > 1 && (
+          <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-border/70 pt-6">
+            <p className="text-xs text-muted-foreground font-medium">
+              दिखाए जा रहे हैं {(currentPage - 1) * HERITAGE_PER_PAGE + 1} -{" "}
+              {Math.min(currentPage * HERITAGE_PER_PAGE, items.length)} (कुल {items.length} में से) — पेज {currentPage} / {totalPages}
+            </p>
+
+            <div className="flex items-center gap-1.5 flex-wrap justify-center">
+              {/* Previous Page */}
+              <button
+                type="button"
+                onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                disabled={currentPage === 1}
+                className="flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-semibold bg-card border border-border text-foreground hover:bg-secondary disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-xs"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                <span>पिछला (Prev)</span>
+              </button>
+
+              {/* Numbered Page Buttons */}
+              {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((pageNum) => (
+                <button
+                  key={pageNum}
+                  type="button"
+                  onClick={() => handlePageChange(pageNum)}
+                  className={`w-9 h-9 rounded-xl text-xs font-bold transition-all flex items-center justify-center ${
+                    currentPage === pageNum
+                      ? "bg-primary text-primary-foreground shadow-sm scale-105"
+                      : "bg-card border border-border text-foreground hover:bg-secondary"
+                  }`}
+                >
+                  {pageNum}
+                </button>
+              ))}
+
+              {/* Next Page */}
+              <button
+                type="button"
+                onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                disabled={currentPage === totalPages}
+                className="flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-semibold bg-card border border-border text-foreground hover:bg-secondary disabled:opacity-40 disabled:cursor-not-allowed transition-colors shadow-xs"
+              >
+                <span>अगला (Next)</span>
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Detail / Image Lightbox Modal */}

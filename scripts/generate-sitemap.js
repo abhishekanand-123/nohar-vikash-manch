@@ -43,6 +43,8 @@ const staticPages = [
   { path: "/gallery", priority: "0.7", changefreq: "weekly" },
   { path: "/videos", priority: "0.7", changefreq: "weekly" },
   { path: "/donation", priority: "0.8", changefreq: "monthly" },
+  { path: "/privacy-policy", priority: "0.5", changefreq: "monthly" },
+  { path: "/terms-conditions", priority: "0.5", changefreq: "monthly" },
 ];
 
 function formatDate(dateStr) {

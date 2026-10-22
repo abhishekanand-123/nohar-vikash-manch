@@ -7,7 +7,6 @@ import VideoEmbed from "@/components/common/VideoEmbed";
 import { Tables } from "@/integrations/supabase/types";
 import SEO from "@/components/common/SEO";
 import RichContentView, { stripHtmlToPlainText } from "@/components/common/RichContentView";
-import GramUdyogBlogWidget from "@/components/common/GramUdyogBlogWidget";
 
 interface BlogDetails {
   id: string;
@@ -181,12 +180,12 @@ export default function FestivalDetails() {
 
         {/* Main Featured Blog Image (Adaptive Zero-Crop with clean high-performance backdrop) */}
         {post.image && (
-          <div className="mt-7 mb-8 rounded-2xl overflow-hidden border border-border bg-slate-100 dark:bg-slate-900/60 shadow-sm relative group flex items-center justify-center p-2 sm:p-3 pr-3 sm:pr-3">
-            {/* Foreground image: object-contain so 100% of the image is visible on mobile and desktop without any cut-offs */}
+          <div className="mt-7 mb-8 rounded-2xl overflow-hidden border border-border bg-slate-100 dark:bg-slate-900/60 shadow-sm relative group flex items-center justify-center p-1.5 sm:p-3">
+            {/* Foreground image: object-contain with min-w-0 ensures full banner is visible on mobile without cut-offs */}
             <img
               src={post.image}
               alt={post.title}
-              className="w-full max-h-[380px] sm:max-h-[500px] md:max-h-[580px] object-contain mx-auto block rounded-xl"
+              className="w-full max-h-[380px] sm:max-h-[500px] md:max-h-[580px] min-w-0 object-contain mx-auto block rounded-xl"
               loading="eager"
             />
           </div>
@@ -251,14 +250,6 @@ export default function FestivalDetails() {
             </div>
           </div>
         )}
-
-        {/* 3 Related Gram Udyog Services */}
-        <GramUdyogBlogWidget
-          limit={3}
-          title="ग्राम उद्योग एवं स्थानीय सेवाएँ"
-          subtitle="नोहर गाँव के कामगारों व सेवाओं से सीधे संपर्क करें।"
-          className="mt-14"
-        />
       </article>
     </div>
   );

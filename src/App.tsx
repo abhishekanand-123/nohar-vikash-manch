@@ -17,6 +17,8 @@ import Ramnavami from "./pages/Ramnavami";
 import Sports from "./pages/Sports";
 import Gallery from "./pages/Gallery";
 import Donation from "./pages/Donation";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import TermsConditions from "./pages/TermsConditions";
 import AdminLogin from "./pages/admin/Login";
 import AdminOverview from "./pages/admin/Overview";
 import ManageMembers from "./pages/admin/ManageMembers";
@@ -67,6 +69,10 @@ const App = () => (
               <Route path="/gallery" element={<Gallery />} />
               <Route path="/videos" element={<Videos />} />
               <Route path="/donation" element={<Donation />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/terms-conditions" element={<TermsConditions />} />
+              <Route path="/terms" element={<TermsConditions />} />
             </Route>
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route element={<AdminLayout />}>

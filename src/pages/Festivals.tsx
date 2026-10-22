@@ -7,7 +7,6 @@ import { Sparkles, Calendar, Filter, Search, ChevronLeft, ChevronRight } from "l
 import { Tables } from "@/integrations/supabase/types";
 import HoverImagePreview from "@/components/common/HoverImagePreview";
 import SEO from "@/components/common/SEO";
-import GramUdyogBlogWidget from "@/components/common/GramUdyogBlogWidget";
 import RichContentView, { stripHtmlToPlainText } from "@/components/common/RichContentView";
 
 interface Blog {
@@ -211,14 +210,14 @@ export default function Festivals() {
                         className="bg-card rounded-2xl overflow-hidden shadow-card ring-1 ring-border hover:shadow-xl transition-shadow flex flex-col group"
                       >
                         {post.image && (
-                          <div className="relative aspect-[16/10] sm:aspect-video overflow-hidden bg-slate-100 dark:bg-slate-900/60 border-b border-border flex items-center justify-center p-2 sm:p-2.5 pr-3 sm:pr-2.5">
-                            {/* Foreground image - object-contain with right margin preserves full banner without cropping */}
+                          <div className="relative w-full aspect-video overflow-hidden bg-slate-100 dark:bg-slate-900/60 border-b border-border flex items-center justify-center p-1 sm:p-1.5">
+                            {/* Foreground image: object-contain with min-w-0 prevents flex transferred-size clipping on mobile */}
                             <img
                               src={post.image}
                               alt={post.title}
                               loading="lazy"
                               decoding="async"
-                              className="w-full h-full max-w-full max-h-full object-contain rounded-lg md:group-hover:scale-[1.01] transition-transform duration-300"
+                              className="w-full h-full max-w-full max-h-full min-w-0 min-h-0 object-contain rounded-lg transition-transform duration-300 md:group-hover:scale-[1.01]"
                             />
                           </div>
                         )}
@@ -325,12 +324,6 @@ export default function Festivals() {
               </>
             )}
 
-            {/* Gram Udyog Widget on Blog Page (Shows 3 services related to Gram Udyog) */}
-            <GramUdyogBlogWidget
-              limit={3}
-              title="ग्राम उद्योग एवं कामगार डायरेक्टरी"
-              subtitle="गाँव नोहर के शिक्षक, मिस्त्री, इलेक्ट्रीशियन, स्वास्थ्य कर्मी व कामगारों से सीधे संपर्क करें।"
-            />
 
             {filteredBlogs.length === 0 && (
               <div className="text-center py-12 bg-card rounded-2xl border border-dashed border-border max-w-md mx-auto">

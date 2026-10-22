@@ -65,6 +65,8 @@ export default function Footer() {
               <li><Link to="/gallery" className="hover:text-accent transition-colors">गैलरी</Link></li>
               <li><Link to="/videos" className="hover:text-accent transition-colors">वीडियो</Link></li>
               <li><Link to="/donation" className="hover:text-accent transition-colors">दान</Link></li>
+              <li><Link to="/privacy-policy" className="hover:text-accent transition-colors">गोपनीयता नीति (Privacy Policy)</Link></li>
+              <li><Link to="/terms-conditions" className="hover:text-accent transition-colors">नियम एवं शर्तें (Terms & Conditions)</Link></li>
               <li>
                 <button
                   type="button"
@@ -94,8 +96,19 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-        <div className="mt-12 pt-8 border-t border-background/10 text-center text-sm text-background/50">
-          © {new Date().getFullYear()} अभिषेक आनंद (Administration) नोहर विकास युवक संघ। सभी अधिकार सुरक्षित।
+        <div className="mt-12 pt-8 border-t border-background/10 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left text-xs sm:text-sm text-background/60">
+          <div>
+            © {new Date().getFullYear()} अभिषेक आनंद (Administration) नोहर विकास युवक संघ। सभी अधिकार सुरक्षित।
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-5 text-xs">
+            <Link to="/privacy-policy" className="text-background/80 hover:text-accent transition-colors underline-offset-4 hover:underline">
+              गोपनीयता नीति (Privacy Policy)
+            </Link>
+            <span className="text-background/30">•</span>
+            <Link to="/terms-conditions" className="text-background/80 hover:text-accent transition-colors underline-offset-4 hover:underline">
+              नियम एवं शर्तें (Terms & Conditions)
+            </Link>
+          </div>
         </div>
       </div>
     </footer>

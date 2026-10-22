@@ -158,14 +158,14 @@ export default function FestivalHighlights() {
                     className="block h-full bg-card rounded-2xl overflow-hidden shadow-card ring-1 ring-border hover:shadow-xl hover:ring-primary/40 transition-shadow transition-colors duration-300 group flex flex-col"
                   >
                     {f.image && (
-                      <div className="relative aspect-[16/10] sm:aspect-video overflow-hidden bg-slate-100 dark:bg-slate-900/60 border-b border-border flex items-center justify-center p-2 sm:p-2.5 pr-3 sm:pr-2.5">
-                        {/* Foreground image - object-contain with right margin prevents image cutting off on mobile */}
+                      <div className="relative w-full aspect-video overflow-hidden bg-slate-100 dark:bg-slate-900/60 border-b border-border flex items-center justify-center p-1 sm:p-1.5">
+                        {/* Foreground image: object-contain with min-w-0 prevents flex transferred-size clipping on mobile */}
                         <img
                           src={f.image}
                           alt={f.title}
                           loading="lazy"
                           decoding="async"
-                          className="w-full h-full max-w-full max-h-full object-contain rounded-lg md:group-hover:scale-[1.01] transition-transform duration-300"
+                          className="w-full h-full max-w-full max-h-full min-w-0 min-h-0 object-contain rounded-lg transition-transform duration-300 md:group-hover:scale-[1.01]"
                         />
                       </div>
                     )}

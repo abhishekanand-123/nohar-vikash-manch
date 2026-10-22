@@ -47,7 +47,7 @@ function getCategoryIcon(category: string) {
   return Briefcase;
 }
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 4;
 
 export default function GramUdyog() {
   const [services, setServices] = useState<VillageService[]>([]);
