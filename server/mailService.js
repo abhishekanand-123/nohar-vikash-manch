@@ -1,28 +1,26 @@
 import nodemailer from "nodemailer";
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const rootDir = path.resolve(__dirname, "..");
-
-// Load env if running in standalone Node script
+// Safely load env if running in standalone Node script without bundling issues
 function getEnvConfig() {
   const env = { ...process.env };
-  const envPath = path.join(rootDir, ".env");
-  if (fs.existsSync(envPath)) {
-    try {
-      const lines = fs.readFileSync(envPath, "utf-8").split("\n");
-      for (const line of lines) {
-        const match = line.match(/^\s*([\w_]+)\s*=\s*["']?(.*?)["']?\s*$/);
-        if (match && !env[match[1]]) {
-          env[match[1]] = match[2];
+  try {
+    const cwd = typeof process !== "undefined" && process.cwd ? process.cwd() : "";
+    if (cwd) {
+      const envPath = path.join(cwd, ".env");
+      if (fs && typeof fs.existsSync === "function" && fs.existsSync(envPath)) {
+        const lines = fs.readFileSync(envPath, "utf-8").split("\n");
+        for (const line of lines) {
+          const match = line.match(/^\s*([\w_]+)\s*=\s*["']?(.*?)["']?\s*$/);
+          if (match && !env[match[1]]) {
+            env[match[1]] = match[2];
+          }
         }
       }
-    } catch (e) {
-      console.warn("Could not read .env file:", e);
     }
+  } catch (e) {
+    // Silently proceed if filesystem is not accessible in serverless bundle
   }
   return env;
 }
@@ -31,23 +29,41 @@ export async function sendContactEmail({ name, email, phone, category = "सा�
   const env = getEnvConfig();
 
   const host = env.MAIL_HOST || "smtp.gmail.com";
-  const port = parseInt(env.MAIL_PORT || "587", 10);
+  const port = parseInt(env.MAIL_PORT || "465", 10);
   const username = env.MAIL_USERNAME || "abhishekanand.avology@gmail.com";
   const rawPassword = env.MAIL_PASSWORD || "tggz rjbp fifq cnki";
   const password = rawPassword.replace(/\s+/g, "");
-  const fromAddress = env.MAIL_FROM_ADDRESS || "testingapp694@gmail.com";
+  const fromAddress = env.MAIL_FROM_ADDRESS || username || "testingapp694@gmail.com";
   const fromName = env.MAIL_FROM_NAME || "Nohar Vikash Manch";
   const recipientEmail = env.MAIL_TO_ADDRESS || "abhi96anand@gmail.com";
 
-  const transporter = nodemailer.createTransport({
-    host,
-    port,
-    secure: port === 465, // false for 587 STARTTLS
-    auth: {
-      user: username,
-      pass: password,
-    },
-  });
+  // Use Gmail service configuration when host is smtp.gmail.com
+  const isGmail = host === "smtp.gmail.com" || host.includes("gmail") || !env.MAIL_HOST;
+  const transportConfig = isGmail
+    ? {
+        service: "gmail",
+        auth: {
+          user: username,
+          pass: password,
+        },
+        connectionTimeout: 10000,
+        greetingTimeout: 10000,
+        socketTimeout: 15000,
+      }
+    : {
+        host,
+        port,
+        secure: port === 465,
+        auth: {
+          user: username,
+          pass: password,
+        },
+        connectionTimeout: 10000,
+        greetingTimeout: 10000,
+        socketTimeout: 15000,
+      };
+
+  const transporter = nodemailer.createTransport(transportConfig);
 
   const now = new Date();
   const istDateString = now.toLocaleString("hi-IN", {

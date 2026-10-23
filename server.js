@@ -83,7 +83,7 @@ const server = http.createServer(async (req, res) => {
         console.error("Server Contact Email Error:", err);
         res.statusCode = 500;
         res.setHeader("Content-Type", "application/json");
-        res.end(JSON.stringify({ error: "ईमेल भेजने में त्रुटि हुई।" }));
+        res.end(JSON.stringify({ error: err?.message || "ईमेल भेजने में त्रुटि हुई।" }));
       }
     });
     return;

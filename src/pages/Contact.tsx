@@ -111,20 +111,39 @@ export default function Contact() {
     setLoading(true);
 
     try {
+      let isSuccess = false;
+      let serverErrorMsg = "";
+
       // 1. Try sending to the backend API endpoint
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const result = await response.json().catch(() => ({}));
-
-      // 2. Best-effort backup save to Supabase (if table exists)
       try {
-        await (supabase as any).from("contact_messages").insert([
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const result = await response.json().catch(() => ({}));
+
+        if (response.ok && !result.error) {
+          isSuccess = true;
+        } else {
+          serverErrorMsg =
+            result.error ||
+            result.errorMessage ||
+            result.message ||
+            (response.status ? `सर्वर त्रुटि (${response.status})` : "संदेश भेजने में समस्या आई।");
+        }
+      } catch (networkErr: any) {
+        console.warn("API Contact call network failure:", networkErr);
+        serverErrorMsg = "सर्वर से सीधा संपर्क नहीं हो सका।";
+      }
+
+      // 2. Best-effort backup save to Supabase contact_messages table
+      let supabaseSaved = false;
+      try {
+        const { error: sbErr } = await (supabase as any).from("contact_messages").insert([
           {
             name: formData.name.trim(),
             email: formData.email.trim(),
@@ -134,16 +153,23 @@ export default function Contact() {
             status: "new",
           },
         ]);
+        if (!sbErr) {
+          supabaseSaved = true;
+        }
       } catch {
-        // Table might not exist yet, ignoring Supabase error
+        // Table might not exist or network failure
       }
 
-      if (!response.ok || result.error) {
-        throw new Error(result.error || "संदेश भेजने में समस्या आई।");
+      if (isSuccess) {
+        setSubmitted(true);
+        toast.success("आपका संदेश सफलतापूर्वक भेज दिया गया है!");
+      } else if (supabaseSaved) {
+        // Backup save succeeded!
+        setSubmitted(true);
+        toast.success("आपका संदेश पोर्टल पर सुरक्षित सहेज लिया गया है! एडमिन शीघ्र संपर्क करेंगे।");
+      } else {
+        throw new Error(serverErrorMsg || "संदेश भेजने में समस्या आई।");
       }
-
-      setSubmitted(true);
-      toast.success("आपका संदेश सफलतापूर्वक भेज दिया गया है!");
     } catch (err: any) {
       console.error("Submission failed:", err);
       setErrorMsg(
