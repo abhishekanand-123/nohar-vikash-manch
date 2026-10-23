@@ -4,6 +4,59 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from "vite-plugin-pwa";
 
+function contactEmailDevPlugin() {
+  return {
+    name: "contact-email-dev-plugin",
+    configureServer(server: any) {
+      server.middlewares.use("/api/contact", async (req: any, res: any) => {
+        if (req.method !== "POST") {
+          res.statusCode = 405;
+          res.setHeader("Content-Type", "application/json");
+          res.end(JSON.stringify({ error: "Method not allowed" }));
+          return;
+        }
+
+        let body = "";
+        req.on("data", (chunk: any) => {
+          body += chunk;
+        });
+
+        req.on("end", async () => {
+          try {
+            const data = JSON.parse(body || "{}");
+            const { name, email, phone, category, message } = data;
+
+            if (!name || !email || !message) {
+              res.statusCode = 400;
+              res.setHeader("Content-Type", "application/json");
+              res.end(JSON.stringify({ error: "कृपया नाम, ईमेल और संदेश भरें।" }));
+              return;
+            }
+
+            const { sendContactEmail } = await import("./server/mailService.js");
+            const info = await sendContactEmail({ name, email, phone, category, message });
+
+            res.statusCode = 200;
+            res.setHeader("Content-Type", "application/json");
+            res.end(
+              JSON.stringify({
+                success: true,
+                message: "संदेश सफलतापूर्वक भेज दिया गया है!",
+                messageId: info.messageId,
+              })
+            );
+          } catch (err: any) {
+            console.error("Vite Contact API Error:", err);
+            res.statusCode = 500;
+            res.setHeader("Content-Type", "application/json");
+            res.end(JSON.stringify({ error: err?.message || "ईमेल भेजने में असमर्थ। कृपया पुनः प्रयास करें।" }));
+          }
+        });
+      });
+    },
+  };
+}
+
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   server: {
@@ -14,6 +67,7 @@ export default defineConfig(({ mode }) => ({
     },
   },
   plugins: [
+    contactEmailDevPlugin(),
     react(),
     mode === "development" && componentTagger(),
     VitePWA({

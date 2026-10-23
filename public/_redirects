@@ -1,2 +1,5 @@
+# Netlify Functions Proxy
+/api/contact    /.netlify/functions/contact   200
+
 # Netlify SPA: serve index.html for all routes so React Router works
 /*    /index.html   200

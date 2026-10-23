@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { ArrowRight, BookOpen } from "lucide-react";
+import { ArrowRight, BookOpen, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 import EventCountdown from "./EventCountdown";
 import heroImg from "@/assets/hero-village.jpg";
@@ -144,6 +144,16 @@ export default function Hero() {
             >
               <span className="relative z-[1] transition-colors duration-300 group-hover:text-white">
                 Support Us
+              </span>
+            </Link>
+
+            <Link
+              to="/contact"
+              className="hero-cta-ghost group border-emerald-400/50 hover:border-emerald-300"
+            >
+              <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-300 shrink-0 group-hover:scale-110 transition-transform" />
+              <span className="relative z-[1] transition-colors duration-300 group-hover:text-emerald-100">
+                संपर्क करें
               </span>
             </Link>
 

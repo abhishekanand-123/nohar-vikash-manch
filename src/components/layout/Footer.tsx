@@ -65,6 +65,7 @@ export default function Footer() {
               <li><Link to="/gallery" className="hover:text-accent transition-colors">गैलरी</Link></li>
               <li><Link to="/videos" className="hover:text-accent transition-colors">वीडियो</Link></li>
               <li><Link to="/donation" className="hover:text-accent transition-colors">दान</Link></li>
+              <li><Link to="/contact" className="hover:text-accent text-accent/95 transition-colors font-semibold">हमसे संपर्क करें (Contact Us)</Link></li>
               <li><Link to="/privacy-policy" className="hover:text-accent transition-colors">गोपनीयता नीति (Privacy Policy)</Link></li>
               <li><Link to="/terms-conditions" className="hover:text-accent transition-colors">नियम एवं शर्तें (Terms & Conditions)</Link></li>
               <li>
@@ -86,12 +87,25 @@ export default function Footer() {
                 <span>ग्राम – नोहर, पोस्ट – ग्वालपाड़ा (Nohar, Gwalpara), जिला – मधेपुरा, बिहार, भारत</span>
               </li>
               <li className="flex items-center gap-2">
-                <Mail className="w-4 h-4 shrink-0" />
-                <span>abhi96anand@gmail.com</span>
+                <Mail className="w-4 h-4 shrink-0 text-accent" />
+                <a href="mailto:abhi96anand@gmail.com" className="hover:text-accent transition-colors font-medium">
+                  abhi96anand@gmail.com
+                </a>
               </li>
               <li className="flex items-center gap-2">
-                <Phone className="w-4 h-4 shrink-0" />
-                <span>+91 8770824752</span>
+                <Phone className="w-4 h-4 shrink-0 text-accent" />
+                <a href="tel:+918770824752" className="hover:text-accent transition-colors font-medium">
+                  +91 8770824752
+                </a>
+              </li>
+              <li className="pt-2">
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-accent text-accent-foreground text-xs font-bold hover:opacity-95 transition-opacity shadow-sm"
+                >
+                  <Mail className="w-3.5 h-3.5" />
+                  <span>हमसे संपर्क करें (Contact Us)</span>
+                </Link>
               </li>
             </ul>
           </div>

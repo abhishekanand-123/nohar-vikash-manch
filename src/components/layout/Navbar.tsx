@@ -16,6 +16,7 @@ const navLinks = [
   { to: "/gallery", label: "गैलरी" },
   { to: "/videos", label: "वीडियो" },
   { to: "/donation", label: "दान" },
+  { to: "/contact", label: "संपर्क करें" },
 ];
 
 export default function Navbar() {
@@ -31,12 +32,12 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop */}
-        <div className="hidden lg:flex items-center gap-1.5">
+        <div className="hidden lg:flex items-center gap-1 xl:gap-1.5">
           {navLinks.map((link) => (
             <Link
               key={link.to}
               to={link.to}
-              className={`px-3.5 py-2 rounded-lg text-sm font-medium transition-colors ${
+              className={`px-2 xl:px-3 py-1.5 xl:py-2 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                 location.pathname === link.to
                   ? "bg-primary text-primary-foreground"
                   : "text-foreground hover:bg-secondary"

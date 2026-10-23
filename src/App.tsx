@@ -39,6 +39,7 @@ import LekhaJokha from "./pages/LekhaJokha";
 import ManageLekhaJokha from "./pages/admin/ManageLekhaJokha";
 import ManageSocialLinks from "./pages/admin/ManageSocialLinks";
 import Videos from "./pages/Videos";
+import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -69,6 +70,8 @@ const App = () => (
               <Route path="/gallery" element={<Gallery />} />
               <Route path="/videos" element={<Videos />} />
               <Route path="/donation" element={<Donation />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/contact-us" element={<Contact />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/terms-conditions" element={<TermsConditions />} />
