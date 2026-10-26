@@ -210,16 +210,19 @@ export default function Festivals() {
                         className="bg-card rounded-2xl overflow-hidden shadow-card ring-1 ring-border hover:shadow-xl transition-shadow flex flex-col group"
                       >
                         {post.image && (
-                          <div className="relative w-full aspect-video overflow-hidden bg-slate-100 dark:bg-slate-900/60 border-b border-border flex items-center justify-center p-1 sm:p-1.5">
-                            {/* Foreground image: object-contain with min-w-0 prevents flex transferred-size clipping on mobile */}
+                          <Link
+                            to={`/festivals/${post.id}`}
+                            className="block relative w-full aspect-video overflow-hidden bg-slate-100 dark:bg-slate-900/60 border-b border-border flex items-center justify-center p-1 sm:p-1.5"
+                          >
+                            {/* Foreground image: smooth zoom on hover & mobile touch/active */}
                             <img
                               src={post.image}
                               alt={post.title}
                               loading="lazy"
                               decoding="async"
-                              className="w-full h-full max-w-full max-h-full min-w-0 min-h-0 object-contain rounded-lg transition-transform duration-300 md:group-hover:scale-[1.01]"
+                              className="w-full h-full max-w-full max-h-full min-w-0 min-h-0 object-contain rounded-lg transition-transform duration-500 ease-out group-hover:scale-105 group-active:scale-105"
                             />
-                          </div>
+                          </Link>
                         )}
                           <div className="p-6 flex-1 flex flex-col">
                             <div className="flex items-center justify-between gap-2 mb-2">

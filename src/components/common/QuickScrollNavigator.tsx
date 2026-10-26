@@ -52,7 +52,7 @@ export default function QuickScrollNavigator() {
 
   return (
     <div
-      className="fixed bottom-6 right-4 sm:bottom-8 sm:right-6 z-40 flex flex-col gap-2 items-center pointer-events-auto"
+      className="fixed bottom-3 right-2.5 sm:bottom-8 sm:right-6 z-40 flex flex-col gap-1.5 sm:gap-2 items-center pointer-events-auto opacity-80 hover:opacity-100 transition-opacity"
       role="navigation"
       aria-label="Quick Page Scroll"
     >
@@ -69,9 +69,9 @@ export default function QuickScrollNavigator() {
             onClick={scrollToTop}
             aria-label="Scroll to top of page"
             title="पेज के सबसे ऊपर जाएँ (Scroll to Top)"
-            className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-primary text-primary-foreground shadow-xl flex items-center justify-center ring-2 ring-background hover:bg-primary/90 active:scale-95 transition-all group backdrop-blur-md"
+            className="w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-primary text-primary-foreground shadow-lg flex items-center justify-center ring-1 ring-background hover:bg-primary/90 active:scale-95 transition-all group backdrop-blur-md"
           >
-            <ArrowUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
+            <ArrowUp className="w-3.5 h-3.5 sm:w-5 sm:h-5 group-hover:-translate-y-0.5 transition-transform" />
           </motion.button>
         )}
 
@@ -87,9 +87,9 @@ export default function QuickScrollNavigator() {
             onClick={scrollToBottom}
             aria-label="Scroll to bottom of page"
             title="पेज के सबसे नीचे जाएँ (Scroll to Bottom)"
-            className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-card/90 backdrop-blur-md text-foreground shadow-lg flex items-center justify-center border border-border/80 hover:bg-secondary active:scale-95 transition-all group"
+            className="w-7 h-7 sm:w-10 sm:h-10 rounded-full bg-card/90 backdrop-blur-md text-foreground shadow-md flex items-center justify-center border border-border/80 hover:bg-secondary active:scale-95 transition-all group"
           >
-            <ArrowDown className="w-4 h-4 text-muted-foreground group-hover:text-foreground group-hover:translate-y-0.5 transition-all" />
+            <ArrowDown className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground group-hover:text-foreground group-hover:translate-y-0.5 transition-all" />
           </motion.button>
         )}
       </AnimatePresence>

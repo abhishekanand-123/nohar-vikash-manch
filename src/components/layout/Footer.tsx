@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { MapPin, Mail, Phone, Instagram, Facebook } from "lucide-react";
+import { MapPin, Mail, Phone, Instagram, Facebook, QrCode } from "lucide-react";
 import { useSocialLinks } from "@/hooks/useSocialLinks";
+import WebsiteQrModal from "@/components/common/WebsiteQrModal";
 
 export default function Footer() {
   const { data: socialLinks } = useSocialLinks();
+  const [showQrModal, setShowQrModal] = useState(false);
 
   return (
     <footer className="bg-foreground text-background py-12 sm:py-16 pb-[max(3rem,env(safe-area-inset-bottom))]">
@@ -71,6 +74,16 @@ export default function Footer() {
               <li>
                 <button
                   type="button"
+                  onClick={() => setShowQrModal(true)}
+                  className="text-primary-foreground/90 hover:text-accent transition-colors flex items-center gap-1.5 font-medium"
+                >
+                  <QrCode className="w-4 h-4 text-accent" />
+                  <span>वेबसाइट QR Code (स्कैन व डाउनलोड)</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
                   onClick={() => window.dispatchEvent(new CustomEvent("trigger-pwa-install"))}
                   className="text-accent hover:underline flex items-center gap-1 font-medium"
                 >
@@ -114,6 +127,7 @@ export default function Footer() {
           © {new Date().getFullYear()} अभिषेक आनंद (Administration) नोहर विकास युवक संघ। सभी अधिकार सुरक्षित।
         </div>
       </div>
+      <WebsiteQrModal open={showQrModal} onOpenChange={setShowQrModal} />
     </footer>
   );
 }

@@ -117,7 +117,7 @@ export function buildSitemapXml(blogs = []) {
   return xml;
 }
 
-async function main() {
+export async function generateSitemap() {
   console.log("🚀 Starting Sitemap generation...");
   const blogs = await fetchBlogPosts();
   console.log(`✅ Found ${blogs.length} blog / festival posts.`);
@@ -136,10 +136,11 @@ async function main() {
   }
 
   console.log("🎉 Sitemap successfully updated with all latest backend blogs!");
+  return { success: true, count: blogs.length, xml };
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  main().catch((e) => {
+  generateSitemap().catch((e) => {
     console.error("Error generating sitemap:", e);
     process.exit(1);
   });

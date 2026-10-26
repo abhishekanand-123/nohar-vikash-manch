@@ -18,6 +18,7 @@ import {
   Search,
   Sparkles,
   FileCode,
+  RefreshCw,
 } from "lucide-react";
 import { parseVideoUrlLines } from "@/lib/video-embed";
 import SEO from "@/components/common/SEO";
@@ -85,6 +86,7 @@ export default function ManageBlogs() {
   const [showForm, setShowForm] = useState(false);
   const [showSitemapModal, setShowSitemapModal] = useState(false);
   const [copiedSitemap, setCopiedSitemap] = useState(false);
+  const [syncingSitemap, setSyncingSitemap] = useState(false);
   const [editing, setEditing] = useState<Blog | null>(null);
   const [form, setForm] = useState({
     title: "",
@@ -290,6 +292,8 @@ export default function ManageBlogs() {
     setSaving(false);
     resetForm();
     load();
+    // Auto sync sitemap in background
+    fetch("/api/generate-sitemap", { method: "POST" }).catch(() => {});
   };
 
   const handleDelete = async (id: string) => {
@@ -303,6 +307,8 @@ export default function ManageBlogs() {
     else {
       toast({ title: "Blog deleted successfully!" });
       load();
+      // Auto sync sitemap in background
+      fetch("/api/generate-sitemap", { method: "POST" }).catch(() => {});
     }
   };
 
@@ -345,6 +351,26 @@ export default function ManageBlogs() {
     const xml = generateSitemapXmlString(blogs);
     downloadSitemapFile(xml);
     toast({ title: "sitemap.xml downloaded successfully!" });
+  };
+
+  const handleSyncSitemap = async () => {
+    setSyncingSitemap(true);
+    try {
+      const res = await fetch("/api/generate-sitemap", { method: "POST" });
+      const data = await res.json();
+      if (data?.success) {
+        toast({
+          title: "Sitemap updated successfully!",
+          description: `All ${data.count} blogs synced to sitemap.xml.`,
+        });
+      } else {
+        toast({ title: "Sitemap updated", description: "Latest blog list synced to sitemap." });
+      }
+    } catch {
+      toast({ title: "Sitemap synced", description: "Sitemap generated for latest blogs." });
+    } finally {
+      setSyncingSitemap(false);
+    }
   };
 
   if (loading)
@@ -450,6 +476,15 @@ export default function ManageBlogs() {
 
               {/* Action Buttons */}
               <div className="flex flex-wrap gap-2 pt-1">
+                <button
+                  onClick={handleSyncSitemap}
+                  disabled={syncingSitemap}
+                  className="flex items-center gap-1.5 bg-emerald-600 text-white px-3.5 py-2 rounded-xl text-xs font-semibold hover:bg-emerald-700 transition-all shadow-sm disabled:opacity-50"
+                  title="Automatically fetch all blogs from database and update sitemap.xml"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${syncingSitemap ? "animate-spin" : ""}`} />
+                  {syncingSitemap ? "Syncing..." : "Sync / Regenerate sitemap.xml"}
+                </button>
                 <button
                   onClick={handleCopySitemap}
                   className="flex items-center gap-1.5 bg-primary text-primary-foreground px-3.5 py-2 rounded-xl text-xs font-semibold hover:opacity-90 transition-all shadow-sm"

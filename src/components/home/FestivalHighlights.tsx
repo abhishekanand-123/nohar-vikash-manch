@@ -13,6 +13,7 @@ interface Blog {
   category: string | null;
   festival_date: string | null;
   created_at: string;
+  tags?: string[] | null;
 }
 
 // Helper to extract year from festival_date or created_at
@@ -34,7 +35,7 @@ export default function FestivalHighlights() {
     async function load() {
       const { data } = await supabase
         .from("blogs")
-        .select("id,title,image,content,category,festival_date,created_at")
+        .select("id,title,image,content,category,festival_date,created_at,tags")
         .order("created_at", { ascending: false });
 
       setFestivals((data as Blog[]) ?? []);
@@ -141,75 +142,89 @@ export default function FestivalHighlights() {
             <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto">
-            {filteredFestivals.slice(0, 2).map((f) => {
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 max-w-7xl mx-auto w-full min-w-0">
+            {filteredFestivals.slice(0, 3).map((f) => {
               const year = getPostYear(f);
               const cleanContent = stripHtmlToPlainText(f.content);
               const rawSnippet = cleanContent;
               return (
-                <motion.div
+                <motion.article
                   key={f.id}
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.25, ease: "easeOut" }}
+                  className="w-full min-w-0 max-w-full bg-card rounded-2xl overflow-hidden shadow-card ring-1 ring-border hover:shadow-xl transition-all duration-300 flex flex-col group"
                 >
-                  <Link
-                    to={`/festivals/${f.id}`}
-                    className="block h-full bg-card rounded-2xl overflow-hidden shadow-card ring-1 ring-border hover:shadow-xl hover:ring-primary/40 transition-shadow transition-colors duration-300 group flex flex-col"
-                  >
-                    {f.image && (
-                      <div className="relative w-full aspect-video overflow-hidden bg-slate-100 dark:bg-slate-900/60 border-b border-border flex items-center justify-center p-1 sm:p-1.5">
-                        {/* Foreground image: object-contain with min-w-0 prevents flex transferred-size clipping on mobile */}
-                        <img
-                          src={f.image}
-                          alt={f.title}
-                          loading="lazy"
-                          decoding="async"
-                          className="w-full h-full max-w-full max-h-full min-w-0 min-h-0 object-contain rounded-lg transition-transform duration-300 md:group-hover:scale-[1.01]"
-                        />
+                  {f.image && (
+                    <Link
+                      to={`/festivals/${f.id}`}
+                      className="block relative w-full aspect-video overflow-hidden bg-slate-100 dark:bg-slate-900/60 border-b border-border flex items-center justify-center p-1 sm:p-1.5"
+                    >
+                      {/* Image with smooth zoom on hover & mobile touch/active */}
+                      <img
+                        src={f.image}
+                        alt={f.title}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full max-w-full max-h-full min-w-0 min-h-0 object-contain rounded-lg transition-transform duration-500 ease-out group-hover:scale-105 group-active:scale-105"
+                      />
+                    </Link>
+                  )}
+
+                  <div className="p-5 sm:p-6 flex-1 flex flex-col min-w-0 w-full overflow-hidden">
+                    <div className="flex items-center justify-between gap-2 mb-2.5 w-full min-w-0">
+                      <span className="text-xs font-semibold text-accent uppercase tracking-wider truncate max-w-[65%]">
+                        {f.category || "Festival"}
+                      </span>
+                      <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary flex items-center gap-1 shrink-0">
+                        <Calendar className="w-3 h-3" />
+                        {year}
+                      </span>
+                    </div>
+
+                    <h3 className="font-display font-semibold text-lg sm:text-xl text-foreground group-hover:text-primary transition-colors line-clamp-2 break-words mb-2 w-full">
+                      <Link to={`/festivals/${f.id}`} className="hover:underline">
+                        {f.title}
+                      </Link>
+                    </h3>
+
+                    <p className="text-sm text-muted-foreground mb-4 line-clamp-3 flex-1 leading-relaxed break-words w-full">
+                      {rawSnippet || "नोहर गाँव के इस पावन पर्व व उत्सव का विस्तृत विवरण और तस्वीरें यहाँ देखें..."}
+                    </p>
+
+                    {f.tags && f.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 mb-4 w-full overflow-hidden">
+                        {f.tags.slice(0, 3).map((tag) => (
+                          <span
+                            key={tag}
+                            className="text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full bg-secondary text-secondary-foreground truncate max-w-full"
+                          >
+                            {tag}
+                          </span>
+                        ))}
                       </div>
                     )}
 
-                      <div className="p-5 sm:p-6 flex-1 flex flex-col">
-                        <div className="flex items-center justify-between gap-2 mb-2.5">
-                          {f.category ? (
-                            <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-primary/10 text-primary uppercase tracking-wide">
-                              {f.category}
-                            </span>
-                          ) : <span />}
-                          
-                          <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-accent/15 text-accent flex items-center gap-1">
-                            <Calendar className="w-3 h-3" />
-                            {year}
-                          </span>
-                        </div>
-
-                        <h3 className="font-display font-semibold text-lg sm:text-xl text-foreground group-hover:text-primary transition-colors line-clamp-2">
-                          {f.title}
-                        </h3>
-
-                        <p className="text-sm text-muted-foreground mt-2 line-clamp-3 flex-1 leading-relaxed">
-                          {rawSnippet || "नोहर गाँव के इस पावन पर्व व उत्सव का विस्तृत विवरण और तस्वीरें यहाँ देखें..."}
-                        </p>
-
-                        <div className="mt-5 pt-3.5 border-t border-border flex items-center justify-between text-xs text-muted-foreground">
-                          <span>
-                            {f.festival_date ||
-                              new Date(f.created_at).toLocaleDateString("en-IN", {
-                                year: "numeric",
-                                month: "short",
-                                day: "numeric",
-                              })}
-                          </span>
-                          <span className="text-primary font-semibold flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                            पूरी जानकारी पढ़ें <ArrowRight className="w-3.5 h-3.5" />
-                          </span>
-                        </div>
-                      </div>
-                    </Link>
-                  </motion.div>
-                );
-              })}
+                    <div className="pt-3.5 border-t border-border flex items-center justify-between text-xs text-muted-foreground mt-auto w-full min-w-0 gap-2">
+                      <span className="truncate min-w-0 flex-1">
+                        {f.festival_date ||
+                          new Date(f.created_at).toLocaleDateString("en-IN", {
+                            year: "numeric",
+                            month: "short",
+                            day: "numeric",
+                          })}
+                      </span>
+                      <Link
+                        to={`/festivals/${f.id}`}
+                        className="text-primary font-semibold hover:underline flex items-center gap-1 shrink-0 whitespace-nowrap pl-1"
+                      >
+                        Read Details →
+                      </Link>
+                    </div>
+                  </div>
+                </motion.article>
+              );
+            })}
           </div>
         )}
 

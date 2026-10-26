@@ -118,15 +118,15 @@ export default function About() {
                   {members.map((m) => (
                     <div
                       key={m.id}
-                      className="shrink-0 bg-card rounded-2xl p-6 shadow-card ring-1 ring-border text-center hover:shadow-xl transition-shadow"
+                      className="shrink-0 bg-card rounded-2xl p-6 shadow-card ring-1 ring-border text-center hover:shadow-xl transition-all duration-300 group"
                       style={{ width: `calc(${100 / visibleCount}% - 1rem)` }}
                     >
                       {m.image ? (
                         <HoverImagePreview
                           src={m.image}
                           alt={m.name}
-                          containerClassName="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden ring-4 ring-primary/20"
-                          imageClassName="w-full h-full object-cover hover:scale-110 transition-transform duration-500"
+                          containerClassName="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden ring-4 ring-primary/20 group-hover:ring-primary/50 transition-all duration-300"
+                          imageClassName="w-full h-full object-cover group-hover:scale-110 group-active:scale-110 transition-transform duration-500 ease-out"
                         />
                       ) : (
                         <div className="w-24 h-24 rounded-full bg-primary/10 mx-auto mb-4 flex items-center justify-center ring-4 ring-primary/20">

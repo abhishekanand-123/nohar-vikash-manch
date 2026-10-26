@@ -62,6 +62,33 @@ function contactEmailDevPlugin() {
   };
 }
 
+function sitemapDevPlugin() {
+  const handler = async (req: any, res: any) => {
+    try {
+      const { generateSitemap } = await import("./scripts/generate-sitemap.js");
+      const result = await generateSitemap();
+      res.statusCode = 200;
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify(result));
+    } catch (err: any) {
+      console.error("Vite Sitemap API Error:", err);
+      res.statusCode = 500;
+      res.setHeader("Content-Type", "application/json");
+      res.end(JSON.stringify({ error: err?.message || "Failed to generate sitemap" }));
+    }
+  };
+
+  return {
+    name: "sitemap-dev-plugin",
+    configureServer(server: any) {
+      server.middlewares.use("/api/generate-sitemap", handler);
+    },
+    configurePreviewServer(server: any) {
+      server.middlewares.use("/api/generate-sitemap", handler);
+    },
+  };
+}
+
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   server: {
@@ -73,6 +100,7 @@ export default defineConfig(({ mode }) => ({
   },
   plugins: [
     contactEmailDevPlugin(),
+    sitemapDevPlugin(),
     react(),
     mode === "development" && componentTagger(),
     VitePWA({
