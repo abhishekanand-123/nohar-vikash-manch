@@ -37,7 +37,7 @@ export default function PageBanner({ pageKey, title, subtitle, icon: Icon }: Pag
     <section className="relative bg-primary py-16 md:py-20 overflow-hidden">
       {bgImage && (
         <>
-          <img src={bgImage} alt={resolvedTitle} className="absolute inset-0 w-full h-full object-cover" />
+          <img src={bgImage} alt={resolvedTitle} className="absolute inset-0 w-full h-full object-cover" loading="lazy" decoding="async" />
           <div className="absolute inset-0 bg-primary/75" />
         </>
       )}

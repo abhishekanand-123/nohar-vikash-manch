@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { sendContactEmail } from "./server/mailService.js";
+import { handler as sitemapHandler } from "./netlify/functions/sitemap.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -41,6 +42,21 @@ const server = http.createServer(async (req, res) => {
 
   const url = new URL(req.url, `http://${req.headers.host || "localhost"}`);
   const pathname = url.pathname;
+
+  // Handle Dynamic Real-time Sitemap
+  if (pathname === "/sitemap.xml") {
+    try {
+      const out = await sitemapHandler();
+      res.statusCode = out.statusCode;
+      for (const [key, val] of Object.entries(out.headers)) {
+        res.setHeader(key, val);
+      }
+      res.end(out.body);
+      return;
+    } catch (e) {
+      console.error("Sitemap generation error:", e);
+    }
+  }
 
   // Handle Contact API
   if (pathname === "/api/contact") {

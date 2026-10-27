@@ -273,9 +273,42 @@ export default function ManageVideos() {
             placeholder="वीडियो का विवरण यहाँ लिखें..."
             minHeight="140px"
           />
-          <div className="space-y-2">
-            <label className="text-sm font-medium text-foreground">Video file</label>
-            <p className="text-xs text-muted-foreground">MP4, WebM, or MOV — up to 100 MB.</p>
+          {/* Option 1: YouTube / Vimeo link (Recommended) */}
+          <div className="space-y-1.5 rounded-xl border border-primary/20 bg-primary/5 p-3 sm:p-4">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-semibold text-foreground">YouTube / Vimeo Link</label>
+              <span className="rounded-full bg-emerald-600/15 px-2 py-0.5 text-[11px] font-semibold text-emerald-600">
+                ⭐ Recommended (0 MB Supabase Bandwidth)
+              </span>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              YouTube ya Vimeo ka link daalein. Isse Supabase ka 5 GB free limit kabhi kharch nahi hoga.
+            </p>
+            <input
+              value={form.embedUrlRaw}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  embedUrlRaw: e.target.value,
+                  videoFile: e.target.value.trim() ? null : form.videoFile,
+                })
+              }
+              disabled={Boolean(form.videoFile)}
+              placeholder="https://www.youtube.com/watch?v=… ya https://youtu.be/…"
+              className="mt-1 w-full rounded-xl border border-input bg-background px-4 py-2.5 text-sm text-foreground disabled:opacity-50"
+            />
+          </div>
+
+          <div className="relative py-1 text-center text-xs text-muted-foreground before:absolute before:inset-x-0 before:top-1/2 before:border-t before:border-border">
+            <span className="relative bg-card px-2 font-medium">or Direct Video Upload</span>
+          </div>
+
+          {/* Option 2: Direct Video File Upload */}
+          <div className="space-y-2 rounded-xl border border-border/70 p-3 sm:p-4">
+            <label className="text-sm font-medium text-foreground">Upload MP4 Video File</label>
+            <p className="text-xs text-amber-600/90 dark:text-amber-400">
+              ⚠️ Direct video upload Supabase ki 5 GB Egress limit consume karta hai. Sirf zaroori ho tabhi chhoti file (&lt; 25 MB) upload karein.
+            </p>
             <input
               type="file"
               accept="video/mp4,video/webm,video/quicktime,.mp4,.webm,.mov"
@@ -293,7 +326,7 @@ export default function ManageVideos() {
                 <p className="text-xs text-muted-foreground">Selected: {form.videoFile.name}</p>
                 <button
                   type="button"
-                  className="text-xs font-medium text-primary hover:underline"
+                  className="text-xs font-medium text-destructive hover:underline"
                   onClick={() =>
                     setForm({
                       ...form,
@@ -308,22 +341,6 @@ export default function ManageVideos() {
             )}
             {editing?.file_url && !form.videoFile && <p className="text-xs text-muted-foreground">Current: uploaded file</p>}
           </div>
-          <div className="relative py-2 text-center text-xs text-muted-foreground before:absolute before:inset-x-0 before:top-1/2 before:border-t before:border-border">
-            <span className="relative bg-card px-2">or YouTube / Vimeo URL</span>
-          </div>
-          <input
-            value={form.embedUrlRaw}
-            onChange={(e) =>
-              setForm({
-                ...form,
-                embedUrlRaw: e.target.value,
-                videoFile: e.target.value.trim() ? null : form.videoFile,
-              })
-            }
-            disabled={Boolean(form.videoFile)}
-            placeholder="https://www.youtube.com/watch?v=…"
-            className="w-full rounded-xl border border-input bg-background px-4 py-3 text-sm text-foreground disabled:opacity-50"
-          />
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="mb-1 block text-xs font-medium text-muted-foreground">Where it appears</label>

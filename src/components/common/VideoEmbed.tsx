@@ -171,7 +171,7 @@ export default function VideoEmbed({
           src={file}
           controls
           className="absolute inset-0 h-full w-full object-contain"
-          preload="metadata"
+          preload="none"
           playsInline
         />
       </div>

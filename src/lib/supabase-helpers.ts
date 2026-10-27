@@ -6,13 +6,13 @@ const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp"
 const MAX_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 
 const VIDEO_MIME_TYPES = ["video/mp4", "video/webm", "video/quicktime"];
-const MAX_VIDEO_BYTES = 100 * 1024 * 1024; // 100 MB
+const MAX_VIDEO_BYTES = 25 * 1024 * 1024; // 25 MB limit to protect free tier egress (recommend YouTube for larger)
 
 /**
  * Compresses an image file using an offscreen canvas to prevent large raw photos
  * (e.g. 5MB-10MB mobile uploads) from freezing/hanging the browser when rendered in lists.
  */
-export async function compressImageFile(file: File, maxDimension = 1600, quality = 0.85): Promise<File> {
+export async function compressImageFile(file: File, maxDimension = 1280, quality = 0.80): Promise<File> {
   // Only compress raster images; skip SVG, GIF (animations), or non-images
   if (!file.type.startsWith("image/") || file.type === "image/gif" || file.type === "image/svg+xml") {
     return file;
@@ -119,14 +119,14 @@ export async function uploadVideoFile(file: File, folder: string = "videos"): Pr
     throw new Error("Only MP4, WebM, or MOV video files are allowed.");
   }
   if (file.size > MAX_VIDEO_BYTES) {
-    throw new Error("Video must not exceed 100 MB.");
+    throw new Error("Video must not exceed 25 MB. (Tip: Use a YouTube link to save Supabase quota).");
   }
 
   const ext = file.name.split(".").pop() || (file.type.includes("webm") ? "webm" : "mp4");
   const fileName = `${folder}/${Date.now()}-${Math.random().toString(36).substring(7)}.${ext}`;
 
   const { error } = await supabase.storage.from("uploads").upload(fileName, file, {
-    cacheControl: "3600",
+    cacheControl: "31536000", // 1 year browser cache to avoid re-downloading on revisit
     upsert: false,
   });
   if (error) {
@@ -150,7 +150,7 @@ export async function uploadPdfFile(file: File, folder: string = "documents"): P
 
   const { error } = await supabase.storage.from("uploads").upload(fileName, file, {
     contentType: "application/pdf",
-    cacheControl: "3600",
+    cacheControl: "31536000", // 1 year cache
     upsert: false,
   });
   if (error) {
