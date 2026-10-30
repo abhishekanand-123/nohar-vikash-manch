@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { ArrowRight, BookOpen, Mail } from "lucide-react";
 import { Link } from "react-router-dom";
 import EventCountdown from "./EventCountdown";
-import heroImg from "@/assets/hero-village.jpg";
+import heroImg from "@/assets/hero-mandir.jpg";
 import { supabase } from "@/integrations/supabase/client";
 import { Tables } from "@/integrations/supabase/types";
 
@@ -66,10 +66,10 @@ export default function Hero() {
     loadData();
   }, []);
 
-  const heroTitle = homeBanner?.title || "Empowering Nohar, Preserving Heritage";
+  const heroTitle = homeBanner?.title || "नोहर परंपरा • आस्था • पहचान";
   const heroSubtitle =
     homeBanner?.subtitle ||
-    "A thriving agriculture-based community in Nohar, Gwalpara, Madhepura (Bihar). Managed with care by Nohar Vikash Yuvak Sangh.";
+    "बिहार के मधेपुरा जिले के नोहर गाँव में विराजमान हैं बाबा लक्ष्मीनारायण मंदिर। यहाँ हर साल रामनवमी के पावन अवसर पर भव्य मेला भी लगता है। जय बाबा लक्ष्मीनारायण! 🙏 जय श्री राम! 🚩";
   const heroBackground = homeBanner?.bg_image || heroImg;
 
   const pdfUrl = (stotraDoc?.is_active && stotraDoc?.bg_image) ? stotraDoc.bg_image : null;
