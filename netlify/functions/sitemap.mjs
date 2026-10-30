@@ -89,7 +89,9 @@ export const handler = async () => {
       statusCode: 200,
       headers: {
         "Content-Type": "application/xml; charset=utf-8",
-        "Cache-Control": "public, max-age=0, must-revalidate",
+        "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0",
+        Pragma: "no-cache",
+        Expires: "0",
       },
       body: xml,
     };
