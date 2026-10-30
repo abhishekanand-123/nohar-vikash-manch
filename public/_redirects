@@ -1,3 +1,6 @@
+# Real-time Dynamic Sitemap
+/sitemap.xml    /.netlify/functions/sitemap   200!
+
 # Netlify Functions Proxy
 /api/contact    /.netlify/functions/contact   200
 

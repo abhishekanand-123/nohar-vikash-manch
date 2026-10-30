@@ -84,7 +84,13 @@
     <priority>0.5</priority>
   </url>
 
-  <!-- Dynamic Festival / Blog Posts from Database (12 items) -->
+  <!-- Dynamic Festival / Blog Posts from Database (13 items) -->
+  <url>
+    <loc>https://noharvikashmanch.in/festivals/7e82d4e6-d773-4ffb-b9cd-95b3269f9e74</loc>
+    <lastmod>2026-10-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
   <url>
     <loc>https://noharvikashmanch.in/festivals/a1b54097-6b95-4c08-b52f-e05b4429eed4</loc>
     <lastmod>2026-10-26</lastmod>

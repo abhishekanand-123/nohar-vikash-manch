@@ -40,7 +40,7 @@ export const handler = async () => {
     let blogs = [];
 
     try {
-      const endpoint = `${SUPABASE_URL}/rest/v1/blogs?select=id,title,created_at,updated_at&order=created_at.desc`;
+      const endpoint = `${SUPABASE_URL}/rest/v1/blogs?select=id,title,created_at&order=created_at.desc`;
       const res = await fetch(endpoint, {
         headers: {
           apikey: SUPABASE_ANON_KEY,
@@ -73,7 +73,7 @@ export const handler = async () => {
     if (Array.isArray(blogs) && blogs.length > 0) {
       xml += `\n  <!-- Dynamic Festival / Blog Posts from Database (${blogs.length} items) -->\n`;
       for (const blog of blogs) {
-        const lastModDate = formatDate(blog.updated_at || blog.created_at);
+        const lastModDate = formatDate(blog.created_at);
         xml += `  <url>\n`;
         xml += `    <loc>${DOMAIN}/festivals/${blog.id}</loc>\n`;
         xml += `    <lastmod>${lastModDate}</lastmod>\n`;
@@ -89,7 +89,7 @@ export const handler = async () => {
       statusCode: 200,
       headers: {
         "Content-Type": "application/xml; charset=utf-8",
-        "Cache-Control": "public, max-age=900, s-maxage=1800", // Edge cache 15-30 mins
+        "Cache-Control": "public, max-age=0, must-revalidate",
       },
       body: xml,
     };
