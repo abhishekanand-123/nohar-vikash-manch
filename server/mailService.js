@@ -30,10 +30,10 @@ export async function sendContactEmail({ name, email, phone, category = "सा�
 
   const host = env.MAIL_HOST || "smtp.gmail.com";
   const port = parseInt(env.MAIL_PORT || "465", 10);
-  const username = env.MAIL_USERNAME || "abhishekanand.avology@gmail.com";
-  const rawPassword = env.MAIL_PASSWORD || "tggz rjbp fifq cnki";
+  const username = env.MAIL_USERNAME || "abhi96anand@gmail.com";
+  const rawPassword = env.MAIL_PASSWORD || "dxuyigmugwkpxjfn";
   const password = rawPassword.replace(/\s+/g, "");
-  const fromAddress = env.MAIL_FROM_ADDRESS || username || "testingapp694@gmail.com";
+  const fromAddress = env.MAIL_FROM_ADDRESS || username || "abhi96anand@gmail.com";
   const fromName = env.MAIL_FROM_NAME || "Nohar Vikash Manch";
   const recipientEmail = env.MAIL_TO_ADDRESS || "abhi96anand@gmail.com";
 
