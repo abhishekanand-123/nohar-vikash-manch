@@ -4,10 +4,19 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  NPM_FLAGS = "--prefer-offline --no-audit"
 
 [functions]
   directory = "netlify/functions"
   node_bundler = "esbuild"
+
+# Save Netlify Build Minutes / Credits:
+# Stop building non-production branches like abhi-dev or previews (saves 50%+ credits)
+[context.branch-deploy]
+  ignore = "true"
+
+[context.deploy-preview]
+  ignore = "true"
 
 [[redirects]]
   from = "/api/contact"
