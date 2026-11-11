@@ -357,13 +357,23 @@ export default function ManageLekhaJokha() {
       if (selectedEventImage) {
         toast.info("कार्यक्रम फोटो अपलोड हो रही है...");
         const uploadedImg = await uploadFile(selectedEventImage, "cultural-events");
-        if (uploadedImg) finalImageUrl = uploadedImg;
+        if (!uploadedImg) {
+          toast.error("फोटो अपलोड नहीं हो सकी। इमेज नहीं बदली।");
+          setSavingEvent(false);
+          return;
+        }
+        finalImageUrl = uploadedImg;
       }
 
       if (selectedEventPdf) {
         toast.info("कार्यक्रम PDF बिल अपलोड हो रहा है...");
         const uploadedPdf = await uploadPdfFile(selectedEventPdf, "cultural-events");
-        if (uploadedPdf) finalPdfUrl = uploadedPdf;
+        if (!uploadedPdf) {
+          toast.error("PDF अपलोड नहीं हो सकी।");
+          setSavingEvent(false);
+          return;
+        }
+        finalPdfUrl = uploadedPdf;
       }
 
       const incomeNum = Number(eventIncome) || 0;

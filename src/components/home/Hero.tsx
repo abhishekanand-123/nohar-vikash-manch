@@ -165,11 +165,11 @@ export default function Hero() {
               onClick={handleDocClick}
               className="hero-cta-doc group"
             >
-              <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-300 shrink-0 group-hover:rotate-6 transition-transform" />
-              <span className="relative z-[1] transition-colors duration-300 group-hover:text-amber-100">
+              <BookOpen className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-200 shrink-0 group-hover:rotate-6 transition-transform" />
+              <span className="relative z-[1]">
                 {docTitle}
               </span>
-              <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded bg-amber-400/20 text-amber-200 border border-amber-400/30">
+              <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-white/10 text-amber-100 border border-amber-200/50">
                 PDF
               </span>
             </a>

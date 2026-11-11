@@ -88,7 +88,7 @@ export default function LekhaJokha() {
 
   // Available Years for Annual Tab
   const annualYears = useMemo(() => {
-    const set = new Set<string>(["2026", "2025"]);
+    const set = new Set<string>();
     records.forEach((r) => set.add(r.year));
     return Array.from(set).sort((a, b) => Number(b) - Number(a));
   }, [records]);
@@ -140,8 +140,8 @@ export default function LekhaJokha() {
       eventExpense += Number(e.total_expense || 0);
     });
 
-    const finalIncome = hasExplicitFigures ? income : (eventIncome || (selectedYear === "2026" ? 345000 : 298000));
-    const finalExpense = hasExplicitFigures ? expense : (eventExpense || (selectedYear === "2026" ? 288400 : 264500));
+    const finalIncome = hasExplicitFigures ? income : eventIncome;
+    const finalExpense = hasExplicitFigures ? expense : eventExpense;
     const finalBalance = finalIncome - finalExpense;
 
     return {
